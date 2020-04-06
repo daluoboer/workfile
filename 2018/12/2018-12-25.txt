@@ -1,0 +1,117 @@
+
+	1.完成开店
+完成	2.上传图片的回显
+	3.完成开店的数据写入以及一些相关的内容操作
+	4.搞明白相关数据的作用
+
+
+
+application-security.xml
+
+<beans:bean id="loginUrlEntryPoint"
+                class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+        <beans:property name="loginFormUrl" value="/login"/>
+    </beans:bean>
+
+设置登录自动跳转的页面
+但是这个/login有俩呀，这咋知道是找的哪个啊
+哦一个是mymall，一个是backend的，上面这儿是backend的，找错啦？
+看看mymall的配置文件
+
+
+
+拦截其他访问并跳转到登录，登录完后继续访问原页面，spring security原理：
+
+一、看下内部原理
+
+简化后的认证过程分为7步:
+
+
+
+1.用户访问网站，打开了一个链接(origin url)。
+
+
+2.请求发送给服务器，服务器判断用户请求了受保护的资源。
+
+
+3.由于用户没有登录，服务器重定向到登录页面
+
+
+4.填写表单，点击登录
+
+
+5.浏览器将用户名密码以表单形式发送给服务器
+
+
+6.服务器验证用户名密码。成功，进入到下一步。否则要求用户重新认证（第三步）
+7.
+
+服务器对用户拥有的权限（角色）判定: 有权限，重定向到origin url; 权限不足，返回状态码403("forbidden").
+
+
+
+从第3步，我们可以知道，用户的请求被中断了。
+
+
+用户登录成功后（第7步），会被重定向到origin url，spring security通过使用缓存的request，使得被中断的请求能够继续执行。
+
+
+
+
+现在的任务：
+	1.用debug调试错误页面，看看它是咋运行的
+	2.搞清楚看明白错误页面，啥时候出啥错
+	
+	3.想想注册放哪儿 咋放 以及注册之后的流程，理顺
+
+
+e.....   现在得先看看debug的常用技巧哇，先学会用debug再说
+
+
+app端注册一个用户信息：
+
+myUserDetails：com.x.mymall.account.model.security.MyUserDetails@12c4afcf: Username: 13523812345; Password: [PROTECTED]; Enabled: true; AccountNonExpired: true; credentialsNonExpired: true; AccountNonLocked: true; Granted Authorities: ROLE_USER
+myUserDetails.getUserType()：0
+myUserDetails.getSeller()：null
+myUserDetails.getUserAgent()：com.x.mymall.core.model.UserAgent@c958fb6
+myUserDetails.getUserAgent().getUserAgentFrom()：1_FROM_PC_WEB
+
+那这个是不是得改一下。在客户端注册的用户，身份应该是商家才对呀，不过还不知道哪儿改，先记着。
+
+web端注册的用户信息：
+
+myUserDetails：com.x.mymall.account.model.security.MyUserDetails@12fe7291: Username: 13523855555; Password: [PROTECTED]; Enabled: true; AccountNonExpired: true; credentialsNonExpired: true; AccountNonLocked: true; Granted Authorities: ROLE_USER
+myUserDetails.getUserType()：0
+myUserDetails.getSeller()：null
+myUserDetails.getUserAgent()：com.x.mymall.core.model.UserAgent@f3949d2
+myUserDetails.getUserAgent().getUserAgentFrom()：1_FROM_PC_WEB
+
+没啥错暂时。再看一下app新建的用户有没有地址，有哇！！！你只有经纬度没有addressDescription
+
+啊啊啊啊！！！customer表的Token和token1也要的哇！！！数据库里面要存哒！！！先把现在的做了然后再看看啊
+不过token和token1应该不是同一步里面添加的，注册应该只有token，开店应该是token1?
+e...注册的时候没有token啊！没有错，开店的时候加的token1~
+
+
+点击进入宜店调用的service：
+AppUpdateService.getAppUpdateInfo
+AccountService.getAllowFunction
+AppCustomerEmployeeService.getCustomerEmployeeDTOByCustomerId
+GoodsService.getLastUpdateDate
+GoodsService.getGoodsListBySeller
+
+
+嗯......
+不知道哪一步不对，退出是假退出...那就看看正常退出调用的方法，再看看你退出调用的方法
+还有正常登录用到了啥方法，你登录用到了啥方法，反正我觉得跟token有关系，哦那个俩电话的名字你大概搞混了，改一下
+
+
+
+
+
+
+
+
+
+
+

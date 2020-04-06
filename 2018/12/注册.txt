@@ -1,0 +1,175 @@
+************************************************************
+1.app填写手机号、密码、验证码 提交
+【后台：com.x.mymall.account.contract.impl.AccountServiceImpl.registerByPhoneNumber
+  *如果验证成功，执行com.x.mymall.account.service.impl.CustomerServiceImpl.registerByPhoneNumber,
+   返回CustomerDTO对象，并登陆（查找店铺信息，店员信息，设备信息）
+
+  *如果验证失败，抛出异常，app上提示错误
+】
+【
+AccountService.registerByPhoneNumber
+AccountService.sellerLogin
+】
+
+
+today to do:
+完成注册
+
+
+APP注册：
+
+1.手机号和验证码有效性
+
+2.注册：customerService.registerByPhoneNumber(phoneNumber, password)
+	①验证手机号
+	②lock(key)
+	③根据手机号查找用户（若存在数据且已注册会员抛出异常：用户已存在；若存在数据且未注册会员：注册会员。若不存在数据：进行注册）
+	④返回该用户
+	⑤finally:unlock(key)
+
+3.创建Token
+
+4.创建CustomerDTO
+
+5.writeToken：将Token写入cookie中
+
+6.注册设备
+
+7.更新上次登录时间：updateLastLoginDateTime
+
+8.返回CustomerDTO
+
+
+WEB注册：
+
+1.验证手机号和验证码
+2.注册：
+	调用customerService.registerByPhoneNumber(phoneNumber, password)
+3.返回CustomerDTO(可是为什么要返回这个呢？)
+应该返回CustomerEntity，因为DTO是APP专用的
+
+
+
+恩恩：先获取地址的封装对象，然后放入请求中？
+
+我要开店：
+	地址定位：
+		StoreService.getStoreCategoryDTOList
+		ajax中调用:AppGlobalRegionService.getCurrentLevelRegion
+			---只需要获取经纬度！！！！然后转换成那啥地址的对象，包含了它的详细信息
+
+		
+
+	
+ 提交一系列数据后：开店成功<a>进入宜店</a>
+
+	调用的方法：
+	AccountService.openShopByCustomerIdAndTelPhone_V2
+		查找：com.x.mymall.account.dao.CustomerEntityMapper.selectByPrimaryKey
+			select ... from customer where cus_id = ?     1493(Long)
+
+		查找：com.x.mymall.account.dao.StoreEntityMapper.selectByExample  
+			select ... from store WHERE ( sto_addressDescription = ? and sto_name = ? ) 北海公园(String), 居居澜的店(String)
+
+		查找：com.x.mymall.account.dao.SellerEntityMapper.insertSelective!selectKey   LAST_INSERT_ID()
+		1.插入：com.x.mymall.account.dao.SellerEntityMapper.insertSelective
+			insert into seller ( sel_identifier, sel_displayName, sel_contactsPhoneNumber, sel_isEnabled, sel_isAudit, sel_storeCount, sel_storeCountLimit, sel_creatorId ) values ( ?, ?, ?, ?, ?, ?, ?, ? )
+			20181221171728(String), 居居澜的店(String), 13523866666(String), true(Boolean), 0(String), 1(Integer), 1(Integer), 1501(Long)
+		
+		查找啥？com.x.mymall.store.dao.PrepaidCardDefEntityMapper.selectByExample
+			select ... from prepaid_card_def WHERE ( pcd_sellerId = ? ) 40(Long)
+
+		又查找啥：com.x.mymall.account.dao.SellerEntityMapper.selectByPrimaryKey
+			select ... from prepaid_card_def WHERE ( pcd_sellerId = ? ) 40(Long)
+
+		查找：com.x.mymall.store.dao.PrepaidCardDefEntityMapper.insertSelective!selectKey    SELECT LAST_INSERT_ID() 
+		2.插入：com.x.mymall.store.dao.PrepaidCardDefEntityMapper.insertSelective
+			insert into prepaid_card_def ( pcd_sellerId, pcd_name, pcd_description, pcd_expiryOfYears ) values ( ?, ?, ?, ? )
+			40(Long), 居居澜的店卡(String), 尊敬的会员........(String), 1(Byte)
+
+		删除：com.x.mymall.mall.dao.MallGoodsEntityMapper.deleteByExample
+			delete from mall_goods WHERE ( mgo_sellerId = ? and mgo_type = ? )    40(Long), 4(Integer)
+
+		查找：com.x.mymall.mall.dao.MallGoodsEntityMapper.insertSelective!selectKey  SELECT LAST_INSERT_ID() 
+		3.插入：com.x.mymall.mall.dao.MallGoodsEntityMapper.insertSelective
+			insert into mall_goods ( mgo_sellerId, mgo_storeId, mgo_name, mgo_description, mgo_type, mgo_valuePrice, mgo_salePrice, mgo_status, mgo_createdTime, mgo_lastUpdateTime, mgo_lastUpdateRemark ) values ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) 
+			40(Long), 0(Long), 100元(String), 100元(String), 4(Integer), 100(BigDecimal), 100(BigDecimal), 0(Byte), Fri Dec 21 17:46:29 CST 2018(Date), Fri Dec 21 17:46:29 CST 2018(Date), 新增储值卡(String)
+		
+		查找：com.x.mymall.mall.dao.MallGoodsEntityMapper.insertSelective!selectKey  SELECT LAST_INSERT_ID() 
+		插入：com.x.mymall.mall.dao.MallGoodsEntityMapper.insertSelective
+			insert into mall_goods ( mgo_sellerId, mgo_storeId, mgo_name, mgo_description, mgo_type, mgo_valuePrice, mgo_salePrice, mgo_status, mgo_createdTime, mgo_lastUpdateTime, mgo_lastUpdateRemark ) values ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )
+			41(Long), 0(Long), 200元(String), 200元(String), 4(Integer), 200(BigDecimal), 200(BigDecimal), 0(Byte), Fri Dec 21 17:46:29 CST 2018(Date), Fri Dec 21 17:46:29 CST 2018(Date), 新增储值卡(String)
+		
+		查找：com.x.mymall.mall.dao.MallGoodsEntityMapper.insertSelective!selectKey    SELECT LAST_INSERT_ID() 
+		插入：com.x.mymall.mall.dao.MallGoodsEntityMapper.insertSelective
+			insert into mall_goods ( mgo_sellerId, mgo_storeId, mgo_name, mgo_description, mgo_type, mgo_valuePrice, mgo_salePrice, mgo_status, mgo_createdTime, mgo_lastUpdateTime, mgo_lastUpdateRemark ) values ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )
+			41(Long), 0(Long), 300元(String), 300元(String), 4(Integer), 300(BigDecimal), 300(BigDecimal), 0(Byte), Fri Dec 21 17:46:29 CST 2018(Date), Fri Dec 21 17:46:29 CST 2018(Date), 新增储值卡(String)
+
+		查找：com.x.mymall.mall.dao.MallGoodsEntityMapper.insertSelective!selectKey
+		插入：com.x.mymall.mall.dao.MallGoodsEntityMapper.insertSelective
+			insert into mall_goods ( mgo_sellerId, mgo_storeId, mgo_name, mgo_description, mgo_type, mgo_valuePrice, mgo_salePrice, mgo_status, mgo_createdTime, mgo_lastUpdateTime, mgo_lastUpdateRemark ) values ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) 
+			41(Long), 0(Long), 500元(String), 500元(String), 4(Integer), 500(BigDecimal), 500(BigDecimal), 0(Byte), Fri Dec 21 17:46:29 CST 2018(Date), Fri Dec 21 17:46:29 CST 2018(Date), 新增储值卡(String)
+		
+		查找：com.x.mymall.mall.dao.MallGoodsEntityMapper.insertSelective!selectKey   SELECT LAST_INSERT_ID() 
+		插入：com.x.mymall.mall.dao.MallGoodsEntityMapper.insertSelective
+			insert into mall_goods ( mgo_sellerId, mgo_storeId, mgo_name, mgo_description, mgo_type, mgo_valuePrice, mgo_salePrice, mgo_status, mgo_createdTime, mgo_lastUpdateTime, mgo_lastUpdateRemark ) values ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) 
+			41(Long), 0(Long), 800元(String), 800元(String), 4(Integer), 800(BigDecimal), 800(BigDecimal), 0(Byte), Fri Dec 21 17:46:29 CST 2018(Date), Fri Dec 21 17:46:29 CST 2018(Date), 新增储值卡(String)
+
+		查找：com.x.mymall.mall.dao.MallGoodsEntityMapper.insertSelective!selectKey    SELECT LAST_INSERT_ID()
+		插入：com.x.mymall.mall.dao.MallGoodsEntityMapper.insertSelective
+			insert into mall_goods ( mgo_sellerId, mgo_storeId, mgo_name, mgo_description, mgo_type, mgo_valuePrice, mgo_salePrice, mgo_status, mgo_createdTime, mgo_lastUpdateTime, mgo_lastUpdateRemark ) values ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )
+			41(Long), 0(Long), 1000元(String), 1000元(String), 4(Integer), 1000(BigDecimal), 1000(BigDecimal), 0(Byte), Fri Dec 21 17:46:29 CST 2018(Date), Fri Dec 21 17:46:29 CST 2018(Date), 新增储值卡(String)
+
+		删除：com.x.mymall.mall.dao.MallGoodsEntityMapper.deleteByExample
+			delete from mall_goods WHERE ( mgo_sellerId = ? and mgo_type = ? )    41(Long), 1(Integer)
+
+		又来一遍？？？
+		查找：com.x.mymall.mall.dao.MallGoodsEntityMapper.insertSelective!selectKey	
+		插入：com.x.mymall.mall.dao.MallGoodsEntityMapper.insertSelective
+			insert into mall_goods ( mgo_sellerId, mgo_storeId, mgo_name, mgo_description, mgo_type, mgo_valuePrice, mgo_salePrice, mgo_status, mgo_createdTime, mgo_lastUpdateTime, mgo_lastUpdateRemark ) values ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) 
+			41(Long), 0(Long), 100元(String), 100元(String), 1(Integer), 100(BigDecimal), 100(BigDecimal), 0(Byte), Fri Dec 21 17:46:29 CST 2018(Date), Fri Dec 21 17:46:29 CST 2018(Date), 新增储值卡（暂时不用）(String)
+
+		到1000
+
+		查找：com.x.mymall.expenseCard.dao.ExpenseCardDefEntityMapper.selectByExample
+			select ... from expense_card_def WHERE ( ecd_sellerId = ? ) 41(Long)
+			
+		查找：com.x.mymall.expenseCard.dao.ExpenseCardDefEntityMapper.insertSelective!selectKey  SELECT LAST_INSERT_ID() 
+		插入：com.x.mymall.expenseCard.dao.ExpenseCardDefEntityMapper.insertSelective
+			insert into expense_card_def ( ecd_sellerId, ecd_prepaidCardName, ecd_createTime ) values ( ?, ?, ? ) 
+			41(Long), 居居澜的店卡(String), Fri Dec 21 17:46:29 CST 2018(Date)
+
+		查找：com.x.mymall.store.dao.PrepaidCardDefEntityMapper.selectByExample
+			select ... from prepaid_card_def WHERE ( pcd_sellerId = ? )
+		后面还有好多不想整了....内容就是下面的		
+
+		插入图片
+
+		插入店铺
+
+		插入超级管理员
+
+
+
+
+新建卖家
+
+创建当前用户的会员卡
+
+创建储值卡（100-1000）
+
+插入点卡
+
+
+插入图片
+
+插入店铺
+
+插入超级管理员
+
+
+
+我是店员：页面提示（联系管理员）
+
+你！你为啥要整理这些东西！啊啊啊啊！不是知道接口就行了吗！这些你自己看代码不行吗！啊啊啊啊！
+罢了罢了，整都整了，那就更好地结合代码理解吧，嘤嘤嘤嘤嘤。

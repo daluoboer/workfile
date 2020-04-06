@@ -1,0 +1,116 @@
+TODO----------------------------------------------------------------------------------------------------------
+    1.注册和开店时token没有写入（还不知道是干啥的，明天看一下）
+    2.开店完成后应该返回主页，但是这时候应该要重新加载数据，明天看看需要哪些数据，怎样获取数据
+    3.将注册以及开店的整个流程做好
+    4.做每一步的时候要明白为什么
+
+
+
+看看退出的时候调用了什么方法，看看token的用处，解决现在注册完退出没有用的问题！
+
+在注册的时候之所以能够登录，应该是因为loaduser还有写了个cookie，至于为啥退出不了？---先看
+
+App：
+退出
+1.AccountService.logout
+	根据用户ID更新token1
+	com.x.mymall.account.dao.CustomerEntityMapper.updateByPrimaryKeySelective
+	update customer SET cus_token1 = ? where cus_id = ?   (String), 1519(Long)
+
+2.AppUpdateService.getAppUpdateInfo
+	咦，不知道查的啥，表是空的
+	com.x.mymall.account.dao.AppSettingDefEntityMapper.selectByExample
+	select ....一大堆... from app_setting_def WHERE ( appsd_deviceType = ? and appsd_isRelease = ? ) order by appsd_createTime desc 
+	1(Integer), 1(Byte)
+
+登录：
+AccountService.sellerLogin只调用了这个接口
+
+
+web登录：
+看不到接口？？
+	先查找了用户
+	com.x.mymall.account.dao.CustomerEntityMapper.selectByExample
+	select ... from customer WHERE ( cus_phoneNumber = ? )   15050481925(String)
+
+	//然后获取店员列表？（商户员工）
+	com.x.mymall.account.dao.custom.CustomerEmployeeExMapper.getCustomerEmployeeListByCustomer
+	select ... from customer_employee left join customer as customer1 on cemp_customerId=customer1.cus_id left join seller on cemp_sellerId=sel_id left join store on cemp_storeId=sto_id WHERE cemp_customerId = ? AND cemp_role = ? AND cemp_isEnabled = 1 ORDER BY cemp_lastVisitTime desc 
+	1449(Long), 1(Byte)
+
+	//查找登录设备
+	com.x.mymall.account.dao.DeviceInfoEntityMapper.selectByExample
+	select  ... from device_info WHERE ( dvi_userId = ? and dvi_userType = ? ) 
+	1449(Long), 2(Integer)
+
+	//更新访问次数
+	com.x.mymall.account.dao.custom.CustomerEmployeeExMapper.updateVisitInfo
+	update customer_employee SET cemp_lastVisitCount = cemp_lastVisitCount + 1, cemp_lastVisitTime = ?, cemp_lastVisitIp = ?, cemp_lastVisitDevice = ? where cemp_id = ? 
+	Wed Dec 26 16:28:44 CST 2018(Date), 192.168.1.37(String), Redmi Note 5(8.1.0)(String), 268(Long)
+
+	com.x.mymall.storefun.dao.ext.StoreFunExEntityMapper.getStoreFunctionList
+	SELECT ... FROM store_function WHERE (sfun_sellerId is null OR sfun_sellerId = ?) AND (sfun_storeId is null OR sfun_storeId = ?) AND (sfun_status = 1 OR sfun_isOpening = 1) AND (sfun_expireTime IS NULL OR sfun_expireTime >= now()) ORDER BY sfun_functionCode asc 
+	31(Long), 76(Long)
+
+	com.x.mymall.account.dao.SellerEntityMapper.selectByPrimaryKey
+	select ... from seller where sel_id = ?    31(Long)
+
+	com.x.mymall.storefun.dao.ext.StoreFunExEntityMapper.getDeductionFunctionCodeList
+	SELECT func_code FROM sys_function_set WHERE func_type = 2 
+
+	com.x.mymall.account.dao.SellerEntityMapper.selectByPrimaryKey
+	select ... from seller where sel_id = ? 31(Long)
+
+	com.x.mymall.storefun.dao.ext.ProductGoodsExEntityMapper.getFunctionCodeListInAllProductBySeller
+	SELECT func_code FROM product_goods LEFT JOIN product_goods_function ON progf_productId = prog_id LEFT JOIN sys_function_set ON func_id = progf_functionId WHERE prog_channelId = ? AND prog_status = 1 
+	2(Long)
+
+	com.x.mymall.account.dao.custom.PrivilegeExMapper.getAllPrivilegeByTypeAndFunc
+	SELECT  pri.*, res.* FROM pri_resource as res LEFT JOIN pri_privilege_resource as pri_res on pri_res.pres_resourceId=res.res_id LEFT JOIN pri_privilege as pri on pri.pri_id=pri_res.pres_privilegeId WHERE (pri.pri_functionCode is null or pri.pri_functionCode IN ( ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? ) ) and (pri_userflag is null or ?=(pri_userflag & ?) ) order by res_type,res_string 
+	ACTIVITY_RESULT_REMINDER(String), DIVERSION_ACTIVITY(String), UNIFIED_ORDER(String), RECEIPTS_LIST(String), CUSTOMER_INFO(String), SALE_ANALYSIS(String), SINGLE_SALE(String), BATCH_SALE(String), FIRST_DISCOUNT(String), UNION_ACCEPT(String), UNION_APPLY(String), 14(Integer), 14(Integer)
+
+	com.x.mymall.account.dao.custom.CustomerEmployeeExMapper.getEmployeeListByConditions
+	select ...  from customer_employee left join customer as customer1 on cemp_customerId=customer1.cus_id left join customer as customer2 on cemp_referrerId=customer2.cus_id left join seller on cemp_sellerId=sel_id left join store on cemp_storeId=sto_id WHERE ( cemp_customerId = ? and cemp_isEnabled = ? ) order by cemp_lastVisitTime desc 
+	1449(Long), true(Boolean)
+
+	com.x.mymall.account.dao.custom.CustomerEmployeeExMapper.getEmployeeListByConditions
+	select ...  from customer_employee left join customer as customer1 on cemp_customerId=customer1.cus_id left join customer as customer2 on cemp_referrerId=customer2.cus_id left join seller on cemp_sellerId=sel_id left join store on cemp_storeId=sto_id WHERE ( cemp_customerId = ? and cemp_isEnabled = ? ) order by cemp_lastVisitTime desc 
+	1449(Long), true(Boolean)
+
+	com.x.mymall.account.dao.custom.StoreExEntityMapper.getListByExample
+	select ... from store LEFT JOIN industry_category ON incat_id = sto_industryCategoryId WHERE ( sto_sellerId = ? and sto_stopStatus = ? ) 
+	31(Long), 1(Integer)
+
+选择店铺：
+
+退出：web端啥都不输出啊！
+
+e......
+
+既然清除一下cookie就可以了，那肯定找
+addCookie的地方啊
+
+
+13523766777
+
+从注册那里就有问题了，那看一下注册那里干了啥
+
+13523211333
+啊！不writeToken就可以了！但是点击我要开店就跑到登录页面去了！哭惹
+恩？？？但是AccountService的logout里面有三个getToken，居然说seller是token1？？？我的天呐！！！
+所以logout其实就是找到token并且clear掉！！！！！！原来是这样！！！
+但是哪个token呢...
+
+
+
+
+
+
+
+
+
+
+
+
+
+

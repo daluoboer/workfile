@@ -1,0 +1,69 @@
+http://192.168.1.117:8080/wxh/getDishesStoreList?sellerId=24&appid=9395731002
+ href:/getDishesStoreList
+  view:wxh/dishes-store-list
+   href:toMealOrder
+    view:wxh/customer-order-dishes
+	function addUnifiedOrder(remark)----
+		url:wxh/ajax/addUnifiedOrderV2
+
+
+    
+	
+
+
+确认订单：
+
+jsp
+mymall-web/src/main/webapp/WEB-INF/views/wxh/customer-order-dishes.jsp
+
+requestMapping
+com.x.mymall.web.controller.wxh.WXUnifiedOrderApiController.addUnifiedOrderV2
+
+确认订单
+ 
+insert:unified_order
+
+insert:unified_order_detail
+
+update:unified_order
+
+insert:unified_order_log
+
+
+支付并下单
+
+jsp
+mymall-web/src/main/webapp/WEB-INF/views/wxh/customer-dishes-order-pay.jsp
+
+requestMapping:这俩到底是哪个
+                              （/payV2-{sellerId}-{storeId}，链接里面是这个，哦那应该是从这个过来的啊）
+wxh/ajax/quickPay
+
+com.x.mymall.web.controller.wxh.WXApiController.quickPay
+
+支付并下单
+
+insert：receipts_order
+
+insert：receipts_order_goods
+
+insert：receipts_order_log
+
+update：receipts_order
+	reor_channelId = ? WHERE ( reor_serialNumber = ? )
+	reor_paymentType = ? WHERE ( reor_serialNumber = ? )
+
+
+
+
+
+
+下面这是支付，就跟现在的bug没有关系了
+
+resultMap.put("payType", "1");微信支付宝支付
+
+resultMap.put("payType", "2");储值卡或返利支付
+
+
+https://blog.csdn.net/sinat_30474567/article/details/72625651
+

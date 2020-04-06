@@ -1,0 +1,38 @@
+TODO----------------------
+
+
+
+
+DO------------------------
+登录的时候会先查找名为token的cookie
+
+恩？退出也要找叫token的cookie？
+
+13523677777
+注册的时候createToken了，但是没有writeToken，而且执行不了？？？因为没有build...
+
+13523455555
+
+退出的时候也找token了，可是并没有清除掉
+
+//手机登录后退出会清除token
+
+13523234345
+13523656565
+
+13523877122
+
+AccountType:
+    public static final int ACC_UNKNOWN = 0;
+    public static final int ACC_CUSTOMER = 1;   //用户端
+    public static final int ACC_SELLER = 2;     //商户端--- app端
+    public static final int ACC_PRINT = 3;      //打印机
+
+
+377行： <!--<beans:property name="exceptionIfMaximumExceeded" value="false" /> &lt;!&ndash; 如果没有配置 exceptionIfMaximumExceeded/error-if-maximum-exceeded，那么用户账号的第二次登录会使第一次登录失效，而配置了的话，那么第二次登录会被阻止。通常的做法是阻止第二次登录。 &ndash;&gt;-->
+ retrieveUser
+啊！！web端登录的时候调用了这个方法耶！com.x.mymall.core.server.security.MyDaoAuthenticationProvider.retrieveUser
+
+
+啊啊啊啊啊啊！！！！！应该是loadUserByUsernameForWeb
+然后选择店铺的时候调用了loadUserByUsername！！！！呀！重大突破！！！而且没有写token的！！！！激动！

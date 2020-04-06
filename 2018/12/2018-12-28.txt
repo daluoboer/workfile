@@ -1,0 +1,89 @@
+TODO--------------------------------------------
+    1.理解登录的原理，找到退出调用的方法
+    2.注册好
+
+而且吧，你不能只局限于一个注册，应该清楚它跟整个项目之间的联系
+
+如果只调用loadUserByUsernameForWeb那会被它的一连串拦截器拦截吗？需要被拦截，这样才能将数据写入缓存，虽然不知道具体是怎样运行的
+
+loadUserByUsernameForWeb
+然后：getByPhoneNumber
+
+没有调用verifyPassword
+
+
+
+
+
+登录的时候：没有添加token，但是会查找token并且getToken
+
+退出的时候：没有清除token
+
+
+
+web端登录的时候调用了这个方法耶！com.x.mymall.core.server.security.MyDaoAuthenticationProvider.retrieveUser
+是在这个方法中调用了loadUserByUsernameForWeb
+
+
+spring security在登录时的流程 ：
+
+
+
+
+
+spring security在实现注销功能时,大致流程如下 ：
+1. 使得HTTP session失效(如果invalidate-session属性被设置为true); 
+2. 清除SecurityContex(真正使得用户退出) 
+3. 将页面重定向至logout-success-url指明的URL
+
+
+
+userTokenAuthenticationProvider：这个可能是登录调用的方法的配置
+
+
+既然不能成功登录那就暂时放弃这个想法，注册完返回登录页面，其实这样也很合理啊，但是开完店之后应该可以直接进入店铺好的就酱，去改吧
+
+注册-->登录-->开店-->进入店铺-->认证-->通知管理员进行审核
+
+现在做的：
+	注册 --> forward:/login --> goInitStore0 --> goInitStore1 --> initStore --> welcome
+
+	注册 --> register(因为要告诉用户是否注册成功)--> goInitStore0 --> goInitStore1 --> initStore --> welcome
+
+	注册 --> register --> goInitStore0 --> goInitStore1 --> initStore（失败，因为用户注册后存储在上下文中的信息并没有改变） --> welcome
+
+	注册 --> register --> goInitStore0 --> goInitStore1 --> initStore -- 加了token，并update数据库中的token1 --> welcome
+
+		咦，注册完后不是有反馈吗？删了吗？加回来
+
+		百度地图咋点了还会弹出地点具体信息啥的那个小框框，去掉
+
+		(⊙o⊙)…倒是可以成功到首页了，但是又不能退出了...所以，这个token是无论如何都不能加的，试一下reloadUserByUsername
+
+		恩这个关键呢，就是这个上下文，怎么将session中的上下文给重新加载，其实解决了这个好像也就是解决了无法登录的问题了吧？
+
+	注册 --> register --> goInitStore0 --> goInitStore1 --> initStore --> welcome（被拦截成错误页）
+
+		
+还是那两种方案
+	1.退出时清除叫token的cookie
+	2.找到登录调用的接口，直接运行对应的方法
+
+啊！成功了！成功登录了哈哈哈哈哈哈哈哈！！！！OK！！！
+
+接下来做开店后的用户信息刷新啦！(⊙o⊙)…咋又有个token...
+救命，这咋也加了个token...
+e...用了reloudUser也加了个token...
+
+
+e........
+布吉岛发生了什么...
+我刚刚重新build了一下，然后注册和开店都没有生成token了~然而我已经加了清除token哈哈哈哈哈哈
+再检查一遍，重新跑一边，确定没有生成cookie？
+
+
+嘻嘻嘻嘻嘻嘻可以啦啦啦啦啦啦
+
+
+
+

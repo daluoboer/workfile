@@ -1,0 +1,7 @@
+entity:实体类
+dao:定义增删查改
+mapper:实现增删查改
+service:接口
+serviceImpl:接口实现类
+
+

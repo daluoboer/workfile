@@ -1,0 +1,101 @@
+@RequestMapping(value = {"dialog/import"}, method = RequestMethod.GET)
+    public String dlgImport(String env) {
+        return "ucm/instance_import";
+    }
+
+    @RequestMapping(value = "upload")
+    @ResponseBody
+    public ResultVO upload(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        // 转型为MultipartHttpRequest：
+        File file = null;
+        try {
+            MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+            // 获得文件：
+            MultipartFile mFileOrder = multipartRequest.getFile("file_data");
+            String tempPath = request.getSession().getServletContext().getRealPath("/") + "/upload/";
+            String fileSuffix = mFileOrder.getOriginalFilename().substring(mFileOrder.getOriginalFilename().lastIndexOf("."));
+            if (!(".xls".equals(fileSuffix) || ".xlsx".equals(fileSuffix))) {
+                return new ResultVO(203, "上传文件格式不正确");
+            }
+            file = new File(tempPath + System.currentTimeMillis() + fileSuffix);
+            File wf;
+            String realPath = tempPath + mFileOrder.getOriginalFilename();
+            wf = new File(realPath);
+            File parent = wf.getParentFile();
+            if (parent != null && !parent.exists()) {
+                parent.mkdirs();
+            }
+            mFileOrder.transferTo(file);
+
+            List<Map<String, String>> mapList = ExcelReaderUtil.readExcel(file.getPath());
+
+            return new ResultVO(200, mapList);
+        } catch (Exception ex) {
+            logger.error("upload instance error", ex);
+            return new ResultVO(203, "上传文件失败");
+        } finally {
+            if (file != null) {
+                file.delete();
+            }
+        }
+    }
+
+    @RequestMapping(value = "doImport", method = RequestMethod.POST)
+    @ResponseBody
+    public ResultVO doImport(@RequestBody List<InstanceDetailVO> list) {
+        try {
+            if (list.size() > 0) {
+                InstanceDetailVO firstInfo = list.get(0);
+
+                ProjectDTO projectDTO = new ProjectDTO();
+                projectDTO.setProjectCode(firstInfo.getProjectCode());
+                projectDTO.setProjectName(firstInfo.getProjectName());
+                projectDTO.setProjectDesc(firstInfo.getProjectDesc());
+
+                InstanceDTO instanceDTO = new InstanceDTO();
+                instanceDTO.setInstanceCode(firstInfo.getInstanceCode());
+                instanceDTO.setInstanceName(firstInfo.getInstanceName());
+                instanceDTO.setProjectCode(firstInfo.getProjectCode());
+                instanceDTO.setInstanceVersion(firstInfo.getInstanceVersion());
+                instanceDTO.setInstanceType(firstInfo.getInstanceType());
+                instanceDTO.setFromInstanceCode(firstInfo.getFromInstanceCode());
+                instanceDTO.setInstanceDesc(firstInfo.getInstanceDesc());
+
+                List<InstanceDetailDTO> detailList = new ArrayList<>();
+                for (InstanceDetailVO detailVO : list) {
+                    InstanceDetailDTO instanceDetailDTO = new InstanceDetailDTO();
+                    instanceDetailDTO.setProjectCode(instanceDTO.getProjectCode());
+                    instanceDetailDTO.setInstanceCode(instanceDTO.getInstanceCode());
+                    instanceDetailDTO.setEnvironmentId("-1");
+                    instanceDetailDTO.setPropertyDesc(detailVO.getPropertyDesc());
+                    instanceDetailDTO.setPropertyKey(detailVO.getPropertyKey());
+                    instanceDetailDTO.setPropertyValue(detailVO.getPropertyValue());
+                    detailList.add(instanceDetailDTO);
+                }
+
+                if (InstanceType.PROJECT.getCode() != instanceDTO.getInstanceType() && InstanceType.GLOBAL.getCode() != instanceDTO.getInstanceType()) {
+                    return new ResultVO(500, "只支持项目配置、全局配置导入");
+                }
+
+                projectService.insert(projectDTO);
+                instanceService.insert(instanceDTO);
+                instanceDetailService.insert(detailList);
+
+                logService.create(new LogInfo() {
+                    {
+                        setOperator(WebContextUtil.getCurrentUser().getName());
+                        setOperateId(projectDTO.getProjectCode());
+                        setModule("ucm/实例管理");
+                        setAction("导入");
+                    }
+                });
+
+                return new ResultVO(200, "ok");
+            } else {
+                return new ResultVO(500, "无实例属性");
+            }
+        } catch (BusinessException ex) {
+            return new ResultVO(500, ex.getMessage());
+        }
+    }
+}

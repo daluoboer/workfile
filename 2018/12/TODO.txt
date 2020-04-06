@@ -1,0 +1,352 @@
+ 1.把H5调用的方法弄明白，知道在哪里修改代码
+ 2.使用分支
+
+
+
+[2018-12-17 17:49:39.349] INFO  [qtp1260254833-461] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.account.dao.CustomerEntityMapper.selectByPrimaryKey
+	==> SQL: select cus_id, cus_idNumber, cus_name, cus_displayName, cus_realName, cus_password, cus_email, cus_phoneNumber, cus_gender, cus_birthday, cus_qq, cus_createdTime, cus_lastLoginTime, cus_lastCheckTime, cus_avatarImageUrl, cus_status, cus_isEnabled, cus_token, cus_token1, cus_token2, cus_salt, cus_isRegistered, cus_registerDate, cus_shippingAddress, cus_sellerId, cus_wxOpenId, cus_wxNickName, cus_alipayOpenId, cus_wxOpenIdForSeller, cus_wxAppletOpenId, cus_wxUnionid, cus_wxSubscribed, cus_wxSubscribedForSeller, cus_fromType from customer where cus_id = ? 
+	==> Parameters: 1449(Long)
+	==> Duration: 0.010s
+
+[2018-12-17 17:49:39.360] INFO  [qtp1260254833-461] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.store.dao.custom.GoodsExMapper.getGoodsListByCondition
+	==> SQL: select goo_id, goo_sellerId, goo_storeId, goo_name, goo_namePinyin, goo_description, goo_categoryId, goo_categoryName, goo_status, goo_closed, goo_operatorId, goo_createdTime, goo_updatedTime, goo_skuNumber, goo_code, goo_barcode, goo_defaultImageUrl, goo_stockNumber, goo_price, goo_vipPrice, goo_costPrice, goo_unit, goo_discount, goo_credits, goo_version, goo_putawayStatus, goo_salesVolume, goo_showLevel , gdu_id, gdu_name, gdu_createdTime , gcate_id, gcate_sellerId, gcate_storeId, gcate_code, gcate_name, gcate_parentId, gcate_path, gcate_imageUrl, gcate_orderNum, gcate_enabled , CASE WHEN goo_categoryId = 0 THEN '未分类' ELSE CASE WHEN gcate_parentId = 0 THEN gcate_name ELSE CONCAT((SELECT b.gcate_name FROM goods_category b WHERE b.gcate_id = a.gcate_parentId),'-->',a.gcate_name) END END AS goodsCategoryName from goods left JOIN goods_unit on gdu_id=goo_unit left JOIN goods_category a on gcate_id=goo_categoryId WHERE ( goo_id in ( ? ) ) 
+	==> Parameters: 98(String)
+	==> Duration: 0.010s
+
+[2018-12-17 17:49:39.394] INFO  [qtp1260254833-461] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.unifiedOrder.dao.UnifiedOrderEntityMapper.insertSelective!selectKey
+	==> SQL: SELECT LAST_INSERT_ID() 
+	==> Duration: 0.009s
+
+[2018-12-17 17:49:39.396] INFO  [qtp1260254833-461] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.unifiedOrder.dao.UnifiedOrderEntityMapper.insertSelective
+	==> SQL: insert into unified_order ( uno_sellerId, uno_storeId, uno_customerId, uno_idNumberOrPhoneNumber, uno_status, uno_totalAmount, uno_createTime, uno_revokeRemark, uno_takeWay ) values ( ?, ?, ?, ?, ?, ?, ?, ?, ? ) 
+	==> Parameters: 24(Long), 64(Long), 1449(Long), 15050481925(String), 1(Byte), 0.01000000000000000020816681711721685132943093776702880859375(BigDecimal), Mon Dec 17 17:49:39 CST 2018(Date), (String), 1(Byte)
+	==> Duration: 0.034s
+
+[2018-12-17 17:49:39.432] INFO  [qtp1260254833-461] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.unifiedOrder.dao.UnifiedOrderDetailEntityMapper.selectByExample
+	==> SQL: select unod_id, unod_unifiedOrderId, unod_goodsId, unod_name, unod_code, unod_price, unod_quantity, unod_createTime, unod_creator, unod_remark, unod_vipPrice, unod_discountType, unod_confirmCount from unified_order_detail WHERE ( unod_unifiedOrderId = ? and unod_goodsId = ? and unod_discountType is null ) 
+	==> Parameters: 840(Long), 98(Long)
+	==> Duration: 0.025s
+
+[2018-12-17 17:49:39.443] INFO  [qtp1260254833-461] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.store.dao.custom.GoodsExMapper.getGoodsListByCondition
+	==> SQL: select goo_id, goo_sellerId, goo_storeId, goo_name, goo_namePinyin, goo_description, goo_categoryId, goo_categoryName, goo_status, goo_closed, goo_operatorId, goo_createdTime, goo_updatedTime, goo_skuNumber, goo_code, goo_barcode, goo_defaultImageUrl, goo_stockNumber, goo_price, goo_vipPrice, goo_costPrice, goo_unit, goo_discount, goo_credits, goo_version, goo_putawayStatus, goo_salesVolume, goo_showLevel , gdu_id, gdu_name, gdu_createdTime , gcate_id, gcate_sellerId, gcate_storeId, gcate_code, gcate_name, gcate_parentId, gcate_path, gcate_imageUrl, gcate_orderNum, gcate_enabled , CASE WHEN goo_categoryId = 0 THEN '未分类' ELSE CASE WHEN gcate_parentId = 0 THEN gcate_name ELSE CONCAT((SELECT b.gcate_name FROM goods_category b WHERE b.gcate_id = a.gcate_parentId),'-->',a.gcate_name) END END AS goodsCategoryName from goods left JOIN goods_unit on gdu_id=goo_unit left JOIN goods_category a on gcate_id=goo_categoryId WHERE ( goo_id = ? ) 
+	==> Parameters: 98(Long)
+	==> Duration: 0.011s
+
+[2018-12-17 17:49:39.472] INFO  [qtp1260254833-461] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.unifiedOrder.dao.UnifiedOrderDetailEntityMapper.insertSelective!selectKey
+	==> SQL: SELECT LAST_INSERT_ID() 
+	==> Duration: 0.010s
+
+[2018-12-17 17:49:39.473] INFO  [qtp1260254833-461] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.unifiedOrder.dao.UnifiedOrderDetailEntityMapper.insertSelective
+	==> SQL: insert into unified_order_detail ( unod_unifiedOrderId, unod_goodsId, unod_name, unod_price, unod_quantity, unod_createTime, unod_remark ) values ( ?, ?, ?, ?, ?, ?, ? ) 
+	==> Parameters: 840(Long), 98(Long), 荔枝(String), 0.01(BigDecimal), 1(Integer), Mon Dec 17 17:49:39 CST 2018(Date), (String)
+	==> Duration: 0.028s
+
+[2018-12-17 17:49:39.535] INFO  [qtp1260254833-461] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.unifiedOrder.dao.UnifiedOrderDetailEntityMapper.selectByExample
+	==> SQL: select unod_id, unod_unifiedOrderId, unod_goodsId, unod_name, unod_code, unod_price, unod_quantity, unod_createTime, unod_creator, unod_remark, unod_vipPrice, unod_discountType, unod_confirmCount from unified_order_detail WHERE ( unod_unifiedOrderId = ? ) 
+	==> Parameters: 840(Long)
+	==> Duration: 0.024s
+
+[2018-12-17 17:49:39.544] INFO  [qtp1260254833-461] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.unifiedOrder.dao.UnifiedOrderEntityMapper.selectByPrimaryKey
+	==> SQL: select uno_id, uno_sellerId, uno_storeId, uno_customerId, uno_idNumberOrPhoneNumber, uno_unifiedOrderUnitId, uno_unifiedOrderSeatId, uno_status, uno_totalAmount, uno_createTime, uno_creator, uno_revokeOperatorId, uno_revokeRemark, uno_revokeTime, uno_closeAccountsOperatorId, uno_closeAccountsTime, uno_finishOperatorId, uno_finishTime, uno_updateTime, uno_modifier, uno_receiptsOrderId, uno_consumerNumber, uno_discount, uno_takeWay from unified_order where uno_id = ? 
+	==> Parameters: 840(Long)
+	==> Duration: 0.008s
+
+[2018-12-17 17:49:39.573] INFO  [qtp1260254833-461] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.unifiedOrder.dao.UnifiedOrderEntityMapper.updateByPrimaryKeySelective
+	==> SQL: update unified_order SET uno_sellerId = ?, uno_storeId = ?, uno_customerId = ?, uno_idNumberOrPhoneNumber = ?, uno_status = ?, uno_totalAmount = ?, uno_createTime = ?, uno_revokeRemark = ?, uno_takeWay = ? where uno_id = ? 
+	==> Parameters: 24(Long), 64(Long), 1449(Long), 15050481925(String), 1(Byte), 0.01(BigDecimal), Mon Dec 17 17:49:39 CST 2018(Date), (String), 1(Byte), 840(Long)
+	==> Duration: 0.028s
+
+[2018-12-17 17:49:39.609] INFO  [qtp1260254833-461] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.unifiedOrder.dao.UnifiedOrderLogEntityMapper.insertSelective!selectKey
+	==> SQL: SELECT LAST_INSERT_ID() 
+	==> Duration: 0.009s
+
+[2018-12-17 17:49:39.609] INFO  [qtp1260254833-461] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.unifiedOrder.dao.UnifiedOrderLogEntityMapper.insertSelective
+	==> SQL: insert into unified_order_log ( unol_unifiedOrderId, unol_goodsId, unol_name, unol_price, unol_quantity, unol_operateType, unol_createTime ) values ( ?, ?, ?, ?, ?, ?, ? ) 
+	==> Parameters: 840(Long), 98(Long), 荔枝(String), 0.01(BigDecimal), 1(Integer), 3(Integer), Mon Dec 17 17:49:39 CST 2018(Date)
+	==> Duration: 0.036s
+
+[2018-12-17 17:49:39.625] INFO  [qtp1260254833-461] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.unifiedOrder.dao.UnifiedOrderEntityMapper.selectByPrimaryKey
+	==> SQL: select uno_id, uno_sellerId, uno_storeId, uno_customerId, uno_idNumberOrPhoneNumber, uno_unifiedOrderUnitId, uno_unifiedOrderSeatId, uno_status, uno_totalAmount, uno_createTime, uno_creator, uno_revokeOperatorId, uno_revokeRemark, uno_revokeTime, uno_closeAccountsOperatorId, uno_closeAccountsTime, uno_finishOperatorId, uno_finishTime, uno_updateTime, uno_modifier, uno_receiptsOrderId, uno_consumerNumber, uno_discount, uno_takeWay from unified_order where uno_id = ? 
+	==> Parameters: 840(Long)
+	==> Duration: 0.014s
+
+[2018-12-17 17:49:39.636] INFO  [qtp1260254833-461] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.account.dao.custom.StoreExEntityMapper.getListByExample
+	==> SQL: select sto_id, sto_sellerId, sto_name, sto_description, sto_logoImageUrl, sto_category, sto_addressDescription, sto_addressLongitude, sto_addressLatitude, sto_geoHash, sto_globalRegionPath, sto_openingHours, sto_mobilePhoneNumber, sto_telephoneNumber, sto_createdTime, sto_updatedTime, sto_regionId, sto_operatorId, sto_stopStatus, sto_stopRemark, sto_auditStatus, sto_auditRemark, sto_validityTime, sto_isOpenMall, sto_viewImageUrls, sto_code, sto_industryCategoryId, sto_isTest, sto_accountingCode , incat_id, incat_code, incat_name, incat_parentId from store LEFT JOIN industry_category ON incat_id = sto_industryCategoryId WHERE ( sto_id = ? ) 
+	==> Parameters: 64(Long)
+	==> Duration: 0.011s
+
+[2018-12-17 17:49:39.647] INFO  [qtp1260254833-461] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.unifiedOrder.dao.UnifiedOrderSettingEntityMapper.selectByExample
+	==> SQL: select unosg_id, unosg_sellerId, unosg_storeId, unosg_setting from unified_order_setting WHERE ( unosg_sellerId = ? and unosg_storeId = ? ) 
+	==> Parameters: 24(Long), 64(Long)
+	==> Duration: 0.010s
+
+[2018-12-17 17:49:39.659] INFO  [qtp1260254833-461] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.print.dao.ext.PrintTemplateDeviceEntityExtMapper.getPrintDeviceCount
+	==> SQL: SELECT COUNT(*) FROM print_template_device a LEFT JOIN print_template b ON a.ptd_printTemplateId = b.pt_id WHERE b.pt_number = ? AND a.ptd_autoPrint = ? AND a.ptd_sellerId = ? AND a.ptd_storeId = ? 
+	==> Parameters: 8(Integer), 0(Integer), 24(Long), 64(Long)
+	==> Duration: 0.011s
+
+[2018-12-17 17:49:39.863] INFO  [qtp1260254833-422] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.account.dao.custom.StoreExEntityMapper.getListByExample
+	==> SQL: select sto_id, sto_sellerId, sto_name, sto_description, sto_logoImageUrl, sto_category, sto_addressDescription, sto_addressLongitude, sto_addressLatitude, sto_geoHash, sto_globalRegionPath, sto_openingHours, sto_mobilePhoneNumber, sto_telephoneNumber, sto_createdTime, sto_updatedTime, sto_regionId, sto_operatorId, sto_stopStatus, sto_stopRemark, sto_auditStatus, sto_auditRemark, sto_validityTime, sto_isOpenMall, sto_viewImageUrls, sto_code, sto_industryCategoryId, sto_isTest, sto_accountingCode , incat_id, incat_code, incat_name, incat_parentId from store LEFT JOIN industry_category ON incat_id = sto_industryCategoryId WHERE ( sto_id = ? ) 
+	==> Parameters: 64(Long)
+	==> Duration: 0.011s
+
+[2018-12-17 17:49:39.876] INFO  [qtp1260254833-422] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.account.dao.CustomerEntityMapper.selectByPrimaryKey
+	==> SQL: select cus_id, cus_idNumber, cus_name, cus_displayName, cus_realName, cus_password, cus_email, cus_phoneNumber, cus_gender, cus_birthday, cus_qq, cus_createdTime, cus_lastLoginTime, cus_lastCheckTime, cus_avatarImageUrl, cus_status, cus_isEnabled, cus_token, cus_token1, cus_token2, cus_salt, cus_isRegistered, cus_registerDate, cus_shippingAddress, cus_sellerId, cus_wxOpenId, cus_wxNickName, cus_alipayOpenId, cus_wxOpenIdForSeller, cus_wxAppletOpenId, cus_wxUnionid, cus_wxSubscribed, cus_wxSubscribedForSeller, cus_fromType from customer where cus_id = ? 
+	==> Parameters: 1449(Long)
+	==> Duration: 0.012s
+
+[2018-12-17 17:49:39.886] INFO  [qtp1260254833-422] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.unifiedOrder.dao.UnifiedOrderEntityMapper.selectByPrimaryKey
+	==> SQL: select uno_id, uno_sellerId, uno_storeId, uno_customerId, uno_idNumberOrPhoneNumber, uno_unifiedOrderUnitId, uno_unifiedOrderSeatId, uno_status, uno_totalAmount, uno_createTime, uno_creator, uno_revokeOperatorId, uno_revokeRemark, uno_revokeTime, uno_closeAccountsOperatorId, uno_closeAccountsTime, uno_finishOperatorId, uno_finishTime, uno_updateTime, uno_modifier, uno_receiptsOrderId, uno_consumerNumber, uno_discount, uno_takeWay from unified_order where uno_id = ? 
+	==> Parameters: 840(Long)
+	==> Duration: 0.010s
+
+[2018-12-17 17:49:39.913] INFO  [qtp1260254833-422] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.unifiedOrder.dao.UnifiedOrderDetailEntityMapper.selectByExample
+	==> SQL: select unod_id, unod_unifiedOrderId, unod_goodsId, unod_name, unod_code, unod_price, unod_quantity, unod_createTime, unod_creator, unod_remark, unod_vipPrice, unod_discountType, unod_confirmCount from unified_order_detail WHERE ( unod_unifiedOrderId = ? ) 
+	==> Parameters: 840(Long)
+	==> Duration: 0.026s
+
+[2018-12-17 17:49:39.978] INFO  [qtp1260254833-422] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.store.dao.PrepaidCardDefEntityMapper.selectByExample
+	==> SQL: select pcd_id, pcd_sellerId, pcd_name, pcd_description, pcd_imageUrl, pcd_createdTime, pcd_updateTime, pcd_authorId, pcd_authorName, pcd_expiryDate, pcd_type, pcd_expiryOfYears, pcd_operatorId, pcd_isCanRecharge, pcd_textColor, pcd_backgroundColor, pcd_adOrder, pcd_adVideoUrl, pcd_count, pcd_regionId, pcd_recommend_startDate, pcd_recommend_endDate from prepaid_card_def WHERE ( pcd_sellerId = ? ) 
+	==> Parameters: 24(Long)
+	==> Duration: 0.027s
+
+[2018-12-17 17:49:40.059] INFO  [qtp1260254833-422] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.store.dao.CustomerPrepaidCardEntityMapper.countByExample
+	==> SQL: select count(*) from customer_prepaid_card WHERE ( cpc_customerId = ? and cpc_prepaidCardDefId = ? ) 
+	==> Parameters: 1449(Long), 24(Long)
+	==> Duration: 0.023s
+
+[2018-12-17 17:49:40.103] INFO  [qtp1260254833-422] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.store.dao.CustomerStoreEntityMapper.selectByExample
+	==> SQL: select cst_id, cst_customerId, cst_sellerId, cst_storeId, cst_createdTime, cst_level, cst_lastVisitTime, cst_firstTradeTime, cst_lastTradeTime, cst_tradeAmount, cst_tradeNumber, cst_fromStoreId, cst_fromOperatorId, cst_joinTime from customer_store WHERE ( cst_sellerId = ? and cst_storeId = ? and cst_customerId = ? ) 
+	==> Parameters: 24(Long), 64(Long), 1449(Long)
+	==> Duration: 0.020s
+
+[2018-12-17 17:49:40.120] INFO  [qtp1260254833-422] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.store.dao.CustomerStoreEntityMapper.updateByPrimaryKeySelective
+	==> SQL: update customer_store SET cst_lastVisitTime = ? where cst_id = ? 
+	==> Parameters: Mon Dec 17 17:49:40 CST 2018(Date), 2886(Long)
+	==> Duration: 0.016s
+
+[2018-12-17 17:49:40.162] INFO  [qtp1260254833-422] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.account.dao.CustomerEntityMapper.selectByPrimaryKey
+	==> SQL: select cus_id, cus_idNumber, cus_name, cus_displayName, cus_realName, cus_password, cus_email, cus_phoneNumber, cus_gender, cus_birthday, cus_qq, cus_createdTime, cus_lastLoginTime, cus_lastCheckTime, cus_avatarImageUrl, cus_status, cus_isEnabled, cus_token, cus_token1, cus_token2, cus_salt, cus_isRegistered, cus_registerDate, cus_shippingAddress, cus_sellerId, cus_wxOpenId, cus_wxNickName, cus_alipayOpenId, cus_wxOpenIdForSeller, cus_wxAppletOpenId, cus_wxUnionid, cus_wxSubscribed, cus_wxSubscribedForSeller, cus_fromType from customer where cus_id = ? 
+	==> Parameters: 1449(Long)
+	==> Duration: 0.009s
+
+[2018-12-17 17:49:40.177] INFO  [qtp1260254833-422] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.store.dao.CustomerStoreEntityMapper.selectByExample
+	==> SQL: select cst_id, cst_customerId, cst_sellerId, cst_storeId, cst_createdTime, cst_level, cst_lastVisitTime, cst_firstTradeTime, cst_lastTradeTime, cst_tradeAmount, cst_tradeNumber, cst_fromStoreId, cst_fromOperatorId, cst_joinTime from customer_store WHERE ( cst_sellerId = ? and cst_storeId = ? and cst_customerId = ? ) 
+	==> Parameters: 24(Long), 64(Long), 1449(Long)
+	==> Duration: 0.012s
+
+[2018-12-17 17:49:40.189] INFO  [qtp1260254833-422] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.expenseCard.dao.ext.ExpenseCardMapper.getExpenseCardStoredValueTotalAmount
+	==> SQL: select sum(mor_totalAmount) from mall_order WHERE mor_type = 4 and mor_status=100 and mor_sellerId = ? and mor_customerId = ? 
+	==> Parameters: 24(Long), 1449(Long)
+	==> Duration: 0.010s
+
+[2018-12-17 17:49:40.228] INFO  [qtp1260254833-422] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.store.dao.custom.GiftTokenExMapper.getGiftTokenListByConditions
+	==> SQL: select distinct cgt_id, cgt_sellerId, cgt_fromStoreId, cgt_customerId, cgt_giftTokenDefId, cgt_numberCode, cgt_operatorId, cgt_createdTime, cgt_usedStoreId, cgt_usedOperatorId, cgt_isUsed, cgt_usedTime, cgt_startDate, cgt_endDate, cgt_source, cgt_isPreSelected, cgt_preSelectedTime, cgt_giftDefType, cgt_srcOrderNo, cgt_srcGoodsId, cgt_marketingActivityId, cgt_updateTime, cgt_deliverStatus, cgt_deliverOrderId, cgt_useType, cgt_giftTotalCount, cgt_giftUsedCount, cgt_isTransfrom, cgt_useTimeRule, cgt_isReserve, cgt_resCancelCount, cgt_resCancelUsedCount , sel_id, sel_identifier, sel_displayName, sel_description, sel_industryCategoryId, sel_contactsName, sel_contactsIdCardNumber, sel_contactsIdCardImageUrl, sel_contactsIdCardImageUrl1, sel_contactsPhoneNumber, sel_contactsEmail, sel_telephone, sel_legalPersonName, sel_legalPersonIDCardNumber, sel_legalPersonIDCardImageUrl, sel_legalPersonIDCardImageUrl1, sel_licenseNumber, sel_licenseImageUrl, sel_proxyLetterImageUrl, sel_createdTime, sel_updatedTime, sel_isEnabled, sel_isAudit, sel_auditTime, sel_auditReason, sel_auditPerson, sel_auditSubmitTime, sel_industryPath, sel_globalRegionPath, sel_storeCount, sel_storeCountLimit, sel_creatorId, sel_servicePersonName, sel_marketPersonName, sel_appId, sel_mchId, sel_remark, sel_tag, sel_enterpriseName, sel_expiryDateFrom, sel_expiryDateTo, sel_settingId, sel_payChannel, sel_exMerchtNm, sel_registAddr, sel_cooperationId, sel_saleManPhoneNumber , customer2.cus_id as customer2_cus_id, customer2.cus_idNumber as customer2_cus_idNumber, customer2.cus_name as customer2_cus_name, customer2.cus_displayName as customer2_cus_displayName, customer2.cus_realName as customer2_cus_realName, customer2.cus_password as customer2_cus_password, customer2.cus_email as customer2_cus_email, customer2.cus_phoneNumber as customer2_cus_phoneNumber, customer2.cus_gender as customer2_cus_gender, customer2.cus_birthday as customer2_cus_birthday, customer2.cus_qq as customer2_cus_qq, customer2.cus_createdTime as customer2_cus_createdTime, customer2.cus_lastLoginTime as customer2_cus_lastLoginTime, customer2.cus_lastCheckTime as customer2_cus_lastCheckTime, customer2.cus_avatarImageUrl as customer2_cus_avatarImageUrl, customer2.cus_status as customer2_cus_status, customer2.cus_isEnabled as customer2_cus_isEnabled, customer2.cus_token as customer2_cus_token, customer2.cus_token1 as customer2_cus_token1, customer2.cus_token2 as customer2_cus_token2, customer2.cus_salt as customer2_cus_salt, customer2.cus_isRegistered as customer2_cus_isRegistered, customer2.cus_registerDate as customer2_cus_registerDate, customer2.cus_shippingAddress as customer2_cus_shippingAddress, customer2.cus_sellerId as customer2_cus_sellerId, customer2.cus_wxOpenId as customer2_cus_wxOpenId, customer2.cus_wxNickName as customer2_cus_wxNickName, customer2.cus_alipayOpenId as customer2_cus_alipayOpenId, customer2.cus_wxOpenIdForSeller as customer2_cus_wxOpenIdForSeller, customer2.cus_wxAppletOpenId as customer2_cus_wxAppletOpenId, customer2.cus_wxUnionid as customer2_cus_wxUnionid, customer2.cus_wxSubscribed as customer2_cus_wxSubscribed, customer2.cus_wxSubscribedForSeller as customer2_cus_wxSubscribedForSeller, customer2.cus_fromType as customer2_cus_fromType , customer1.cus_id as customer1_cus_id, customer1.cus_idNumber as customer1_cus_idNumber, customer1.cus_name as customer1_cus_name, customer1.cus_displayName as customer1_cus_displayName, customer1.cus_realName as customer1_cus_realName, customer1.cus_password as customer1_cus_password, customer1.cus_email as customer1_cus_email, customer1.cus_phoneNumber as customer1_cus_phoneNumber, customer1.cus_gender as customer1_cus_gender, customer1.cus_birthday as customer1_cus_birthday, customer1.cus_qq as customer1_cus_qq, customer1.cus_createdTime as customer1_cus_createdTime, customer1.cus_lastLoginTime as customer1_cus_lastLoginTime, customer1.cus_lastCheckTime as customer1_cus_lastCheckTime, customer1.cus_avatarImageUrl as customer1_cus_avatarImageUrl, customer1.cus_status as customer1_cus_status, customer1.cus_isEnabled as customer1_cus_isEnabled, customer1.cus_token as customer1_cus_token, customer1.cus_token1 as customer1_cus_token1, customer1.cus_token2 as customer1_cus_token2, customer1.cus_salt as customer1_cus_salt, customer1.cus_isRegistered as customer1_cus_isRegistered, customer1.cus_registerDate as customer1_cus_registerDate, customer1.cus_shippingAddress as customer1_cus_shippingAddress, customer1.cus_sellerId as customer1_cus_sellerId, customer1.cus_wxOpenId as customer1_cus_wxOpenId, customer1.cus_wxNickName as customer1_cus_wxNickName, customer1.cus_alipayOpenId as customer1_cus_alipayOpenId, customer1.cus_wxOpenIdForSeller as customer1_cus_wxOpenIdForSeller, customer1.cus_wxAppletOpenId as customer1_cus_wxAppletOpenId, customer1.cus_wxUnionid as customer1_cus_wxUnionid, customer1.cus_wxSubscribed as customer1_cus_wxSubscribed, customer1.cus_wxSubscribedForSeller as customer1_cus_wxSubscribedForSeller, customer1.cus_fromType as customer1_cus_fromType , gtd_id, gtd_number, gtd_sellerId, gtd_name, gtd_description, gtd_valueAmount, gtd_sellAmount, gtd_issueNumber, gtd_stockNumber, gtd_receivedCount, gtd_goodsId, gtd_goodsSKU, gtd_imageUrl, gtd_createdTime, gtd_updateTime, gtd_fromStoreId, gtd_operatorId, gtd_enabled, gtd_isAudit, gtd_expiryDateType, gtd_expiryDate, gtd_startDate, gtd_endDate, gtd_timeRange, gtd_pubToSellerUnion, gtd_pubTime, gtd_giftDefType, gtd_goodsCount, gtd_inStoreCount, gtd_useNoticeContent, gtd_imageUrlArray, gtd_isDeliever, gtd_delieverAmount, gtd_delieverDesc, gtd_isSent, gtd_useType, gtd_totalCount, gtd_isTransfrom, gtd_isOrderDeliever, gtd_useTimeRule, gtd_isReserve, gtd_resCancelCount , store1.sto_id as store1_sto_id, store1.sto_sellerId as store1_sto_sellerId, store1.sto_name as store1_sto_name, store1.sto_description as store1_sto_description, store1.sto_logoImageUrl as store1_sto_logoImageUrl, store1.sto_category as store1_sto_category, store1.sto_addressDescription as store1_sto_addressDescription, store1.sto_addressLongitude as store1_sto_addressLongitude, store1.sto_addressLatitude as store1_sto_addressLatitude, store1.sto_geoHash as store1_sto_geoHash, store1.sto_globalRegionPath as store1_sto_globalRegionPath, store1.sto_openingHours as store1_sto_openingHours, store1.sto_mobilePhoneNumber as store1_sto_mobilePhoneNumber, store1.sto_telephoneNumber as store1_sto_telephoneNumber, store1.sto_createdTime as store1_sto_createdTime, store1.sto_updatedTime as store1_sto_updatedTime, store1.sto_regionId as store1_sto_regionId, store1.sto_operatorId as store1_sto_operatorId, store1.sto_stopStatus as store1_sto_stopStatus, store1.sto_stopRemark as store1_sto_stopRemark, store1.sto_auditStatus as store1_sto_auditStatus, store1.sto_auditRemark as store1_sto_auditRemark, store1.sto_validityTime as store1_sto_validityTime, store1.sto_isOpenMall as store1_sto_isOpenMall, store1.sto_viewImageUrls as store1_sto_viewImageUrls, store1.sto_code as store1_sto_code, store1.sto_industryCategoryId as store1_sto_industryCategoryId, store1.sto_isTest as store1_sto_isTest, store1.sto_accountingCode as store1_sto_accountingCode , store2.sto_id as store2_sto_id, store2.sto_sellerId as store2_sto_sellerId, store2.sto_name as store2_sto_name, store2.sto_description as store2_sto_description, store2.sto_logoImageUrl as store2_sto_logoImageUrl, store2.sto_category as store2_sto_category, store2.sto_addressDescription as store2_sto_addressDescription, store2.sto_addressLongitude as store2_sto_addressLongitude, store2.sto_addressLatitude as store2_sto_addressLatitude, store2.sto_geoHash as store2_sto_geoHash, store2.sto_globalRegionPath as store2_sto_globalRegionPath, store2.sto_openingHours as store2_sto_openingHours, store2.sto_mobilePhoneNumber as store2_sto_mobilePhoneNumber, store2.sto_telephoneNumber as store2_sto_telephoneNumber, store2.sto_createdTime as store2_sto_createdTime, store2.sto_updatedTime as store2_sto_updatedTime, store2.sto_regionId as store2_sto_regionId, store2.sto_operatorId as store2_sto_operatorId, store2.sto_stopStatus as store2_sto_stopStatus, store2.sto_stopRemark as store2_sto_stopRemark, store2.sto_auditStatus as store2_sto_auditStatus, store2.sto_auditRemark as store2_sto_auditRemark, store2.sto_validityTime as store2_sto_validityTime, store2.sto_isOpenMall as store2_sto_isOpenMall, store2.sto_viewImageUrls as store2_sto_viewImageUrls, store2.sto_code as store2_sto_code, store2.sto_industryCategoryId as store2_sto_industryCategoryId, store2.sto_isTest as store2_sto_isTest, store2.sto_accountingCode as store2_sto_accountingCode from customer_gift_token left join gift_token_def on gtd_id=cgt_giftTokenDefId left join gift_token_def_store on gtds_giftTokenDefId=cgt_giftTokenDefId left join customer as customer1 on customer1.cus_id=cgt_usedOperatorId left join customer as customer2 on customer2.cus_id=cgt_customerId left join store as store1 on store1.sto_id = cgt_usedStoreId left join store as store2 on store2.sto_id = cgt_fromStoreId left join seller on sel_id=cgt_sellerId WHERE ( cgt_sellerId = ? and cgt_customerId = ? and cgt_isUsed = ? and cgt_endDate >= ? ) and gtds_storeId=? order by IF(ISNULL(cgt_deliverStatus),0,1) desc, cgt_deliverStatus, cgt_isPreSelected desc, cgt_endDate 
+	==> Parameters: 24(Long), 1449(Long), false(Boolean), Mon Dec 17 17:49:40 CST 2018(Date), 64(Long)
+	==> Duration: 0.038s
+
+[2018-12-17 17:49:40.246] INFO  [qtp1260254833-422] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.store.dao.custom.PrepaidCardExMapper.getPrepaidCardByCustomerInSeller
+	==> SQL: select cpc.*, pcd.*, sel.*,cus.* from customer_prepaid_card as cpc left join prepaid_card_def as pcd on cpc.cpc_prepaidCardDefId = pcd.pcd_id left join seller as sel on sel.sel_id = cpc.cpc_sellerId left join customer as cus on cpc.cpc_customerId = cus.cus_id where cpc.cpc_customerId=? and cpc.cpc_sellerId=? order by cpc.cpc_updatedTime desc 
+	==> Parameters: 1449(Long), 24(Long)
+	==> Duration: 0.015s
+
+[2018-12-17 17:49:40.281] INFO  [qtp1260254833-422] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.store.dao.custom.PrepaidCardDiscountInfoCustomMapper.getDiscountByPrepaidCardInStore
+	==> SQL: select cpcd.* from prepaid_card_discount_info as cpcd left join prepaid_card_discount_store as cdst on cpcd.cpcd_id=cdst.cdst_discountInfoId where cdst.cdst_sellerId=? and cpcd.cpcd_customerPrepaidCardId=? and cpcd.cpcd_enabled=1 and ( ( (cpcd.cpcd_isLimitDate=1 and cpcd.cpcd_limitStartDate <= now() and cpcd.cpcd_limitEndDate>=now()) or cpcd.cpcd_isLimitDate=0 ) and ( (cpcd.cpcd_isLimitCount=1 and cpcd.cpcd_limitCount>0 and cpcd.cpcd_limitCount>cpcd.cpcd_discountCount) or cpcd.cpcd_isLimitCount=0 ) ) and cdst.cdst_storeId=? limit 1 
+	==> Parameters: 24(Long), 1015(Long), 64(Long)
+	==> Duration: 0.034s
+
+[2018-12-17 17:49:40.296] INFO  [qtp1260254833-422] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.marketingMeans.dao.ext.GroupCustomerEntityExMapper.getGroupCustomerListByPhoneNumber
+	==> SQL: SELECT gcus_name AS groupCustomerName FROM group_customer_member, group_customer, group_customer_authorize_seller WHERE gcm_groupCustomerId = gcus_id AND gcas_groupCustomerId = gcus_id AND gcas_sellerId = ? AND gcas_storeId = ? AND gcm_phoneNumber = ? ORDER BY gcm_createTime DESC LIMIT 0, 1 
+	==> Parameters: 24(Long), 64(Long), 15050481925(String)
+	==> Duration: 0.014s
+
+[2018-12-17 17:49:40.307] INFO  [qtp1260254833-422] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.expenseCard.dao.ext.ExpenseCardStoreBillExMapper.getAllSellerExpenseCardForStoreId
+	==> SQL: select cpc_expenseCardBalance expenseCardTotalAmount,pcd_name expenseCardName,cpc_sellerId sellerId, sel_displayName displayName from customer_prepaid_card left join seller on sel_id=cpc_sellerId left join prepaid_card_def on pcd_id=cpc_prepaidCardDefId where cpc_customerId=? and cpc_sellerId in (select sto_sellerId from store where sto_id = ? union select ecus_sellerId from expense_card_union_seller where ecus_status=1 AND ecus_unionStoreId=?) 
+	==> Parameters: 1449(Long), 64(Long), 64(Long)
+	==> Duration: 0.010s
+
+[2018-12-17 17:49:40.349] INFO  [qtp1260254833-422] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.marketingMeans.dao.MarketingMeansEntityMapper.selectByExample
+	==> SQL: select mtm_id, mtm_sellerId, mtm_storeId, mtm_marketName, mtm_meansDetail, mtm_description, mtm_marketType, mtm_unionExpenseCardId, mtm_createTime, mtm_creator, mtm_startDate, mtm_endDate, mtm_status, mtm_commonUnionId, mtm_discountCount, mtm_meansType, mtm_auditStatus, mtm_remarks, mtm_inSellerId, mtm_inStoreCount, mtm_statisfyAmount, mtm_giftTokenId, mtm_giftTokenLimit, mtm_auditTime, mtm_baseAmount from marketing_means WHERE ( mtm_unionExpenseCardId = ? and mtm_storeId = ? and mtm_startDate <= ? and mtm_endDate >= ? and mtm_status = ? and mtm_marketType = ? ) order by mtm_startDate asc limit 0 , 1 
+	==> Parameters: 24(Long), 64(Long), Mon Dec 17 00:00:00 CST 2018(Date), Mon Dec 17 00:00:00 CST 2018(Date), 2(Integer), 2(Integer)
+	==> Duration: 0.033s
+
+[2018-12-17 17:49:40.366] INFO  [qtp1260254833-422] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.marketingMeans.dao.ext.MarketingMeansEntityExMapper.getNewCustomerAndBuyCard
+	==> SQL: SELECT mtm_id, mtm_sellerId, mtm_storeId, mtm_marketName, mtm_meansDetail, mtm_description, mtm_marketType, mtm_unionExpenseCardId, mtm_createTime, mtm_creator, mtm_startDate, mtm_endDate, mtm_status, mtm_commonUnionId, mtm_discountCount, mtm_meansType, mtm_auditStatus, mtm_remarks, mtm_inSellerId, mtm_inStoreCount, mtm_statisfyAmount, mtm_giftTokenId, mtm_giftTokenLimit, mtm_auditTime, mtm_baseAmount FROM marketing_means WHERE ((mtm_marketType = 1 AND mtm_sellerId = ?) OR (mtm_inSellerId = ? AND mtm_marketType = 3 AND mtm_meansType = 0 AND mtm_auditStatus = 3)) AND mtm_startDate <= now() AND mtm_endDate >= now() AND mtm_status = 2 ORDER BY mtm_marketType, mtm_statisfyAmount 
+	==> Parameters: 24(Long), 24(Long)
+	==> Duration: 0.016s
+
+[2018-12-17 17:49:40.390] INFO  [qtp1260254833-422] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.account.dao.CustomerEntityMapper.selectByPrimaryKey
+	==> SQL: select cus_id, cus_idNumber, cus_name, cus_displayName, cus_realName, cus_password, cus_email, cus_phoneNumber, cus_gender, cus_birthday, cus_qq, cus_createdTime, cus_lastLoginTime, cus_lastCheckTime, cus_avatarImageUrl, cus_status, cus_isEnabled, cus_token, cus_token1, cus_token2, cus_salt, cus_isRegistered, cus_registerDate, cus_shippingAddress, cus_sellerId, cus_wxOpenId, cus_wxNickName, cus_alipayOpenId, cus_wxOpenIdForSeller, cus_wxAppletOpenId, cus_wxUnionid, cus_wxSubscribed, cus_wxSubscribedForSeller, cus_fromType from customer where cus_id = ? 
+	==> Parameters: 1449(Long)
+	==> Duration: 0.012s
+
+[2018-12-17 17:49:40.390] INFO  [qtp1260254833-422] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.account.dao.CustomerEntityMapper.selectByPrimaryKey
+	==> SQL: select cus_id, cus_idNumber, cus_name, cus_displayName, cus_realName, cus_password, cus_email, cus_phoneNumber, cus_gender, cus_birthday, cus_qq, cus_createdTime, cus_lastLoginTime, cus_lastCheckTime, cus_avatarImageUrl, cus_status, cus_isEnabled, cus_token, cus_token1, cus_token2, cus_salt, cus_isRegistered, cus_registerDate, cus_shippingAddress, cus_sellerId, cus_wxOpenId, cus_wxNickName, cus_alipayOpenId, cus_wxOpenIdForSeller, cus_wxAppletOpenId, cus_wxUnionid, cus_wxSubscribed, cus_wxSubscribedForSeller, cus_fromType from customer where cus_id = ? 
+	==> Parameters: 1449(Long)
+	==> Duration: 0.000s
+
+[2018-12-17 17:49:40.401] INFO  [qtp1260254833-422] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.store.dao.CustomerStoreEntityMapper.selectByExample
+	==> SQL: select cst_id, cst_customerId, cst_sellerId, cst_storeId, cst_createdTime, cst_level, cst_lastVisitTime, cst_firstTradeTime, cst_lastTradeTime, cst_tradeAmount, cst_tradeNumber, cst_fromStoreId, cst_fromOperatorId, cst_joinTime from customer_store WHERE ( cst_sellerId = ? and cst_storeId = ? and cst_customerId = ? ) 
+	==> Parameters: 24(Long), 64(Long), 1449(Long)
+	==> Duration: 0.009s
+
+[2018-12-17 17:49:40.415] INFO  [qtp1260254833-422] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.expenseCard.dao.ext.ExpenseCardMapper.getExpenseCardStoredValueTotalAmount
+	==> SQL: select sum(mor_totalAmount) from mall_order WHERE mor_type = 4 and mor_status=100 and mor_sellerId = ? and mor_customerId = ? 
+	==> Parameters: 24(Long), 1449(Long)
+	==> Duration: 0.014s
+
+[2018-12-17 17:49:40.447] INFO  [qtp1260254833-422] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.store.dao.custom.GiftTokenExMapper.getGiftTokenListByConditions
+	==> SQL: select distinct cgt_id, cgt_sellerId, cgt_fromStoreId, cgt_customerId, cgt_giftTokenDefId, cgt_numberCode, cgt_operatorId, cgt_createdTime, cgt_usedStoreId, cgt_usedOperatorId, cgt_isUsed, cgt_usedTime, cgt_startDate, cgt_endDate, cgt_source, cgt_isPreSelected, cgt_preSelectedTime, cgt_giftDefType, cgt_srcOrderNo, cgt_srcGoodsId, cgt_marketingActivityId, cgt_updateTime, cgt_deliverStatus, cgt_deliverOrderId, cgt_useType, cgt_giftTotalCount, cgt_giftUsedCount, cgt_isTransfrom, cgt_useTimeRule, cgt_isReserve, cgt_resCancelCount, cgt_resCancelUsedCount , sel_id, sel_identifier, sel_displayName, sel_description, sel_industryCategoryId, sel_contactsName, sel_contactsIdCardNumber, sel_contactsIdCardImageUrl, sel_contactsIdCardImageUrl1, sel_contactsPhoneNumber, sel_contactsEmail, sel_telephone, sel_legalPersonName, sel_legalPersonIDCardNumber, sel_legalPersonIDCardImageUrl, sel_legalPersonIDCardImageUrl1, sel_licenseNumber, sel_licenseImageUrl, sel_proxyLetterImageUrl, sel_createdTime, sel_updatedTime, sel_isEnabled, sel_isAudit, sel_auditTime, sel_auditReason, sel_auditPerson, sel_auditSubmitTime, sel_industryPath, sel_globalRegionPath, sel_storeCount, sel_storeCountLimit, sel_creatorId, sel_servicePersonName, sel_marketPersonName, sel_appId, sel_mchId, sel_remark, sel_tag, sel_enterpriseName, sel_expiryDateFrom, sel_expiryDateTo, sel_settingId, sel_payChannel, sel_exMerchtNm, sel_registAddr, sel_cooperationId, sel_saleManPhoneNumber , customer2.cus_id as customer2_cus_id, customer2.cus_idNumber as customer2_cus_idNumber, customer2.cus_name as customer2_cus_name, customer2.cus_displayName as customer2_cus_displayName, customer2.cus_realName as customer2_cus_realName, customer2.cus_password as customer2_cus_password, customer2.cus_email as customer2_cus_email, customer2.cus_phoneNumber as customer2_cus_phoneNumber, customer2.cus_gender as customer2_cus_gender, customer2.cus_birthday as customer2_cus_birthday, customer2.cus_qq as customer2_cus_qq, customer2.cus_createdTime as customer2_cus_createdTime, customer2.cus_lastLoginTime as customer2_cus_lastLoginTime, customer2.cus_lastCheckTime as customer2_cus_lastCheckTime, customer2.cus_avatarImageUrl as customer2_cus_avatarImageUrl, customer2.cus_status as customer2_cus_status, customer2.cus_isEnabled as customer2_cus_isEnabled, customer2.cus_token as customer2_cus_token, customer2.cus_token1 as customer2_cus_token1, customer2.cus_token2 as customer2_cus_token2, customer2.cus_salt as customer2_cus_salt, customer2.cus_isRegistered as customer2_cus_isRegistered, customer2.cus_registerDate as customer2_cus_registerDate, customer2.cus_shippingAddress as customer2_cus_shippingAddress, customer2.cus_sellerId as customer2_cus_sellerId, customer2.cus_wxOpenId as customer2_cus_wxOpenId, customer2.cus_wxNickName as customer2_cus_wxNickName, customer2.cus_alipayOpenId as customer2_cus_alipayOpenId, customer2.cus_wxOpenIdForSeller as customer2_cus_wxOpenIdForSeller, customer2.cus_wxAppletOpenId as customer2_cus_wxAppletOpenId, customer2.cus_wxUnionid as customer2_cus_wxUnionid, customer2.cus_wxSubscribed as customer2_cus_wxSubscribed, customer2.cus_wxSubscribedForSeller as customer2_cus_wxSubscribedForSeller, customer2.cus_fromType as customer2_cus_fromType , customer1.cus_id as customer1_cus_id, customer1.cus_idNumber as customer1_cus_idNumber, customer1.cus_name as customer1_cus_name, customer1.cus_displayName as customer1_cus_displayName, customer1.cus_realName as customer1_cus_realName, customer1.cus_password as customer1_cus_password, customer1.cus_email as customer1_cus_email, customer1.cus_phoneNumber as customer1_cus_phoneNumber, customer1.cus_gender as customer1_cus_gender, customer1.cus_birthday as customer1_cus_birthday, customer1.cus_qq as customer1_cus_qq, customer1.cus_createdTime as customer1_cus_createdTime, customer1.cus_lastLoginTime as customer1_cus_lastLoginTime, customer1.cus_lastCheckTime as customer1_cus_lastCheckTime, customer1.cus_avatarImageUrl as customer1_cus_avatarImageUrl, customer1.cus_status as customer1_cus_status, customer1.cus_isEnabled as customer1_cus_isEnabled, customer1.cus_token as customer1_cus_token, customer1.cus_token1 as customer1_cus_token1, customer1.cus_token2 as customer1_cus_token2, customer1.cus_salt as customer1_cus_salt, customer1.cus_isRegistered as customer1_cus_isRegistered, customer1.cus_registerDate as customer1_cus_registerDate, customer1.cus_shippingAddress as customer1_cus_shippingAddress, customer1.cus_sellerId as customer1_cus_sellerId, customer1.cus_wxOpenId as customer1_cus_wxOpenId, customer1.cus_wxNickName as customer1_cus_wxNickName, customer1.cus_alipayOpenId as customer1_cus_alipayOpenId, customer1.cus_wxOpenIdForSeller as customer1_cus_wxOpenIdForSeller, customer1.cus_wxAppletOpenId as customer1_cus_wxAppletOpenId, customer1.cus_wxUnionid as customer1_cus_wxUnionid, customer1.cus_wxSubscribed as customer1_cus_wxSubscribed, customer1.cus_wxSubscribedForSeller as customer1_cus_wxSubscribedForSeller, customer1.cus_fromType as customer1_cus_fromType , gtd_id, gtd_number, gtd_sellerId, gtd_name, gtd_description, gtd_valueAmount, gtd_sellAmount, gtd_issueNumber, gtd_stockNumber, gtd_receivedCount, gtd_goodsId, gtd_goodsSKU, gtd_imageUrl, gtd_createdTime, gtd_updateTime, gtd_fromStoreId, gtd_operatorId, gtd_enabled, gtd_isAudit, gtd_expiryDateType, gtd_expiryDate, gtd_startDate, gtd_endDate, gtd_timeRange, gtd_pubToSellerUnion, gtd_pubTime, gtd_giftDefType, gtd_goodsCount, gtd_inStoreCount, gtd_useNoticeContent, gtd_imageUrlArray, gtd_isDeliever, gtd_delieverAmount, gtd_delieverDesc, gtd_isSent, gtd_useType, gtd_totalCount, gtd_isTransfrom, gtd_isOrderDeliever, gtd_useTimeRule, gtd_isReserve, gtd_resCancelCount , store1.sto_id as store1_sto_id, store1.sto_sellerId as store1_sto_sellerId, store1.sto_name as store1_sto_name, store1.sto_description as store1_sto_description, store1.sto_logoImageUrl as store1_sto_logoImageUrl, store1.sto_category as store1_sto_category, store1.sto_addressDescription as store1_sto_addressDescription, store1.sto_addressLongitude as store1_sto_addressLongitude, store1.sto_addressLatitude as store1_sto_addressLatitude, store1.sto_geoHash as store1_sto_geoHash, store1.sto_globalRegionPath as store1_sto_globalRegionPath, store1.sto_openingHours as store1_sto_openingHours, store1.sto_mobilePhoneNumber as store1_sto_mobilePhoneNumber, store1.sto_telephoneNumber as store1_sto_telephoneNumber, store1.sto_createdTime as store1_sto_createdTime, store1.sto_updatedTime as store1_sto_updatedTime, store1.sto_regionId as store1_sto_regionId, store1.sto_operatorId as store1_sto_operatorId, store1.sto_stopStatus as store1_sto_stopStatus, store1.sto_stopRemark as store1_sto_stopRemark, store1.sto_auditStatus as store1_sto_auditStatus, store1.sto_auditRemark as store1_sto_auditRemark, store1.sto_validityTime as store1_sto_validityTime, store1.sto_isOpenMall as store1_sto_isOpenMall, store1.sto_viewImageUrls as store1_sto_viewImageUrls, store1.sto_code as store1_sto_code, store1.sto_industryCategoryId as store1_sto_industryCategoryId, store1.sto_isTest as store1_sto_isTest, store1.sto_accountingCode as store1_sto_accountingCode , store2.sto_id as store2_sto_id, store2.sto_sellerId as store2_sto_sellerId, store2.sto_name as store2_sto_name, store2.sto_description as store2_sto_description, store2.sto_logoImageUrl as store2_sto_logoImageUrl, store2.sto_category as store2_sto_category, store2.sto_addressDescription as store2_sto_addressDescription, store2.sto_addressLongitude as store2_sto_addressLongitude, store2.sto_addressLatitude as store2_sto_addressLatitude, store2.sto_geoHash as store2_sto_geoHash, store2.sto_globalRegionPath as store2_sto_globalRegionPath, store2.sto_openingHours as store2_sto_openingHours, store2.sto_mobilePhoneNumber as store2_sto_mobilePhoneNumber, store2.sto_telephoneNumber as store2_sto_telephoneNumber, store2.sto_createdTime as store2_sto_createdTime, store2.sto_updatedTime as store2_sto_updatedTime, store2.sto_regionId as store2_sto_regionId, store2.sto_operatorId as store2_sto_operatorId, store2.sto_stopStatus as store2_sto_stopStatus, store2.sto_stopRemark as store2_sto_stopRemark, store2.sto_auditStatus as store2_sto_auditStatus, store2.sto_auditRemark as store2_sto_auditRemark, store2.sto_validityTime as store2_sto_validityTime, store2.sto_isOpenMall as store2_sto_isOpenMall, store2.sto_viewImageUrls as store2_sto_viewImageUrls, store2.sto_code as store2_sto_code, store2.sto_industryCategoryId as store2_sto_industryCategoryId, store2.sto_isTest as store2_sto_isTest, store2.sto_accountingCode as store2_sto_accountingCode from customer_gift_token left join gift_token_def on gtd_id=cgt_giftTokenDefId left join gift_token_def_store on gtds_giftTokenDefId=cgt_giftTokenDefId left join customer as customer1 on customer1.cus_id=cgt_usedOperatorId left join customer as customer2 on customer2.cus_id=cgt_customerId left join store as store1 on store1.sto_id = cgt_usedStoreId left join store as store2 on store2.sto_id = cgt_fromStoreId left join seller on sel_id=cgt_sellerId WHERE ( cgt_sellerId = ? and cgt_customerId = ? and cgt_isUsed = ? and cgt_endDate >= ? ) and gtds_storeId=? order by IF(ISNULL(cgt_deliverStatus),0,1) desc, cgt_deliverStatus, cgt_isPreSelected desc, cgt_endDate 
+	==> Parameters: 24(Long), 1449(Long), false(Boolean), Mon Dec 17 17:49:40 CST 2018(Date), 64(Long)
+	==> Duration: 0.031s
+
+[2018-12-17 17:49:40.472] INFO  [qtp1260254833-422] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.store.dao.custom.PrepaidCardExMapper.getPrepaidCardByCustomerInSeller
+	==> SQL: select cpc.*, pcd.*, sel.*,cus.* from customer_prepaid_card as cpc left join prepaid_card_def as pcd on cpc.cpc_prepaidCardDefId = pcd.pcd_id left join seller as sel on sel.sel_id = cpc.cpc_sellerId left join customer as cus on cpc.cpc_customerId = cus.cus_id where cpc.cpc_customerId=? and cpc.cpc_sellerId=? order by cpc.cpc_updatedTime desc 
+	==> Parameters: 1449(Long), 24(Long)
+	==> Duration: 0.023s
+
+[2018-12-17 17:49:40.491] INFO  [qtp1260254833-422] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.store.dao.custom.PrepaidCardDiscountInfoCustomMapper.getDiscountByPrepaidCardInStore
+	==> SQL: select cpcd.* from prepaid_card_discount_info as cpcd left join prepaid_card_discount_store as cdst on cpcd.cpcd_id=cdst.cdst_discountInfoId where cdst.cdst_sellerId=? and cpcd.cpcd_customerPrepaidCardId=? and cpcd.cpcd_enabled=1 and ( ( (cpcd.cpcd_isLimitDate=1 and cpcd.cpcd_limitStartDate <= now() and cpcd.cpcd_limitEndDate>=now()) or cpcd.cpcd_isLimitDate=0 ) and ( (cpcd.cpcd_isLimitCount=1 and cpcd.cpcd_limitCount>0 and cpcd.cpcd_limitCount>cpcd.cpcd_discountCount) or cpcd.cpcd_isLimitCount=0 ) ) and cdst.cdst_storeId=? limit 1 
+	==> Parameters: 24(Long), 1015(Long), 64(Long)
+	==> Duration: 0.018s
+
+[2018-12-17 17:49:40.503] INFO  [qtp1260254833-422] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.marketingMeans.dao.ext.GroupCustomerEntityExMapper.getGroupCustomerListByPhoneNumber
+	==> SQL: SELECT gcus_name AS groupCustomerName FROM group_customer_member, group_customer, group_customer_authorize_seller WHERE gcm_groupCustomerId = gcus_id AND gcas_groupCustomerId = gcus_id AND gcas_sellerId = ? AND gcas_storeId = ? AND gcm_phoneNumber = ? ORDER BY gcm_createTime DESC LIMIT 0, 1 
+	==> Parameters: 24(Long), 64(Long), 15050481925(String)
+	==> Duration: 0.011s
+
+[2018-12-17 17:49:40.512] INFO  [qtp1260254833-422] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.expenseCard.dao.ext.ExpenseCardStoreBillExMapper.getAllSellerExpenseCardForStoreId
+	==> SQL: select cpc_expenseCardBalance expenseCardTotalAmount,pcd_name expenseCardName,cpc_sellerId sellerId, sel_displayName displayName from customer_prepaid_card left join seller on sel_id=cpc_sellerId left join prepaid_card_def on pcd_id=cpc_prepaidCardDefId where cpc_customerId=? and cpc_sellerId in (select sto_sellerId from store where sto_id = ? union select ecus_sellerId from expense_card_union_seller where ecus_status=1 AND ecus_unionStoreId=?) 
+	==> Parameters: 1449(Long), 64(Long), 64(Long)
+	==> Duration: 0.009s
+
+[2018-12-17 17:49:40.540] INFO  [qtp1260254833-422] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.marketingMeans.dao.MarketingMeansEntityMapper.selectByExample
+	==> SQL: select mtm_id, mtm_sellerId, mtm_storeId, mtm_marketName, mtm_meansDetail, mtm_description, mtm_marketType, mtm_unionExpenseCardId, mtm_createTime, mtm_creator, mtm_startDate, mtm_endDate, mtm_status, mtm_commonUnionId, mtm_discountCount, mtm_meansType, mtm_auditStatus, mtm_remarks, mtm_inSellerId, mtm_inStoreCount, mtm_statisfyAmount, mtm_giftTokenId, mtm_giftTokenLimit, mtm_auditTime, mtm_baseAmount from marketing_means WHERE ( mtm_unionExpenseCardId = ? and mtm_storeId = ? and mtm_startDate <= ? and mtm_endDate >= ? and mtm_status = ? and mtm_marketType = ? ) order by mtm_startDate asc limit 0 , 1 
+	==> Parameters: 24(Long), 64(Long), Mon Dec 17 00:00:00 CST 2018(Date), Mon Dec 17 00:00:00 CST 2018(Date), 2(Integer), 2(Integer)
+	==> Duration: 0.027s
+
+[2018-12-17 17:49:40.560] INFO  [qtp1260254833-422] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.unifiedOrder.dao.UnifiedOrderEntityMapper.selectByExample
+	==> SQL: select uno_id, uno_sellerId, uno_storeId, uno_customerId, uno_idNumberOrPhoneNumber, uno_unifiedOrderUnitId, uno_unifiedOrderSeatId, uno_status, uno_totalAmount, uno_createTime, uno_creator, uno_revokeOperatorId, uno_revokeRemark, uno_revokeTime, uno_closeAccountsOperatorId, uno_closeAccountsTime, uno_finishOperatorId, uno_finishTime, uno_updateTime, uno_modifier, uno_receiptsOrderId, uno_consumerNumber, uno_discount, uno_takeWay from unified_order WHERE ( uno_id in ( ? ) ) 
+	==> Parameters: 840(Long)
+	==> Duration: 0.018s
+
+[2018-12-17 17:49:40.589] INFO  [qtp1260254833-422] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.unifiedOrder.dao.UnifiedOrderDetailEntityMapper.selectByExample
+	==> SQL: select unod_id, unod_unifiedOrderId, unod_goodsId, unod_name, unod_code, unod_price, unod_quantity, unod_createTime, unod_creator, unod_remark, unod_vipPrice, unod_discountType, unod_confirmCount from unified_order_detail WHERE ( unod_unifiedOrderId in ( ? ) ) 
+	==> Parameters: 840(Long)
+	==> Duration: 0.028s
+
+[2018-12-17 17:49:40.589] INFO  [qtp1260254833-422] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.account.dao.CustomerEntityMapper.selectByPrimaryKey
+	==> SQL: select cus_id, cus_idNumber, cus_name, cus_displayName, cus_realName, cus_password, cus_email, cus_phoneNumber, cus_gender, cus_birthday, cus_qq, cus_createdTime, cus_lastLoginTime, cus_lastCheckTime, cus_avatarImageUrl, cus_status, cus_isEnabled, cus_token, cus_token1, cus_token2, cus_salt, cus_isRegistered, cus_registerDate, cus_shippingAddress, cus_sellerId, cus_wxOpenId, cus_wxNickName, cus_alipayOpenId, cus_wxOpenIdForSeller, cus_wxAppletOpenId, cus_wxUnionid, cus_wxSubscribed, cus_wxSubscribedForSeller, cus_fromType from customer where cus_id = ? 
+	==> Parameters: 1449(Long)
+	==> Duration: 0.000s
+
+[2018-12-17 17:49:40.601] INFO  [qtp1260254833-422] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.marketingMeans.dao.MarketingMeansEntityMapper.selectByExample
+	==> SQL: select mtm_id, mtm_sellerId, mtm_storeId, mtm_marketName, mtm_meansDetail, mtm_description, mtm_marketType, mtm_unionExpenseCardId, mtm_createTime, mtm_creator, mtm_startDate, mtm_endDate, mtm_status, mtm_commonUnionId, mtm_discountCount, mtm_meansType, mtm_auditStatus, mtm_remarks, mtm_inSellerId, mtm_inStoreCount, mtm_statisfyAmount, mtm_giftTokenId, mtm_giftTokenLimit, mtm_auditTime, mtm_baseAmount from marketing_means WHERE ( mtm_storeId = ? and mtm_startDate <= ? and mtm_endDate >= ? and mtm_baseAmount <= ? and mtm_status = ? and mtm_auditStatus = ? ) 
+	==> Parameters: 64(Long), Mon Dec 17 17:49:40 CST 2018(Date), Mon Dec 17 17:49:40 CST 2018(Date), 0.01(BigDecimal), 2(Integer), 3(Integer)
+	==> Duration: 0.011s
+
+[2018-12-17 17:49:40.602] INFO  [qtp1260254833-422] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.account.dao.CustomerEntityMapper.selectByPrimaryKey
+	==> SQL: select cus_id, cus_idNumber, cus_name, cus_displayName, cus_realName, cus_password, cus_email, cus_phoneNumber, cus_gender, cus_birthday, cus_qq, cus_createdTime, cus_lastLoginTime, cus_lastCheckTime, cus_avatarImageUrl, cus_status, cus_isEnabled, cus_token, cus_token1, cus_token2, cus_salt, cus_isRegistered, cus_registerDate, cus_shippingAddress, cus_sellerId, cus_wxOpenId, cus_wxNickName, cus_alipayOpenId, cus_wxOpenIdForSeller, cus_wxAppletOpenId, cus_wxUnionid, cus_wxSubscribed, cus_wxSubscribedForSeller, cus_fromType from customer where cus_id = ? 
+	==> Parameters: 1449(Long)
+	==> Duration: 0.000s
+
+[2018-12-17 17:49:40.603] INFO  [qtp1260254833-422] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.store.dao.CustomerStoreEntityMapper.selectByExample
+	==> SQL: select cst_id, cst_customerId, cst_sellerId, cst_storeId, cst_createdTime, cst_level, cst_lastVisitTime, cst_firstTradeTime, cst_lastTradeTime, cst_tradeAmount, cst_tradeNumber, cst_fromStoreId, cst_fromOperatorId, cst_joinTime from customer_store WHERE ( cst_sellerId = ? and cst_storeId = ? and cst_customerId = ? ) 
+	==> Parameters: 24(Long), 64(Long), 1449(Long)
+	==> Duration: 0.001s
+
+[2018-12-17 17:49:40.603] INFO  [qtp1260254833-422] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.expenseCard.dao.ext.ExpenseCardMapper.getExpenseCardStoredValueTotalAmount
+	==> SQL: select sum(mor_totalAmount) from mall_order WHERE mor_type = 4 and mor_status=100 and mor_sellerId = ? and mor_customerId = ? 
+	==> Parameters: 24(Long), 1449(Long)
+	==> Duration: 0.000s
+
+[2018-12-17 17:49:40.634] INFO  [qtp1260254833-422] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.store.dao.custom.GiftTokenExMapper.getGiftTokenListByConditions
+	==> SQL: select distinct cgt_id, cgt_sellerId, cgt_fromStoreId, cgt_customerId, cgt_giftTokenDefId, cgt_numberCode, cgt_operatorId, cgt_createdTime, cgt_usedStoreId, cgt_usedOperatorId, cgt_isUsed, cgt_usedTime, cgt_startDate, cgt_endDate, cgt_source, cgt_isPreSelected, cgt_preSelectedTime, cgt_giftDefType, cgt_srcOrderNo, cgt_srcGoodsId, cgt_marketingActivityId, cgt_updateTime, cgt_deliverStatus, cgt_deliverOrderId, cgt_useType, cgt_giftTotalCount, cgt_giftUsedCount, cgt_isTransfrom, cgt_useTimeRule, cgt_isReserve, cgt_resCancelCount, cgt_resCancelUsedCount , sel_id, sel_identifier, sel_displayName, sel_description, sel_industryCategoryId, sel_contactsName, sel_contactsIdCardNumber, sel_contactsIdCardImageUrl, sel_contactsIdCardImageUrl1, sel_contactsPhoneNumber, sel_contactsEmail, sel_telephone, sel_legalPersonName, sel_legalPersonIDCardNumber, sel_legalPersonIDCardImageUrl, sel_legalPersonIDCardImageUrl1, sel_licenseNumber, sel_licenseImageUrl, sel_proxyLetterImageUrl, sel_createdTime, sel_updatedTime, sel_isEnabled, sel_isAudit, sel_auditTime, sel_auditReason, sel_auditPerson, sel_auditSubmitTime, sel_industryPath, sel_globalRegionPath, sel_storeCount, sel_storeCountLimit, sel_creatorId, sel_servicePersonName, sel_marketPersonName, sel_appId, sel_mchId, sel_remark, sel_tag, sel_enterpriseName, sel_expiryDateFrom, sel_expiryDateTo, sel_settingId, sel_payChannel, sel_exMerchtNm, sel_registAddr, sel_cooperationId, sel_saleManPhoneNumber , customer2.cus_id as customer2_cus_id, customer2.cus_idNumber as customer2_cus_idNumber, customer2.cus_name as customer2_cus_name, customer2.cus_displayName as customer2_cus_displayName, customer2.cus_realName as customer2_cus_realName, customer2.cus_password as customer2_cus_password, customer2.cus_email as customer2_cus_email, customer2.cus_phoneNumber as customer2_cus_phoneNumber, customer2.cus_gender as customer2_cus_gender, customer2.cus_birthday as customer2_cus_birthday, customer2.cus_qq as customer2_cus_qq, customer2.cus_createdTime as customer2_cus_createdTime, customer2.cus_lastLoginTime as customer2_cus_lastLoginTime, customer2.cus_lastCheckTime as customer2_cus_lastCheckTime, customer2.cus_avatarImageUrl as customer2_cus_avatarImageUrl, customer2.cus_status as customer2_cus_status, customer2.cus_isEnabled as customer2_cus_isEnabled, customer2.cus_token as customer2_cus_token, customer2.cus_token1 as customer2_cus_token1, customer2.cus_token2 as customer2_cus_token2, customer2.cus_salt as customer2_cus_salt, customer2.cus_isRegistered as customer2_cus_isRegistered, customer2.cus_registerDate as customer2_cus_registerDate, customer2.cus_shippingAddress as customer2_cus_shippingAddress, customer2.cus_sellerId as customer2_cus_sellerId, customer2.cus_wxOpenId as customer2_cus_wxOpenId, customer2.cus_wxNickName as customer2_cus_wxNickName, customer2.cus_alipayOpenId as customer2_cus_alipayOpenId, customer2.cus_wxOpenIdForSeller as customer2_cus_wxOpenIdForSeller, customer2.cus_wxAppletOpenId as customer2_cus_wxAppletOpenId, customer2.cus_wxUnionid as customer2_cus_wxUnionid, customer2.cus_wxSubscribed as customer2_cus_wxSubscribed, customer2.cus_wxSubscribedForSeller as customer2_cus_wxSubscribedForSeller, customer2.cus_fromType as customer2_cus_fromType , customer1.cus_id as customer1_cus_id, customer1.cus_idNumber as customer1_cus_idNumber, customer1.cus_name as customer1_cus_name, customer1.cus_displayName as customer1_cus_displayName, customer1.cus_realName as customer1_cus_realName, customer1.cus_password as customer1_cus_password, customer1.cus_email as customer1_cus_email, customer1.cus_phoneNumber as customer1_cus_phoneNumber, customer1.cus_gender as customer1_cus_gender, customer1.cus_birthday as customer1_cus_birthday, customer1.cus_qq as customer1_cus_qq, customer1.cus_createdTime as customer1_cus_createdTime, customer1.cus_lastLoginTime as customer1_cus_lastLoginTime, customer1.cus_lastCheckTime as customer1_cus_lastCheckTime, customer1.cus_avatarImageUrl as customer1_cus_avatarImageUrl, customer1.cus_status as customer1_cus_status, customer1.cus_isEnabled as customer1_cus_isEnabled, customer1.cus_token as customer1_cus_token, customer1.cus_token1 as customer1_cus_token1, customer1.cus_token2 as customer1_cus_token2, customer1.cus_salt as customer1_cus_salt, customer1.cus_isRegistered as customer1_cus_isRegistered, customer1.cus_registerDate as customer1_cus_registerDate, customer1.cus_shippingAddress as customer1_cus_shippingAddress, customer1.cus_sellerId as customer1_cus_sellerId, customer1.cus_wxOpenId as customer1_cus_wxOpenId, customer1.cus_wxNickName as customer1_cus_wxNickName, customer1.cus_alipayOpenId as customer1_cus_alipayOpenId, customer1.cus_wxOpenIdForSeller as customer1_cus_wxOpenIdForSeller, customer1.cus_wxAppletOpenId as customer1_cus_wxAppletOpenId, customer1.cus_wxUnionid as customer1_cus_wxUnionid, customer1.cus_wxSubscribed as customer1_cus_wxSubscribed, customer1.cus_wxSubscribedForSeller as customer1_cus_wxSubscribedForSeller, customer1.cus_fromType as customer1_cus_fromType , gtd_id, gtd_number, gtd_sellerId, gtd_name, gtd_description, gtd_valueAmount, gtd_sellAmount, gtd_issueNumber, gtd_stockNumber, gtd_receivedCount, gtd_goodsId, gtd_goodsSKU, gtd_imageUrl, gtd_createdTime, gtd_updateTime, gtd_fromStoreId, gtd_operatorId, gtd_enabled, gtd_isAudit, gtd_expiryDateType, gtd_expiryDate, gtd_startDate, gtd_endDate, gtd_timeRange, gtd_pubToSellerUnion, gtd_pubTime, gtd_giftDefType, gtd_goodsCount, gtd_inStoreCount, gtd_useNoticeContent, gtd_imageUrlArray, gtd_isDeliever, gtd_delieverAmount, gtd_delieverDesc, gtd_isSent, gtd_useType, gtd_totalCount, gtd_isTransfrom, gtd_isOrderDeliever, gtd_useTimeRule, gtd_isReserve, gtd_resCancelCount , store1.sto_id as store1_sto_id, store1.sto_sellerId as store1_sto_sellerId, store1.sto_name as store1_sto_name, store1.sto_description as store1_sto_description, store1.sto_logoImageUrl as store1_sto_logoImageUrl, store1.sto_category as store1_sto_category, store1.sto_addressDescription as store1_sto_addressDescription, store1.sto_addressLongitude as store1_sto_addressLongitude, store1.sto_addressLatitude as store1_sto_addressLatitude, store1.sto_geoHash as store1_sto_geoHash, store1.sto_globalRegionPath as store1_sto_globalRegionPath, store1.sto_openingHours as store1_sto_openingHours, store1.sto_mobilePhoneNumber as store1_sto_mobilePhoneNumber, store1.sto_telephoneNumber as store1_sto_telephoneNumber, store1.sto_createdTime as store1_sto_createdTime, store1.sto_updatedTime as store1_sto_updatedTime, store1.sto_regionId as store1_sto_regionId, store1.sto_operatorId as store1_sto_operatorId, store1.sto_stopStatus as store1_sto_stopStatus, store1.sto_stopRemark as store1_sto_stopRemark, store1.sto_auditStatus as store1_sto_auditStatus, store1.sto_auditRemark as store1_sto_auditRemark, store1.sto_validityTime as store1_sto_validityTime, store1.sto_isOpenMall as store1_sto_isOpenMall, store1.sto_viewImageUrls as store1_sto_viewImageUrls, store1.sto_code as store1_sto_code, store1.sto_industryCategoryId as store1_sto_industryCategoryId, store1.sto_isTest as store1_sto_isTest, store1.sto_accountingCode as store1_sto_accountingCode , store2.sto_id as store2_sto_id, store2.sto_sellerId as store2_sto_sellerId, store2.sto_name as store2_sto_name, store2.sto_description as store2_sto_description, store2.sto_logoImageUrl as store2_sto_logoImageUrl, store2.sto_category as store2_sto_category, store2.sto_addressDescription as store2_sto_addressDescription, store2.sto_addressLongitude as store2_sto_addressLongitude, store2.sto_addressLatitude as store2_sto_addressLatitude, store2.sto_geoHash as store2_sto_geoHash, store2.sto_globalRegionPath as store2_sto_globalRegionPath, store2.sto_openingHours as store2_sto_openingHours, store2.sto_mobilePhoneNumber as store2_sto_mobilePhoneNumber, store2.sto_telephoneNumber as store2_sto_telephoneNumber, store2.sto_createdTime as store2_sto_createdTime, store2.sto_updatedTime as store2_sto_updatedTime, store2.sto_regionId as store2_sto_regionId, store2.sto_operatorId as store2_sto_operatorId, store2.sto_stopStatus as store2_sto_stopStatus, store2.sto_stopRemark as store2_sto_stopRemark, store2.sto_auditStatus as store2_sto_auditStatus, store2.sto_auditRemark as store2_sto_auditRemark, store2.sto_validityTime as store2_sto_validityTime, store2.sto_isOpenMall as store2_sto_isOpenMall, store2.sto_viewImageUrls as store2_sto_viewImageUrls, store2.sto_code as store2_sto_code, store2.sto_industryCategoryId as store2_sto_industryCategoryId, store2.sto_isTest as store2_sto_isTest, store2.sto_accountingCode as store2_sto_accountingCode from customer_gift_token left join gift_token_def on gtd_id=cgt_giftTokenDefId left join gift_token_def_store on gtds_giftTokenDefId=cgt_giftTokenDefId left join customer as customer1 on customer1.cus_id=cgt_usedOperatorId left join customer as customer2 on customer2.cus_id=cgt_customerId left join store as store1 on store1.sto_id = cgt_usedStoreId left join store as store2 on store2.sto_id = cgt_fromStoreId left join seller on sel_id=cgt_sellerId WHERE ( cgt_sellerId = ? and cgt_customerId = ? and cgt_isUsed = ? and cgt_endDate >= ? ) and gtds_storeId=? order by IF(ISNULL(cgt_deliverStatus),0,1) desc, cgt_deliverStatus, cgt_isPreSelected desc, cgt_endDate 
+	==> Parameters: 24(Long), 1449(Long), false(Boolean), Mon Dec 17 17:49:40 CST 2018(Date), 64(Long)
+	==> Duration: 0.029s
+
+[2018-12-17 17:49:40.636] INFO  [qtp1260254833-422] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.store.dao.custom.PrepaidCardExMapper.getPrepaidCardByCustomerInSeller
+	==> SQL: select cpc.*, pcd.*, sel.*,cus.* from customer_prepaid_card as cpc left join prepaid_card_def as pcd on cpc.cpc_prepaidCardDefId = pcd.pcd_id left join seller as sel on sel.sel_id = cpc.cpc_sellerId left join customer as cus on cpc.cpc_customerId = cus.cus_id where cpc.cpc_customerId=? and cpc.cpc_sellerId=? order by cpc.cpc_updatedTime desc 
+	==> Parameters: 1449(Long), 24(Long)
+	==> Duration: 0.000s
+
+[2018-12-17 17:49:40.636] INFO  [qtp1260254833-422] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.store.dao.custom.PrepaidCardDiscountInfoCustomMapper.getDiscountByPrepaidCardInStore
+	==> SQL: select cpcd.* from prepaid_card_discount_info as cpcd left join prepaid_card_discount_store as cdst on cpcd.cpcd_id=cdst.cdst_discountInfoId where cdst.cdst_sellerId=? and cpcd.cpcd_customerPrepaidCardId=? and cpcd.cpcd_enabled=1 and ( ( (cpcd.cpcd_isLimitDate=1 and cpcd.cpcd_limitStartDate <= now() and cpcd.cpcd_limitEndDate>=now()) or cpcd.cpcd_isLimitDate=0 ) and ( (cpcd.cpcd_isLimitCount=1 and cpcd.cpcd_limitCount>0 and cpcd.cpcd_limitCount>cpcd.cpcd_discountCount) or cpcd.cpcd_isLimitCount=0 ) ) and cdst.cdst_storeId=? limit 1 
+	==> Parameters: 24(Long), 1015(Long), 64(Long)
+	==> Duration: 0.000s
+
+[2018-12-17 17:49:40.637] INFO  [qtp1260254833-422] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.marketingMeans.dao.ext.GroupCustomerEntityExMapper.getGroupCustomerListByPhoneNumber
+	==> SQL: SELECT gcus_name AS groupCustomerName FROM group_customer_member, group_customer, group_customer_authorize_seller WHERE gcm_groupCustomerId = gcus_id AND gcas_groupCustomerId = gcus_id AND gcas_sellerId = ? AND gcas_storeId = ? AND gcm_phoneNumber = ? ORDER BY gcm_createTime DESC LIMIT 0, 1 
+	==> Parameters: 24(Long), 64(Long), 15050481925(String)
+	==> Duration: 0.000s
+
+[2018-12-17 17:49:40.637] INFO  [qtp1260254833-422] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.expenseCard.dao.ext.ExpenseCardStoreBillExMapper.getAllSellerExpenseCardForStoreId
+	==> SQL: select cpc_expenseCardBalance expenseCardTotalAmount,pcd_name expenseCardName,cpc_sellerId sellerId, sel_displayName displayName from customer_prepaid_card left join seller on sel_id=cpc_sellerId left join prepaid_card_def on pcd_id=cpc_prepaidCardDefId where cpc_customerId=? and cpc_sellerId in (select sto_sellerId from store where sto_id = ? union select ecus_sellerId from expense_card_union_seller where ecus_status=1 AND ecus_unionStoreId=?) 
+	==> Parameters: 1449(Long), 64(Long), 64(Long)
+	==> Duration: 0.000s
+
+[2018-12-17 17:49:40.638] INFO  [qtp1260254833-422] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.marketingMeans.dao.MarketingMeansEntityMapper.selectByExample
+	==> SQL: select mtm_id, mtm_sellerId, mtm_storeId, mtm_marketName, mtm_meansDetail, mtm_description, mtm_marketType, mtm_unionExpenseCardId, mtm_createTime, mtm_creator, mtm_startDate, mtm_endDate, mtm_status, mtm_commonUnionId, mtm_discountCount, mtm_meansType, mtm_auditStatus, mtm_remarks, mtm_inSellerId, mtm_inStoreCount, mtm_statisfyAmount, mtm_giftTokenId, mtm_giftTokenLimit, mtm_auditTime, mtm_baseAmount from marketing_means WHERE ( mtm_unionExpenseCardId = ? and mtm_storeId = ? and mtm_startDate <= ? and mtm_endDate >= ? and mtm_status = ? and mtm_marketType = ? ) order by mtm_startDate asc limit 0 , 1 
+	==> Parameters: 24(Long), 64(Long), Mon Dec 17 00:00:00 CST 2018(Date), Mon Dec 17 00:00:00 CST 2018(Date), 2(Integer), 2(Integer)
+	==> Duration: 0.000s
+
+
+
