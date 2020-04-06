@@ -1,0 +1,75 @@
+@Override
+    public BigDecimal getStorePerformanceTotalAmount(Map<String, Object> paramMap) {
+        Map<String,Object> newMap = new HashMap<>();
+        newMap.putAll(paramMap);
+        StringBuilder sql = new StringBuilder("SELECT SUM(reor_totalAmount) as sum1 FROM receipts_order WHERE reor_sellerId = " + newMap.get("sellerId") +
+                " AND reor_storeId = " + newMap.get("storeId"));
+
+        if (newMap.get("startDate") != null) {
+            sql.append(" AND reor_createdTime_dt >= '" + newMap.get("startDate") + "'");
+        }
+        if (newMap.get("endDate") != null) {
+            sql.append(" AND reor_createdTime_dt < '" + newMap.get("endDate") + "'");
+        }
+        if (newMap.get("deviceCode") != null) {
+            sql.append(" and reor_deviceCode = " + newMap.get("deviceCode"));
+        }
+        if (newMap.get("noPaymentTypes") != null) {
+            sql.append(" and reor_paymentType not in " + newMap.get("noPaymentTypes"));
+        }
+        Object operatorId = newMap.get("operatorId");
+        /*有的地方是operator，有的地方是operatorId，在这儿统一一下吧*/
+        if (operatorId == null) {
+            operatorId = newMap.get("operator");
+        }
+        newMap.put("operator",null);
+        newMap.put("operatorId",null);
+        if (operatorId != null) {
+            if (operatorId.toString().equals("NULL")) {
+                newMap.put("operator","NULL");
+                sql.append(" and reor_operatorId is null");
+            } else if (operatorId.toString().equals("NOTNULL")){
+                newMap.put("operator","NOTNULL");
+                sql.append(" and reor_operatorId is not null");
+            } else {
+                newMap.put("operatorId",operatorId);
+                sql.append(" and reor_operatorId = " + operatorId);
+            }
+        }
+        //使用Kylin查询
+        List<Map<String, Object>> maps = kylinService.queryKylinData(sql.toString(), 5);
+        Object sum = null;
+        if (maps!= null) {
+            sum = maps.get(0).get("sum1");
+        }
+
+        /*如果包含今天，需要另外查询今天的值并与之相加*/
+        Date startDate = Utils.formateStringToDate(newMap.get("startDate").toString(), "yyyy-MM-dd");
+        Date endDate = Utils.formateStringToDate(newMap.get("endDate").toString(), "yyyy-MM-dd");
+        Date date = new Date();
+        Boolean containsToday = Utils.getContainsToday(startDate, endDate);
+        if (containsToday) {
+            newMap.put("startDate", Utils.setDateSecond(date,0,0,0));
+            newMap.put("endDate", Utils.setDateSecond(date,23,59,59));
+            BigDecimal todayAmount = orderCustomEntityMapper.getStorePerformanceTotalAmount(newMap);
+            if (todayAmount != null) {
+                sum = sum == null?todayAmount:todayAmount.add(new BigDecimal(sum.toString()));
+            }
+        }
+
+        return sum == null ? BigDecimal.ZERO : new BigDecimal(sum.toString());
+    }
+
+
+
+
+
+
+@Override
+    public List<CustomerEmpPerformance> getStorePerformanceListByPage(Map<String, Object> paramMap) {
+        Date startDate = Utils.formateStringToDate(paramMap.get("startDate").toString(), "yyyy-MM-dd");
+        Date endDate = Utils.formateStringToDate(paramMap.get("endDate").toString(), "yyyy-MM-dd");
+        paramMap.put("startDate", Utils.setDateSecond(startDate,0,0,0));
+        paramMap.put("endDate", Utils.setDateSecond(endDate,23,59,59));
+        return orderCustomEntityMapper.getStorePerformanceListByPage(paramMap);
+    }

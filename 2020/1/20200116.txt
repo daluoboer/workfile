@@ -1,0 +1,12 @@
+团长需求
+
+1.parttime_rule表增加分账需要的信息
+
+2.parttime_rule的实体增加 团长返现
+
+3.parttime_rule增加商品价格
+
+4.增加log表的相关字段
+
+
+供应商字段取值？

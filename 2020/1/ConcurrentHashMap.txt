@@ -1,0 +1,20 @@
+关于线程：
+----------------------------------------------------
+ConcurrentDeque：双向队列
+ConcurrentQueue：队列
+ConcurrentHashMap
+
+1.key\value都不能为空，在put的时候:if (key == null || value == null) throw new NullPointerException();
+
+2.啊同步是通过synchronized实现的
+
+
+--------------------------------------------------------
+ThreadLocal：
+
+
+
+----------------------------------------------------------
+AtomicInteger
+
+

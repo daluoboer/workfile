@@ -1,0 +1,11 @@
+
+首页-->账目-->收款订单：
+
+原接口：
+AppReceiptsOrderService.queryReceiptsOrderList
+
+拆分为两个接口：传参不变，取值不变
+
+1.统计项接口：AppReceiptsOrderService.queryReceiptsOrderAnalyzeData
+
+2.列表接口：AppReceiptsOrderService.queryReceiptsOrderListData

@@ -1,0 +1,89 @@
+打开mq：
+
+邮箱：zhangqian@188yd.com
+密码：1qaz@WSX
+
+其他密码：Mu-rZkA5L
+
+
+
+"wx1f845b79186efd77"
+
+
+闲时手作：
+AppId：wx867256793b5bc22f
+AppSecret：408b87b50317fd76f3e6489a8b6a9b34
+
+1.项目合并是在ci上合的，你咋会记成是本地呢？？哎但是确实是有啥在本地执行的，好像是删除？
+	
+	是的，删除分支是在本地，删除远程分支就行了
+
+	项目合并的时候出错，会导致版本号不对，应该setVersion，才能再次合并
+
+打tag是咋打的？？？会了会了~看看之前的参数就行~
+
+2.看看面试那段时间你的学习效率。看看现在……
+
+3.以后有什么学到的东西要记下来，小的知识点也要记下来，不然不超过两天你就会忘记！
+
+	找Jar包：
+	看设置里资源路径
+
+
+我的店铺：
+
+相馆：15050481925
+
+裁缝铺：18550963140（之前的大王卡号）
+
+
+啊~牢记每种数据结构的默认值和初始化逻辑，也是开发工程师基本素质的提现！这也是常识啊？那你要懂的常识还有好多哇！
+
+74日志文件夹：/usr/local/mymall/logs  tail -f mymall.log
+
+tail -f /usr/local/mymall/logs/mymall.log
+
+
+Mysql按照指定顺序排序：
+SELECT `ID` FROM wp_posts WHERE `ID` in (1,2,3,4,5) ORDER BY FIELD(`ID`,5,4,3,1,2); // 纯数字字段不用处理引号，比较好拼接
+SELECT `ID` FROM wp_posts WHERE `ID` in (1,2,3,4,5) ORDER BY FIND_IN_SET(`post_title`,'A,B,C,D,E'); // 一个引号全包住，搞定字符值字段
+
+
+count(distinct mcl_id, IF ( mcl_spreaderRebate > 0 AND mcl_enable = 1, TRUE, NULL )) as orderNumber2,
+sum( IF ( mcl_spreaderRebate > 0 AND mcl_enable = 1, mcl_spreaderRebate, 0 ))   as totalRebateAmount,
+
+select sum(mcl_enable=1),
+sum(if(mcl_enable=1,mcl_spreaderRebate,0)) as rebateAmount ,
+sum(case when mcl_enable = 1 then mcl_spreaderRebate else 0 end) as rebateAmount1...
+
+mysql 如何使用count()函数计算两个不同条件的值
+create table test (id int);
+insert into test values(1),(2),(3),(4),(5),(6),(7),(8);
+例如：查询id大于4和id=1的统计
+一般写法
+select count(case when id>4 then id end),count(case when id=1 then id end ) from test;
+非主流写法:
+select count(id>4 or null),count(id=1 or null) from test;
+
+下次再有解决不了的错误时，先看看配置文件/数据库啥的对不对~这种低级问题就不要拿去麻烦别人啦！
+
+
+type == NumberGenerateService.NumberType.MALL_ORDER
+
+
+case  
+    when condition then result
+    when condition then result
+    when condition then result
+else result
+end new_column_name
+
+
+//处理历史数据
+Integer updateCareNumber();----之前的 只是复制过来，以后有这种需求可以参考一下
+
+
+
+导入外部jar包：file --> project structure --> Modules --> 选择本地jar包 --> apply --> ok!
+
+查看本地仓库地址：settings --> Build,Execution,Deployment --> Build Tools --> Mavan

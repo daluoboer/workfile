@@ -1,0 +1,12 @@
+select * from store left join (
+select * from (
+select * from marketing_cash where mac_sellerId = 68 and mac_type in （2，3） and mac_delete = 0 and mac_startDate <= now() and mac_endDate >= now() order By mac_id desc) as a
+group by mac_storeId 
+)
+as marketing on sto_id = mac_storeId
+left join marketing_cash_rule on mac_id = mcr_marketingCashId
+where sto_sellerId = 68 and sto_stopStatus = 1
+order by mac_id is null,sto_id asc
+limit 0,7
+
+把条件限制到最小，去掉分页（jsp上把页数写成1000吧）

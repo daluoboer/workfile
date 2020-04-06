@@ -1,3 +1,8 @@
+`mor_extraInfo` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'MAP结构的订单额外信息',
+`mor_isUpload` int(11) DEFAULT '0' COMMENT '1成功 0失败',
+  
+
+
 正式版
 位置：
 1.H5经营分析
@@ -37,9 +42,12 @@ cemp_customerId : 66066281
 sellerId:769
 storeId:839
 
+于家磊：67698753
+
 
 我的customer Id：66690493
 文豪customerId：1194525
+郭政辰customerId：65466905
 把自己商户超管改成了66690492
 sellerId:1529481
 storeId:1317021
