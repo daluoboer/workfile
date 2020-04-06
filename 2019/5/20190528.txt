@@ -1,0 +1,26 @@
+问题：
+
+1.是否在/wxh/ajax/quickPay发放红包
+
+2.如果在支付页面发放红包，在付款完成页面不能获取发放了哪些红包，因为log表没有记录相关信息，只有fromStoreId
+
+如果是根据订单付款金额和商品再次查询可发放的红包，可能delete状态与之前有变化
+
+<a href="/backend/redPacket/toNewRedPacketDetail?id=571" id="redPacketDetail" date-id="571" class="btn blue" data-toggle="modal"><i class="fa fa-plus"></i> 详情</a>
+
+
+    /**
+     * 获取用户零钱包账户变动列表
+     * @param serialNumber
+     * @param type
+     * @return
+     */
+    List<CustomerCapitalBillDTO> getAllCapitalBillByStatus(String serialNumber, Long customerId, Integer type, Integer index, Integer size);
+
+
+
+@Override
+    public List<CustomerCapitalBillDTO> getAllCapitalBillByStatus(String serialNumber, Long customerId, Integer type, Integer index, Integer size) {
+        List<CustomerExCapitalBillEntity> allCapitalBillByStatus = customerCapitalService.getAllCapitalBillByStatus(serialNumber, customerId, type, index, size);
+        return DTOConverter.convertToDTO4CapitalBill(allCapitalBillByStatus);
+    }

@@ -1,0 +1,21 @@
+feature/refund-permission
+1.首页-->商城管理-->退款管理 √
+2.首页-->商城管理-->退款订单 √
+3.首页-->退款管理 √
+4.首页-->账目-->退款订单
+
+5.H5-->退款管理 √
+6.H5-->账目查询-->退款订单 √
+
+
+1、appUnifyRefundOrderService.getMayRefundOrderList
+2、appUnifyRefundOrderService.getQueryRefundOrderForUnify
+3、appRefundOrderService.queryReceiptsOrderList
+4、appRefundOrderService.getQueryRefundOrderByOrder
+
+
+问题：H5的退款管理和退款列表要改吗？改啦！
+
+/receiptsOrder
+
+还有个bug：单品折扣券不触发那个

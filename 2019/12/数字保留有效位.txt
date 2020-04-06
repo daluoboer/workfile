@@ -1,0 +1,7 @@
+public static BigDecimal test(BigDecimal f){
+        BigDecimal bigDecimal = f.setScale(0,RoundingMode.DOWN);
+        if (bigDecimal.compareTo(f) != 0) {
+            return f;
+        }
+        return bigDecimal;
+    }

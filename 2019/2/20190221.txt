@@ -1,0 +1,11 @@
+编辑 登记工时 跟踪 复制
+Bug #10370
+正式版，一个店员拥有PC/APP/H5的权限，当在H5店员管理，点击编辑权限，之后保存，该店员PC/APP的权限会被清除，只剩下H5的权限
+
+看描述，应该是在H5端修改权限时，调用的接口同时修改了H5、PC/APP端的权限，但是因为PC/APP端权限未设置，所以被清空
+
+H5端调用接口：/wxh/seller/clerkForDetails
+	----》wxh/seller/ajax/setEmployeePrivilege
+
+
+PC端调用接口：ajax/employee/setEmployeePrivilege

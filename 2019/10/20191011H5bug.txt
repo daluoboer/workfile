@@ -1,0 +1,30 @@
+Bug #12002 H5来赚钱页面，未到账明细改为平台级，现在我在花物语商户点去赚钱进来后有显示，从其他商户进入后，就不显示了
+
+Bug #12010 
+H5来赚钱页，排序问题
+
+
+付款码：
+
+textStatus：abort
+
+XMLHttpRequest.status：0
+
+XMLHttpRequest.readyState：4
+
+XMLHttpRequest.onreadystatechange()：undefined
+
+errorThrown：null
+
+页面请求：wxh/paycode?sellerid=31
+
+ajax：url: "wxh/ajax/getCustomerSecureCode",
+         data: {"sellerId":${sellerId}},
+
+
+
+requestOptions.error("textStatus:"+textStatus);
+                        requestOptions.error("XMLHttpRequest.status:"+XMLHttpRequest.status);
+                        requestOptions.error("XMLHttpRequest.readyState:"+XMLHttpRequest.readyState);
+                        requestOptions.error("XMLHttpRequest.onreadystatechange()"+XMLHttpRequest.onreadystatechange());
+                        requestOptions.error("errorThrown:"+errorThrown);

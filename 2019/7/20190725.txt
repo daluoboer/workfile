@@ -1,0 +1,10 @@
+unifyOrder：
+订单金额<0.1不打折，不用券，用单品折扣吗？好像用哎（已改！订单金额<0.1,不执行全场折扣）
+receiptsOrder：
+订单金额<0.1全场折扣不执行，单品依然走
+
+
+MarketingCashService.addMarketingCash
+
+MarketingCashService.executeMarketingCash
+

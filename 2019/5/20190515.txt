@@ -1,0 +1,80 @@
+diff
+
+ALTER TABLE marketing_cash_log ADD mcl_spreaderId BIGINT(20) NULL COMMENT '推荐人';
+
+ALTER TABLE marketing_cash_log ADD mcl_spreaderRebate decimal NULL;
+
+ALTER TABLE marketing_cash ADD mac_rebate decimal NULL;
+
+ALTER TABLE marketing_cash MODIFY mac_rebate decimal(10,2);
+
+ALTER TABLE marketing_cash_log MODIFY mcl_spreaderRebate decimal(10,2) COMMENT '推荐人返利';
+
+
+
+1.更多红包
+
+2.团长红包列表
+wxh/coinPurse/toShareMarketingCashList
+
+3.推广
+
+
+
+不做
+4.分享返利明细
+
+推广时间：createTime
+
+会员：spreadUser.phoneNumber
+
+订单号：receiptsOrderEntity.serialNumber
+
+订单时间：receiptsOrderEntity.createdTime
+
+订单金额：receiptsOrderEntity.totalAmount
+
+
+
+
+/*$(".immediete").click(function () {
+                    if (("${empty user.phoneNumber}") == "true") {
+                        // if($(".phoneNumber").val() == ""){
+                        //弹出,输入手机号
+                        $.popup('.popup-bind');
+                    }
+                    else {
+                        AjaxService.ajaxService({
+                            url: "wxh/coinPurse/ajax/beforeExecuteMarketing",
+                            data: {
+                                "cashId": "${marketingCashEntity.id}"
+                            },
+                            success: function (data) {
+                                var status = parseInt(data);
+                                console.log(status);
+                                $('.infinite-scroll-preloader').hide();
+                                //返回0说明领取成功，返回2说明红包不能领取
+                                if (status == 0) {
+                                    $.popup('.popup-success');
+                                }
+                                else if (status == 1) {
+                                    $.popup('.popup-already');
+                                }
+                                else {
+                                    $.popup('.popup-over');
+                                }
+//                        $.refreshScroller();
+                            },
+                            error: function (msg) {
+                                $.alert(msg);
+                            },
+                            afinal: function () {
+                                /!*loading = false;
+                                if (true === isshow) {
+                                    $('.infinite-scroll-preloader').hide();
+                                }
+                                $.refreshScroller();*!/
+                            }
+                        });
+                    }
+                });*/

@@ -1,0 +1,9 @@
+补贴活动明细：http://192.168.1.117:8080/wxh/seller/coinPurse/marketingCashDetail?id=11
+
+红包活动明细：http://192.168.1.117:8080/wxh/seller/coinPurse/subsidyDetail?id=11
+
+返现活动：http://192.168.1.117:8080/wxh/seller/coinPurse/returnMoneyRecords
+
+现金红包：http://192.168.1.117:8080/wxh/seller/coinPurse/toRedEnvelopeList
+
+补贴列表：http://192.168.1.117:8080/wxh/seller/coinPurse/toSubsidyGoodsPage

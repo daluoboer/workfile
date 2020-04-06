@@ -1,0 +1,18 @@
+ @Override
+    public void followStoreWxMessage(Long sellerId,Long storeId, CustomerEntity customerEntity){
+        String customerPhone = "";
+        customerPhone = CustomerUtil.ensureDisplayName(customerEntity, true);
+        Map megMap = new HashMap();
+        SellerEntity sellerInfo = sellerService.getSellerInfo(sellerId);
+        String sellerName = sellerInfo.getDisplayName();
+        megMap.put("first","欢迎成为"+sellerName+"的会员");
+        megMap.put("keyword1",customerPhone);
+        megMap.put("keyword2",DateUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
+
+        wxMpApiService.sendWxTemplateMessage(sellerId,
+                customerEntity.getId(),
+                Configs.getInstance().getH5HostUrl(sellerId)+"wxh/ecard?sellerid=" + sellerId + "&storeid=" + storeId,
+                WxMessageScope.FOLLOW_SELLER,
+                megMap
+        );
+    }

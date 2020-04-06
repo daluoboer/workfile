@@ -1,0 +1,99 @@
+@RequestMapping(value = "/getAddressList")
+    @ResponseBody
+    public ApiResult getAddressList(){
+        final CustomerEntity customerEntity = getCurrentCustomer();
+        return this.apiHandler(new ApiInvoker() {
+            @Override
+            public Object invoke() {
+                Integer size = deliverAddressService.findAddressListSizeByCustomerId(customerEntity.getId());
+                return deliverAddressService.findAddressListByCustomerId(customerEntity.getId(),1,size);
+            }
+        });
+    }
+
+    /**
+     * 删除配送地址（假删除，修改该记录状态）
+     * @param addressId
+     */
+    @RequestMapping(value = "/delAddress")
+    @ResponseBody
+    public void delAddress(
+            @RequestParam(value = "addressId",required = true) final Long addressId
+    ){
+        final CustomerEntity customerEntity = getCurrentCustomer();
+        //应该先查找该记录是否存在，若不存在抛出异常，存在则删除
+        System.out.println("You are deleting address:"+addressId+", "+customerEntity.getId());
+        DeliverAddressEntity deliverAddressEntity = deliverAddressService.getDeliverAddressEntityById(addressId);
+        if(deliverAddressEntity != null){
+            System.out.println("已删除" + addressId);
+            //假删除啊！改变记录状态
+            //deliverAddressService.deleteDeliverAddress(addressId,customerEntity.getId());
+        }
+        else{
+            throw Utils.getServiceException("记录不存在！");
+        }
+    }
+
+    /**
+     * 增加、修改配送地址
+     * @param phoneNumber
+     * @param name
+     * @param addressDetail
+     * @param houseDetail
+     * @param defaultAddress
+     * @param addressId
+     * @param longitude
+     * @param latitude
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/editAddress")
+    @ResponseBody
+    public ApiResult editAddress(@RequestParam(value = "phoneNumber", required = true) final String phoneNumber,
+                                 @RequestParam(value = "name", required = true) final String name,
+                                 @RequestParam(value = "addressDetail", required = true) final String addressDetail,
+                                 @RequestParam(value = "houseDetail",required = true) final String houseDetail,
+                                 @RequestParam(value = "defaultAddress", required = true) final Boolean defaultAddress,
+                                 @RequestParam(value = "addressId", required = false) final Long addressId,
+                                 @RequestParam(value = "longitude",required = true) final String longitude,
+                                 @RequestParam(value = "latitude",required = true) final String latitude,
+                                 final HttpServletRequest request) {
+        final CustomerEntity customerEntity = getCurrentCustomer();
+        return this.apiHandler(new ApiInvoker() {
+            @Override
+            public Object invoke() {
+                System.out.println("You are editing or add address");
+                if (StringUtils.isBlank(name)) {
+                    throw Utils.getServiceException("收货人不能为空");
+                }
+                if (StringUtils.isBlank(phoneNumber)) {
+                    throw Utils.getServiceException("手机号不能为空");
+                }
+                if (StringUtils.isBlank(addressDetail)) {
+                    throw Utils.getServiceException("收货地址不能为空");
+                }
+                //如果门牌号信息不为空，与addressDetail合并
+                String addressDetail2 = String.format("%s/%s",addressDetail,houseDetail);
+                System.out.println("addressDetail2:"+addressDetail2);
+                String remoteIp = Utils.getRemoteAddr(request);
+                DeliverAddressEntity deliverAddressEntity = new DeliverAddressEntity();
+                deliverAddressEntity.setCustomerId(customerEntity.getId());
+                deliverAddressEntity.setPhoneNumber(phoneNumber);
+                deliverAddressEntity.setName(name);
+                deliverAddressEntity.setAddressDetail(addressDetail);
+                deliverAddressEntity.setId(addressId);
+                deliverAddressEntity.setDefaultAddress(defaultAddress);
+                deliverAddressEntity.setLongtitude(longitude);
+                deliverAddressEntity.setLatitude(latitude);
+                deliverAddressEntity.setAddressArea(addressDetail2);
+
+                if (deliverAddressEntity.getId() != null) {
+                    deliverAddressService.updateDeliverAddressById(deliverAddressEntity.getId(), deliverAddressEntity, remoteIp);
+                } else {
+                    deliverAddressEntity.setAddressArea("");
+                    deliverAddressService.createAddress(deliverAddressEntity, remoteIp);
+                }
+                return deliverAddressEntity;
+            }
+        });
+    }

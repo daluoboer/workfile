@@ -1,0 +1,3 @@
+取餐单：PrintUnifyOrderService.recycleUnifyOrder(orderId)
+
+日结单：PrintUnifyOrderService.finishUnifyOrderByDay(sellerId,storeId,date)

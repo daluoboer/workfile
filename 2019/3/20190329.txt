@@ -1,0 +1,2 @@
+/wxh/seller/coinPurse/ajax/delRedEnvelope
+²ÎÊý£ºcashId£¨marketingCashId£©

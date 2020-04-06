@@ -1,0 +1,36 @@
+getRegionEntityByPosition
+1.如果经纬度不为空则根据经纬度获取
+	
+2.否则根据IP获取
+3.否则返回null
+
+噗哈哈哈哈哈哈哈哈！原来是那个经纬度就是查不到的！你是不是傻啊啊啊啊啊啊啊！！！
+
+
+public HttpResponse doGet(String url, List<NameValuePair> httpParameter,
+                              String charset) throws ClientProtocolException, IOException {
+        StringBuilder sb = new StringBuilder(url);
+        if (httpParameter != null) {
+            if (!url.contains("?")) {
+                sb.append("?");
+            }
+            if (sb.charAt(sb.length() - 1) != ('?')) {
+                sb.append("&");
+            }
+
+            String queryString = URLEncodedUtils.format(httpParameter, charset);
+
+            sb.append(queryString);
+        }
+        HttpGet httpGet = new HttpGet(sb.toString());
+        HttpClient httpclient;
+        httpclient = new DefaultHttpClient();
+        httpclient.getParams().setParameter(
+                CoreConnectionPNames.SO_TIMEOUT, 30000);
+        return httpclient.execute(httpGet);
+    }
+
+还有个小问题呀！
+要分页！
+
+恩？奇了怪了~咋就改不了默认地址呢

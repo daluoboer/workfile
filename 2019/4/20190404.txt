@@ -1,0 +1,9 @@
+商家：wxh/seller/coinPurse/returnMoneyRecords
+
+用户：wxh/ecard?sellerid=31&storeid=76
+
+领红包：wxh/coinPurse/toBeforeExecuteMarketing?cashId=179
+
+https://wxa1d7a076fce5c0cf.dev.188yd.com/wxh/seller/coinPurse/returnMoneyRecords  B返现活动
+
+https://wxa1d7a076fce5c0cf.dev.188yd.com/wxh/ecard?sellerid=31&storeid=76 C会员卡页面

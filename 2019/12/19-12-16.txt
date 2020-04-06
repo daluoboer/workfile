@@ -1,0 +1,6 @@
+beforeMarketingWithMallGoods
+
+
+http://192.168.1.79:8080/wxh/queryGoodsDeatailByWx?cashId=2519&goodsId=7430&templateId=24&isShowShare=false&isIdentityTwo=false
+
+http://192.168.1.79:8080/wxh/coinPurse/beforeMarketingWithMallGoods?cashId=2519&goodsId=7430&templateId=24&isShowShare=false&isIdentityTwo=false

@@ -1,0 +1,11 @@
+//删除活动的时候不会解冻吗？再看看，应该会解冻吧？
+                    /*if (marketingCashEntity.getExecuteCount().equals(marketingCashEntity.getNumber())) {
+                        delMarketingCash(marketingCashEntity.getId(), null);
+                        if(marketingCashEntity.getBalance().compareTo(BigDecimal.ZERO) > 0){
+                            BigDecimal lastBalance = marketingCashEntity.getBalance();
+                            if(entity.getSpreaderRebate() != null){
+                                lastBalance = lastBalance.subtract(entity.getSpreaderRebate());
+                            }
+                            sellerCapitalAccountService.changeAccountBalance(lastBalance,entity.getSellerId(),entity.getStoreId(),SellerCapitalAction.ACTIVITY_REFUND,"执行红包活动-返现冻结金额退回",entity.getId(),null);
+                        }
+                    }*/

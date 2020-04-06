@@ -1,0 +1,62 @@
+//        中间的先忽略
+//        ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        //如果fromType为空，则直接查看欠款金额，如没有欠款金额则直接跳转到充值页
+        //创建特殊红包中
+        if(fromType != null && fromType == 1){
+            if (number == null) {
+                throw Utils.getServiceException("请输入红包数量");
+            }
+            if (cashAmount == null) {
+                throw Utils.getServiceException("请输入红包金额");
+            }
+            MarketingCashEntity marketingCashEntity = new MarketingCashEntity();
+            marketingCashEntity.setSellerId(sellerId);
+            marketingCashEntity.setStoreId(storeId);
+            marketingCashEntity.setNumber(number);
+            marketingCashEntity.setCashAmount(cashAmount);
+            marketingCashEntity.setCreateTime(new Date());
+            marketingCashEntity.setOperatorId(operatorId);
+            marketingCashEntity.setStartDate(startDate);
+            marketingCashEntity.setEndDate(endDate);
+            marketingCashEntity.setRebate(BigDecimal.valueOf(0));
+            if (cashType.equals(MarketingCashType.MARKETING_CASH_TYPE_TWO) && executeAmount == null) {
+                throw Utils.getServiceException("请输入返现金的条件");
+            } else if (cashType.equals(MarketingCashType.MARKETING_CASH_TYPE_TWO) && executeAmount != null) {
+                marketingCashEntity.setExecuteAmount(executeAmount);
+                marketingCashEntity.setType(MarketingCashType.MARKETING_CASH_TYPE_TWO);
+//                marketingCashEntity = marketingCashService.addMarketingCashByOrder(marketingCashEntity);
+                modelAndView.addObject("marketingCashEntity",marketingCashEntity);
+            }
+
+            if (cashType.equals(MarketingCashType.MARKETING_CASH_TYPE_THREE) && goodsId == null) {
+                throw Utils.getServiceException("请选择商品");
+            } else if (cashType.equals(MarketingCashType.MARKETING_CASH_TYPE_THREE) && goodsId != null) {
+                marketingCashEntity.setExecuteGoodsId(goodsId);
+                marketingCashEntity.setType(MarketingCashType.MARKETING_CASH_TYPE_THREE);
+//                marketingCashEntity = marketingCashService.addMarketingCashByGoods(marketingCashEntity);
+                modelAndView.addObject("marketingCashEntity",marketingCashEntity);
+            }
+        }
+        //创建单品返现活动中
+        if(fromType != null && fromType == 2){
+            GoodsSubsidyEntity goodsSubsidyEntity = new GoodsSubsidyEntity();
+            goodsSubsidyEntity.setStoreId(storeId);
+            goodsSubsidyEntity.setSellerId(sellerId);
+        /*goodsSubsidyEntity.setStartDate(startDate);
+        goodsSubsidyEntity.setEndDate(endDate);*/
+            try {
+                goodsSubsidyEntity.setStartDate(DateUtil.parse(DateUtil.format(startDate, "yyyy-MM-dd") + " 00:00:00", DateUtil.DATE_FORMAT_LONG));
+                goodsSubsidyEntity.setEndDate(DateUtil.parse(DateUtil.format(endDate, "yyyy-MM-dd") + " 23:59:59", DateUtil.DATE_FORMAT_LONG));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            goodsSubsidyEntity.setSubsidyAmount(subsidyAmount);
+            goodsSubsidyEntity.setGoodsId(goodsId);
+            goodsSubsidyEntity.setGoodsNumber(subsidyCount);
+            goodsSubsidyEntity.setOperatorId(operatorId);
+//            goodsSubsidyService.addGoodsSubsidy(goodsSubsidyEntity);
+            modelAndView.addObject("goodsSubsidyEntity",goodsSubsidyEntity);
+        }
+        modelAndView.addObject("fromType",fromType);
+//        ---------------------------------------------------------------------------------------------------------------------------------------------------------------

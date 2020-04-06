@@ -1,0 +1,16 @@
+»•¡Ï«Æ£∫wxh/coinPurse/toBeforeExecuteList
+
+
+/*
+        and mac_id not in
+        (select mcl_marketingCashId from marketing_cash_log where mcl_sellerId = #{sellerId} and mcl_customerId = #{customerId})*/
+
+190415040921100000
+
+190314084781100000
+
+190306134391100000
+
+190415040921100000
+
+190415040921100004

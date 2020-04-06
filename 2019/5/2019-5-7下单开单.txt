@@ -1,0 +1,85 @@
+逻辑：店铺营业中-》添加新订单-》添加订单详情-》添加订单日志-》打印小票
+
+下单基础设置：设置桌号等
+
+下单操作设置：设置核单开关，点单结账时先付款还是后付款
+
+啊！先付款就是：先付款后打单，后付款就是先打单后付款
+
+几种方式：
+
+1.用户扫码自助下单	/wxh/toMealOrder?sellerId=1529481&storeId=1317021
+
+下单：wxh/ajax/addUnifiedOrderV2
+
+customer-order-dishes.jsp
+
+ 报的错：
+  商品库存发生变化 
+  在规则时间内尚未扫码核销取餐
+
+
+ 核对取餐码/recycleUnifiedOrder
+
+
+2.用户扫码在当前桌下单	/wxh/orderDishes?sellerId=1529481&storeId=1317021&tableId=1
+
+下单：wxh/ajax/addUnifiedOrder
+
+order-dishes.jsp
+
+ 不能核单吗？下完单直接完成
+
+
+	上面俩都是下完单自动打印小票
+
+
+
+3.商家App开单		
+interface AppUnifiedOrderService
+（是这个吗？为啥都显示的没有被引用啊？还是因为App的系统跟Java后端的不是一个）
+
+ 结完账就没法核单了吗？
+
+
+数据表：
+
+unified_order
+unified_order_detail
+unified_order_log
+unified_order_seat_config
+
+unified_order_setting
+
+
+正式版：
+
+https://wx1f845b79186efd77.b.188yd.com/wxh/toMealOrder?sellerId=1529481&storeId=1317021 自助点餐
+
+https://b.188yd.com/wxh/orderDishes?sellerId=1529481&storeId=1317021&tableId=1 自助点餐1桌
+
+https://wx1f845b79186efd77.b.188yd.com/wxh/receiptsOrder/infoV2?orderId=48075065 自助点餐成功 堂食
+
+https://wx1f845b79186efd77.b.188yd.com/wxh/receiptsOrder/infoV2?orderId=48075107 自助点餐成功 打包
+
+https://wx1f845b79186efd77.b.188yd.com/wxh/receiptsOrder/info?orderId=48075141&sellerId=1529481自助点餐完成 1桌
+
+
+
+74版：
+
+https://wxa1d7a076fce5c0cf.dev.188yd.com/wxh/toMealOrder?storeId=76&sellerId=31&backUrlToken=1 自助点餐
+
+https://dev.188yd.com/wxh/orderDishes?sellerId=31&storeId=77&tableId=1 自助点餐1桌
+
+https://wxa1d7a076fce5c0cf.dev.188yd.com/wxh/receiptsOrder/infoV2?orderId=7776 点餐成功
+
+https://dev.188yd.com/wxh/receiptsOrder/info?orderId=7775&sellerId=31 自助点餐完成 1桌
+
+
+117：
+
+192.168.1.117:8080/wxh/toMealOrder?storeId=76&sellerId=31&backUrlToken=1 自助点餐
+
+192.168.1.117:8080/wxh/orderDishes?sellerId=31&storeId=77&tableId=1 自助点餐1桌
+

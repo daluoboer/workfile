@@ -1,0 +1,33 @@
+
+
+
+http://192.168.3.192:8080/wxh/seller/receiptsOrderAnalysisByStore?timeUnit=1
+修改建议：
+1.页面统计项改为ajax，涉及线下订单、商品的使用kylin（今日统计项除外）
+
+数据不多，也挺快的
+
+两个列表不只涉及商品表，涉及到多张表
+
+
+
+
+
+http://192.168.3.192:8080/wxh/seller/ableRefundReceiptsList
+修改建议：
+1.取消列表
+
+
+
+
+还有啥：
+
+ok	1.再检查一遍
+
+ok 	2.所有的方法，都要判断一下是否包含今日数据，如果包含今日数据，在数据库中查出今日数据并与kylin数据相加
+
+ok	3.页面上有没有丢字 
+
+ok	4.http://192.168.1.79:8080/wxh/seller/receiptsOrderAnalysisByStore?timeUnit=2，数据库中少了个字段，等数据库好了需要再测试
+
+5.退款管理超慢

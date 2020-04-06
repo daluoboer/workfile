@@ -1,0 +1,31 @@
+今天：把单品折扣券接进去
+
+1.receipts_order
+
+2.unify_order
+
+	a.计算
+
+	b.核销券
+
+
+1.获取用户单品折扣券
+2.筛选出订单中可用的单品折扣券
+3.计算商品金额时计算折扣
+4.核销券
+
+测试订单
+1.线下订单
+2.商城订单（冀豆  冀豆餐饮）
+
+需要转换的BIgDecimal
+
+totalAmount
+receivableAmount
+actuallyAmount
+point
+mergeExpenseCardPaymentAmount
+mergeCardPaymentAmount
+paymentAmount
+discount
+discountAmount

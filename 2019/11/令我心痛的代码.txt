@@ -1,0 +1,258 @@
+package com.x.mymall.account.model.custom;
+
+import com.x.mymall.account.model.SellerEntity;
+
+import java.math.BigDecimal;
+
+public class CustomerCapitalInSeller {
+    /*因为有sellerId为空的情况，所以需要一个不为空的主键*/
+    private Long id;
+    /*商户信息*/
+    private SellerEntity sellerEntity;
+
+    /*入账金额 -- 自己查询的时候需要啥入账查啥就行，只是用来计算页面数据*/
+    private BigDecimal inBalance;
+
+    /*出账金额*/
+    private BigDecimal outBalance;
+
+    /*未到账金额*/
+    private BigDecimal notArrivedAmount;
+
+    /*征信欠款金额*/
+    private BigDecimal reversalAmount;
+
+    /*可提现金额*/
+    private BigDecimal canWithDrawAmount;
+    /*补贴总金额
+    - 含：
+        可提现金额
+        未到账金额（现为用户未达到商户设置的提现额度因而不能提现的金额）
+        征信欠款金额
+    */
+    private BigDecimal subsidyAmount;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public SellerEntity getSellerEntity() {
+        return sellerEntity;
+    }
+
+    public void setSellerEntity(SellerEntity sellerEntity) {
+        this.sellerEntity = sellerEntity;
+    }
+
+    public BigDecimal getInBalance() {
+        return inBalance;
+    }
+
+    public void setInBalance(BigDecimal inBalance) {
+        this.inBalance = inBalance;
+    }
+
+    public BigDecimal getOutBalance() {
+        return outBalance;
+    }
+
+    public void setOutBalance(BigDecimal outBalance) {
+        this.outBalance = outBalance;
+    }
+
+    public BigDecimal getNotArrivedAmount() {
+        return notArrivedAmount;
+    }
+
+    public void setNotArrivedAmount(BigDecimal notArrivedAmount) {
+        this.notArrivedAmount = notArrivedAmount;
+    }
+
+    public BigDecimal getReversalAmount() {
+        return reversalAmount;
+    }
+
+    public void setReversalAmount(BigDecimal reversalAmount) {
+        this.reversalAmount = reversalAmount;
+    }
+
+    public BigDecimal getCanWithDrawAmount() {
+        return canWithDrawAmount;
+    }
+
+    public void setCanWithDrawAmount(BigDecimal canWithDrawAmount) {
+        this.canWithDrawAmount = canWithDrawAmount;
+    }
+
+    public BigDecimal getSubsidyAmount() {
+        return subsidyAmount;
+    }
+
+    public void setSubsidyAmount(BigDecimal subsidyAmount) {
+        this.subsidyAmount = subsidyAmount;
+    }
+}
+ 
+
+
+
+/**
+     * 获取用户在各商户 某时间段内的 某种类型账单的 变更总金额
+     * @param customerId 用户Id
+     * @param inOrderTypes 入账账单类型
+     * @param outOrderTypes 出账账单类型
+     * @param fromDate
+     * @param toDate
+     * @return
+     */
+    List<CustomerCapitalInSeller> getCustomerCapitalsInSeller(@Param("customerId") Long customerId, @Param("inOrderTypes") List<Integer> inOrderTypes, @Param("outOrderTypes") List<Integer> outOrderTypes, @Param("fromDate") Date fromDate, @Param("toDate") Date toDate);
+
+
+<resultMap id="customerCapitalInSeller" type="com.x.mymall.account.model.custom.CustomerCapitalInSeller">
+        <id column="id" property="id"/>
+        <result column="inBalance" property="inBalance" jdbcType="DECIMAL" />
+        <result column="outBalance" property="outBalance" jdbcType="DECIMAL"/>
+        <result column="reversalAmount" property="reversalAmount" jdbcType="DECIMAL"/>
+        <association property="sellerEntity" resultMap="com.x.mymall.account.dao.SellerEntityMapper.BaseResultMap"/>
+    </resultMap>
+
+
+<select id="getCustomerCapitalsInSeller" resultMap="customerCapitalInSeller">
+        SELECT
+        sel_displayName,
+        a.mySellerId AS id,
+        a.ccbl_sellerId AS sel_id,
+        inBalance,
+        outBalance,
+        reversalAmount
+        FROM
+        (
+        SELECT
+        CASE
+        WHEN
+        ccbl_sellerId IS NULL THEN
+        - 1 ELSE ccbl_sellerId
+        END mySellerId,
+        ccbl_sellerId,
+        sum( ccbl_changeBalance ) AS inBalance
+        FROM
+        customer_capital_bill
+        WHERE 1=1
+        ccbl_customerId = #{customerId}
+        <if test="inOrderTypes != null">
+            AND ccbl_orderType IN (
+            <foreach collection="inOrderTypes" item="orderType" separator=",">
+                #{orderType}
+            </foreach>
+            )
+        </if>
+        <if test="fromDate != null">
+            AND ccbl_createTime &gt; #{fromDate}
+        </if>
+        <if test="toDate != null">
+            AND ccbl_createTime &lt; #{toDate}
+        </if>
+        GROUP BY
+        ccbl_sellerId
+        ) a
+        LEFT JOIN (
+        SELECT
+        CASE
+        WHEN
+        ccbl_sellerId IS NULL THEN
+        - 1 ELSE ccbl_sellerId
+        END mySellerId,
+        ccbl_sellerId,
+        sum( ccbl_changeBalance ) AS outBalance
+        FROM
+        customer_capital_bill
+        WHERE
+        ccbl_customerId = #{customerId}
+        <if test="outOrderTypes != null">
+            AND ccbl_orderType IN (
+            <foreach collection="outOrderTypes" item="orderType" separator=",">
+                #{orderType}
+            </foreach>
+            )
+        </if>
+        <if test="fromDate != null">
+            AND ccbl_createTime &gt; #{fromDate}
+        </if>
+        <if test="toDate != null">
+            AND ccbl_createTime &lt; #{toDate}
+        </if>
+        GROUP BY
+        ccbl_sellerId
+        ) b ON a.mySellerId = b.mySellerId
+        LEFT JOIN (
+        SELECT
+        revr_sellerId,
+        sum( revr_reversalAmount ) AS reversalAmount
+        FROM
+        reversal_record
+        WHERE
+        1 = 1
+        AND revr_toCustomerId = #{customerId}
+        AND revr_status = 1
+        GROUP BY
+        revr_sellerId
+        ) c ON a.ccbl_sellerId = revr_sellerId
+        LEFT JOIN seller ON a.ccbl_sellerId = sel_id
+    </select>
+
+
+
+/**
+     * 获取用户在各商户可提现列表
+     * @return
+     */
+    List<CustomerCapitalInSeller> getWithdrawInSeller(Long customerId);
+
+    /**
+     * 获取用户在各商户补贴列表
+     * @return
+     */
+    List<CustomerCapitalInSeller> getSubsidyInSeller(Long customerId);
+
+
+
+private List<CustomerCapitalInSeller> getCustomerCapitalInSeller(Long customerId, List<Integer> inOrderTypes, List<Integer> outOrderTypes) {
+        /*发版日期！啊这里忽略了之前的数据啊！先把这个写好待会儿再补充*/
+        DateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = null;
+        try {
+            date = dateFormat1.parse("2019-11-21");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        List<CustomerCapitalInSeller> customerCapitalsInSeller = customerCapitalExMapper.getCustomerCapitalsInSeller(customerId, inOrderTypes, outOrderTypes, date, null);
+        return customerCapitalsInSeller;
+    }
+
+    @Override
+    public List<CustomerCapitalInSeller> getWithdrawInSeller(Long customerId) {
+        /*商户--可提现金额（该商户入账记录 - 该商户出账记录）*/
+        List<Integer> inOrderTypes = Arrays.asList(CapitalBillType.ENTRY, CapitalBillType.REDPACKET);
+        List<Integer> outOrderTypes = Arrays.asList(CapitalBillType.EXPENDITURE, CapitalBillType.WITHDRAWED);
+
+        List<CustomerCapitalInSeller> customerCapitalsInSeller = getCustomerCapitalInSeller(customerId, inOrderTypes, outOrderTypes);
+        return customerCapitalsInSeller;
+    }
+
+    @Override
+    public List<CustomerCapitalInSeller> getSubsidyInSeller(Long customerId) {
+        /*商户--补贴总金额（该商户入账总记录 - 该商户出账记录）*/
+        List<Integer> inOrderTypes = Arrays.asList(CapitalBillType.ENTRY, CapitalBillType.REDPACKET, CapitalBillType.NOT_ARRIVED);
+        List<Integer> outOrderTypes = Arrays.asList(CapitalBillType.EXPENDITURE, CapitalBillType.WITHDRAWED);
+
+        List<CustomerCapitalInSeller> customerCapitalsInSeller = getCustomerCapitalInSeller(customerId, inOrderTypes, outOrderTypes);
+        /*这个还应该查询征信欠款记录*/
+
+
+        return customerCapitalsInSeller;
+    }

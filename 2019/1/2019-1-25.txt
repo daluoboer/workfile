@@ -1,0 +1,48 @@
+1.有分配的任务就修改
+
+2.看数据库相关内容（Mybatis动态sql,高级特性）
+
+3.博客？
+
+4.看Java的一些不太熟悉的知识点
+
+5.可以尝试看一些开源代码的源码
+
+
+不熟的知识点：
+	Java关键字
+	类：内部类、匿名类等
+	泛型
+	static、final、transient、volatile
+	JVM&Hotspot
+	JVM:内存划分、class加载机制以及GC策略
+	堆栈
+	并发、并发会对操作的数组、map等有什么影响
+
+	并发、JVM、分布式、TCP/IP协议
+
+	LinkedList，ArrayList，HashMap，TreeMap
+
+	按位异或...
+
+	JMS
+
+	泛型、类型擦除
+
+	正则（这个还好啦，就是规则记得不熟，用的也不熟）
+
+	异常
+
+	语法糖
+
+	线程池
+
+	线程安全、锁、死锁、synchronized
+
+	ThreadLocal
+
+
+
+
+static会将所引用的属性、方法以及内部类，与类直接产生引用关系，而非与类的实例
+如果你没有用static修饰，那么你就必须使用实例才能引用这些方法、属性或者是内部类，最典型的就是内部类

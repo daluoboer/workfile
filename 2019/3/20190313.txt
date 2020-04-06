@@ -1,0 +1,68 @@
+C端：
+
+1.宜店发送给商家链接/二维码
+
+2.商家打开链接/扫描二维码设置红包---若商家现金红包不足 需要充值
+
+3.商家分享二维码
+
+4.用户扫描二维码 直接领取宜店红包，有提现按钮---
+  跳转至：
+
+	参考：/toAccountPage
+
+		account-list.jsp
+
+		$(".withdraw-btn").click(function () {
+                    var bankCountBoolean = $(this).data('bankBool');
+                    var phoneNumber = $("#phoneNumber").val();
+                    if (bankCountBoolean) {
+                        window.location.href = '${webRootPath}wxh/coinPurse/toBindingBankCard';
+                    } else if (isNull(phoneNumber)) {
+                        window.location.href = '${webRootPath}wxh/toMyAccount';
+                    } else {
+                        $(".hidden-overlay").show();
+                    }
+                });
+
+
+
+/**
+     * 红包活动 领取红包
+     * @return
+     */
+//    @RequestMapping(value = "getRedPacket")
+    private ModelAndView getRedPacket(
+            @RequestParam(value = "marketingCashId") final Long marketingCashId,
+            @RequestParam(value = "storeId") final Long storeId
+    ){
+        Long customerId = getUser().getUserId();
+        //执行红包
+        marketingCashService.executeMarketingCash(marketingCashId,customerId,storeId);
+        ModelAndView mv = new ModelAndView("wxh/coinPurse/get-red-packet");
+        //查询红包详情
+        MarketingCashEntityExample example = new MarketingCashEntityExample();
+        MarketingCashEntityExample.Criteria  criteria = example.createCriteria();
+        criteria.andIdEqualTo(marketingCashId);
+        criteria.andStoreIdEqualTo(storeId);
+        List<MarketingCashEntity> marketingCashEntities = marketingCashService.selectMarketingCashByExample(example);
+        MarketingCashEntity marketingCashEntity = null;
+        if(Utils.isNotEmptyCollection(marketingCashEntities)){
+            marketingCashEntity = Utils.first(marketingCashEntities);
+        }
+
+        /*获取用户所绑定的银行卡*/
+        List<CustomerBankInfoEntity> customerBankInfoEntityList = customerBankInfoService.selectBankList(customerId);
+        /*已经绑定银行卡true 未绑定银行卡false*/
+        Boolean bankCountBoolean = false;
+        if(Utils.isNotEmptyCollection(customerBankInfoEntityList)){
+            bankCountBoolean = true;
+        }
+
+        //查询店铺详情
+        StoreExEntity storeExEntity = storeService.getStoreEntityById(storeId);
+        mv.addObject("marketingCashEntity",marketingCashEntity);
+        mv.addObject("storeEntity",storeExEntity);
+        mv.addObject("bankCountBoolean", bankCountBoolean);
+        return mv;
+    }

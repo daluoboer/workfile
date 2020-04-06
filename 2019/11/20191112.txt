@@ -1,0 +1,48 @@
+这次的修改还行
+UI修改的比较多，后台也有数据要修改
+
+可以先改起来了 后台的
+
+在哪个分支上做呢？布吉岛，等哈儿先撤，明个儿来了应该就有分支啦
+
+还有一个小时，先看看都要加哪个东西
+
+
+宜店后台：
+	√ 1.活动列表：修改sql，页面上添加一列即可
+
+OK啦！但是发现这个页面上几项数据不统一，需要跟产品确认一下现在的需求
+
+	√ 2.活动详情：页面上增加数据即可
+	√ 3.样式：群体名称最多展示三行，多余文字用“…“省略
+	
+
+
+H5：
+	√ 1.B端活动列表页 sql修改
+	√ 有数据呀~2.H5 B端预览活动
+	√ 3.分享出去的红包链接需要啥信息 （这个得问问孟欣）
+	√ 4.钱包明细页文案
+
+我把我的补全快捷键搞没了，好像是上周手太快不知道点了个啥，然后我的快捷键就没了....哭唧唧 搞了半天也没有弄好
+
+	噢！解决啦！那个快捷键的问题！就是点得太快不小心给禁用了~完美！
+
+好像差不多了噢
+
+<c:if test="${empty cashEntity.marketingCashRuleEntity}">
+                                全体用户
+                            </c:if>
+                            <c:if test="${not empty cashEntity.marketingCashRuleEntity}">
+                                <c:if test="${cashEntity.marketingCashRuleEntity.type == 0}">
+                                    ${cashEntity.marketingCashRuleEntity.customerName}
+                                </c:if>
+                                <c:if test="${cashEntity.marketingCashRuleEntity.type != 0 && empty cashEntity.marketingCashRuleEntity.numberStep}">
+                                    ${cashEntity.marketingCashRuleEntity.customerName}用户
+                                </c:if>
+                                <c:if test="${cashEntity.marketingCashRuleEntity.type != 0 && not empty cashEntity.marketingCashRuleEntity.numberStep}">
+                                    ${cashEntity.marketingCashRuleEntity.numberStep}号段用户
+                                </c:if>
+                            </c:if>
+
+(⊙o⊙)… 领取普通现金红包会生成log吗？

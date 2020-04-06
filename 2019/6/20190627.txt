@@ -1,0 +1,12 @@
+<!--<if test="example.orderByClause != null">
+            order by ${example.orderByClause}
+        </if>-->
+
+关于版本号
+将新分支合并到develop的时候，要确保两个版本号都是正确的，否则都会合并失败，所以最后先在本地看一下新分支和develop分支pom文件的版本号，再进行合并，确保无误
+
+/wxh/applet/getMyGiftList
+
+/wxh/mycard
+
+大神写的sql比之前的少了一个条件呀~明天再问一下直接加上去可不可以~

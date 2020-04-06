@@ -1,0 +1,62 @@
+String rempteIp = request.getRemoteAddr();
+        storeService.openStoreWeb(
+                userId,
+                storeName,
+                storeTelPhone,
+                storePhoneNumber,
+                image,
+                industryCategoryId,
+                longitude,
+                latitude,
+                rempteIp,
+                response
+        );
+
+
+
+List<GlobalRegionEntity> regionEntities = globalRegionService.getRegionEntityByPosition(remoteIp,deliverAddressEntity.getLongtitude(),deliverAddressEntity.getLatitude());
+        String provinceName = null;
+        Integer provinceId = null;
+        String cityName = null;
+        Integer cityId = null;
+        String districtName = null;
+        Integer districtId = null;
+        //恩...这个地址到底是要干嘛的，好像数据表里并没有存储店铺的位置信息，先放一放，e....要的要的，需要在开店的时候填写
+        if (regionEntities.size() >= 1) {    //省
+            GlobalRegionEntity entity = regionEntities.get(0);
+            if (entity != null) {
+                provinceId = entity.getRegionId();
+                provinceName = entity.getRegionName();
+            }
+        }
+
+        if (regionEntities.size() >= 2) {  //市
+            GlobalRegionEntity entity = regionEntities.get(1);
+            if (entity != null) {
+                cityId = entity.getRegionId();
+                cityName = entity.getRegionName();
+            }
+        }
+
+        if (regionEntities.size() >= 3) {   // 区
+            GlobalRegionEntity entity = regionEntities.get(2);
+            if (entity != null) {
+                districtId = entity.getRegionId();
+                districtName = entity.getRegionName();
+            }
+        }
+        String addressInfo = provinceName + cityName + districtName;
+        String globalRegionPath = String.format("%s/%s/%s/", provinceId, cityId, districtId);
+        System.out.println("addressInfo:"+addressInfo);
+        System.out.println("globalRegionPath:"+globalRegionPath);
+
+
+
+
+
+
+
+
+
+
+

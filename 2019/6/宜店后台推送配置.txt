@@ -1,0 +1,8 @@
+1.marketing_cash_store表：
+	增加type、categoryId、executeAmount字段
+2.marketing_cash_log表：
+	增加marketing_cash_store_id，因为要根据这条配置查看发放详情
+
+
+选择红包
+弹窗，先查询数据，直接显示

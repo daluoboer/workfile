@@ -1,0 +1,18 @@
+-- 本周/月收款统计
+-- ReceiptsOrderCustomEntityMapper.getReceiptsListCount
+-- 项目中查询时间：25.264s，数据库中查询时间：30.365s
+-- select count(*) from receipts_order WHERE ( reor_sellerId = 769 and reor_storeId = 839 and reor_status = 3 and reor_finishedTime >= "2019-12-1 00:00:00" and reor_finishedTime <= "2019-12-9 23:59:59" ) 
+
+-- -----------------------------------------------------------------------------------------------------------------------
+
+-- 经营分析--设置促销活动
+-- wxh/seller/accurateMarketing 
+-- 该页面在数据多的数据库里进不去，所有数据在进入页面时全部加载，应首先拆分成ajax
+
+-- ------------------------------------------------------------------------------------------------------------------------------
+
+-- 经营分析--设置首单优惠
+-- 1.这一个方法查询了7次（生成一周新增会员走势折线图）
+-- ReceiptsOrderCustomEntityMapper.getTotalAddNewMemberCount
+-- 项目中查询时间：6-16.582s，数据库中查询时间：23.133s
+-- SELECT count(*) FROM (SELECT cst_customerId FROM customer_store WHERE cst_sellerId = 769 AND cst_storeId = 839 AND cst_createdTime >= "2019-12-9 00:00:00" AND cst_createdTime <= "2019-12-9 23:59:59" ) AS a; 

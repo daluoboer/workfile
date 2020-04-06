@@ -1,0 +1,88 @@
+√   1.创建活动
+√   2.创建活动时获取集团客户 可以用现有接口
+	/getGroupCustomerListByStoreId
+√   3.选择运营商时需要获取号段
+   4.参与活动时需要判断用户手机号是否符合活动字段
+
+√ 页面优化那个需求，页面上显示推广员应该加个判断条件---活动有佣金 （直接在这个需求上改了）
+
+
+
+canCare:true--可以领取
+canCare:false---不可以领取（非指定用户）
+
+
+活动列表页：非推广员页面展示定向条件
+
+
+现在是干啥勒？
+1.加serialNumber
+2.改bug
+
+改完了~
+还有啥？
+不是定向用户弹出的窗口，点击跳转到用户首页
+
+
+****************************************** ！！！！！！！！***********************************************
+marketing_cash新增needCare字段，需要处理历史数据
+
+-- 将marketingCash needCare 字段修改为0；类型为2/3的修改为1
+update marketing_cash set mac_needCare = 1 where mac_type in (2,3)
+***********************************************************************************************************
+
+提现：ccbl_orderType=4 ccbl_serialNumber 
+满返、爆品/推荐返现红包：ccbl_orderType=6 ccbl_tradeNo=mcl_id
+营销发放红包：ccbl_orderType=6 ccbl_tradeNo=营销活动Id
+
+商品补贴：ccbl_orderType=1 ccbl_tradeNo=mcl_id
+
+冲正入账：ccbl_orderType=6 ccbl_tradeNo = null
+
+惠友订单商品返现（活动类型为8：惠友订单满返、惠友订单商品返现）：ccbl_orderType=6 ccbl_tradeNo=mcl_id
+
+
+
+//处理历史数据
+Integer updateCareNumber();----之前的只是复制过来，以后有这种需求可以参考一下
+
+update marketing_cash set mac_needCare = 1 where mac_type in (2,3)
+
+Bug #12239 H5钱包明细页，消费返现的记录点击没有跳转
+Bug #12217 H5集团营销，选择号段问题汇总
+Bug #12244 管理后台，集团红包活动，红包条件为空
+Bug #12248 H5钱包明细页，欠款活动记录，不能正常跳转
+Bug #12249 H5创建爆品拉新返现活动时，先勾选一个商品券，再勾选商品，点击确定，活动会变成单品返现活动
+
+
+
+
+
+$(".btnSure").click(function () {
+                var selectedGoodsId = $("input[name='goodsId']").val();
+                var selectedMallGoodsId = $("input[name='mallGoodsId']").val();
+                if (isBlank(selectedGoodsId) && isBlank(selectedMallGoodsId)) {
+                    $.alert("请选择商品！");
+                    return;
+                }
+
+                var href = "${webRootPath}wxh/seller/coinPurse/toAddSubsidyPage?goodsId=" + selectedGoodsId + "&mallGoodsId=" + selectedMallGoodsId;
+                if (isBlank(type)) {
+                    if(isBlank(selectedGoodsId)){
+                        href = "${webRootPath}wxh/seller/coinPurse/toAddSubsidyPage?mallGoodsId=" + selectedMallGoodsId;
+                    }
+                    if(isBlank(selectedMallGoodsId)){
+                        href = "${webRootPath}wxh/seller/coinPurse/toAddSubsidyPage?goodsId=" + selectedGoodsId;
+                    }
+                } else {
+                    if(isBlank(selectedGoodsId)){
+                        href = "${webRootPath}wxh/seller/coinPurse/toFullGiftRedEnvelopeSet?mallGoodsId=" + selectedMallGoodsId;
+                    }
+                    if(isBlank(selectedMallGoodsId)){
+                        href = "${webRootPath}wxh/seller/coinPurse/toFullGiftRedEnvelopeSet?goodsId=" + selectedGoodsId;
+                    }
+                    <%--href = "${webRootPath}wxh/seller/coinPurse/toFullGiftRedEnvelopeSet?goodsId=" + selectedGoodsId + "&mallGoodsId=" + selectedMallGoodsId;--%>
+                }
+                window.location.href = href;
+
+            });

@@ -1,0 +1,50 @@
+1.更改活动规则
+
+2.创建活动 -- 
+
+	活动预算，活动金额初始化
+
+	指定集团数据初始化
+
+3.执行活动 --
+
+	活动执行规则
+
+	活动金额变化
+
+
+4.参与活动
+
+H5创建指定活动修改
+
+
+指定用户规则校验
+3504：checkMarketingCashRule（）
+
+1866：afterExecuteMarketingCashByOrder
+
+2210：afterExecuteMarketingCashByGoods
+
+返佣活动，如果金额不足怎么分配：
+1.是否要执行返佣返现
+2.如果执行，优先返佣还是返现
+
+
+<%-- 单级指定 （全部用户没有返现，指定用户有活动） --%>
+                                <c:if test="${marketingCashEntity.cashAmount == 0 && not empty marketingCashEntity.marketingCashRuleEntity}">
+                                    <c:if test="${empty marketingCashEntity.marketingCashRuleEntity.numberStep}">
+                                        <%-- 指定联盟卡用户 --%>
+                                        <c:if test="${marketingCashEntity.marketingCashRuleEntity.type == -1}">
+                                            <p class="rule_usePar"><span class="rule_useSep">${ruleIndex}<c:set var="ruleIndex" value="${ruleIndex+1}"/>.</span>仅限<span class="rule_red_character">${storeExEntity.sellerEntity.displayName}${marketingCashEntity.marketingCashRuleEntity.customerName}</span>的用户参与</p>
+                                            <p class="rule_usePar" style="margin-bottom: .2rem;color:#666;"><span class="rule_useSep">${ruleIndex}<c:set var="ruleIndex" value="${ruleIndex+1}"/>.</span>可在联盟门店扫码购卡</p>
+                                            <p class="rule_usePar" style="color:#666;"><span class="rule_useSep">${ruleIndex}<c:set var="ruleIndex" value="${ruleIndex+1}"/>.活动订单不支持退款</span></p>
+                                        </c:if>
+                                        <%-- 指定其他集团客户 --%>
+                                        <c:if test="${marketingCashEntity.marketingCashRuleEntity.type != -1}">
+                                            <p class="rule_usePar"><span class="rule_useSep">${ruleIndex}<c:set var="ruleIndex" value="${ruleIndex+1}"/>.</span>仅限<span class="rule_red_character">${marketingCashEntity.marketingCashRuleEntity.customerName}</span>的用户参与</p>
+                                        </c:if>
+                                    </c:if>
+                                    <c:if test="${not empty marketingCashEntity.marketingCashRuleEntity.numberStep}">
+                                        <p class="rule_usePar"><span class="rule_useSep">${ruleIndex}<c:set var="ruleIndex" value="${ruleIndex+1}"/>.</span>仅限<span class="rule_red_character">${marketingCashEntity.marketingCashRuleEntity.customerName}${marketingCashEntity.marketingCashRuleEntity.numberStep}号段</span>的用户参与</p>
+                                    </c:if>
+                                </c:if>

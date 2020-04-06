@@ -1,0 +1,85 @@
+正式版
+位置：
+1.H5经营分析
+2.APP经营分析
+3.APP数据统计
+4.WEB端统计分析
+
+经营分析：
+
+订单总额 totalOrderAmont
+
+优惠金额 storeStatistics.totalOrderAmont - storeStatistics.totalActuallyAmount
+
+实收金额 totalActuallyAmount
+
+会员数 totalMember
+
+客单价 storeStatistics.totalOrderAmont/storeStatistics.totalOrderCount
+
+会员消费金额占比：
+
+新会员消费共计 totalNewMemberAmount
+
+老会员消费：totalOldMemberAmount
+
+新会员人数：totalNewMember
+
+老会员人数：totalOldMember
+
+
+一串数字的商户超级管理员
+cemp_customerId : 66066281
+密码：666666
+
+
+惠友超级管理员：948553
+sellerId:769
+storeId:839
+
+
+我的customer Id：66690493
+文豪customerId：1194525
+把自己商户超管改成了66690492
+sellerId:1529481
+storeId:1317021
+
+俩问题：
+
+1.报错了，请求失败
+
+2.数据查询慢 
+ 	
+	a.改成ajax
+	b.优化SQL
+
+
+2.4min -- /getAllAmountYear：SaleAnalysisAppMapper.selectSaleAmount
+[2019-10-15 16:49:50.764] INFO  [qtp166608914-394] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.store.dao.analysisApp.SaleAnalysisAppMapper.selectSaleAmount
+	==> SQL: select sum(reor_actuallyAmount) orderAmount, UNIX_TIMESTAMP(date_format(reor_createdTime, '%Y-%m-%e')) * 1000 createdTime from receipts_order where 1=1 and reor_sellerId =? and reor_storeId = ? and reor_status = 3 and reor_finishedTime >= ? and reor_finishedTime <= ? GROUP BY createdTime 
+	==> Parameters: 1474961(Long), 1262205(Long), Sun Sep 01 00:00:00 CST 2019(Date), Mon Sep 30 23:59:59 CST 2019(Date)
+	==> Duration: 30.494s
+
+1.7min -- /getTotalAmountYear：SaleAnalysisAppMapper.getAllReceiptAmount
+[2019-10-15 16:49:20.746] INFO  [qtp166608914-374] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.store.dao.analysisApp.SaleAnalysisAppMapper.getAllReceiptAmount
+	==> SQL: select sum( reor_totalAmount) orderAmount FROM receipts_order where 1=1 and reor_sellerId =? and reor_storeId = ? and reor_status = 3 and reor_createdTime >= ? and reor_createdTime <= ? 
+	==> Parameters: 1474961(Long), 1262205(Long), Tue Jan 01 00:00:00 CST 2019(Date), Tue Oct 15 16:48:24 CST 2019(Date)
+	==> Duration: 56.589s
+
+1.7min -- /getUnionSalesTotalList：GiftStatisticsNotBillionInShopsMapper.queryUnionSalesTotal
+[2019-10-15 16:49:20.818] INFO  [qtp166608914-353] (SqlCostInterceptor.java:131) -Mybatis-Mapper-Method:
+	==> Id: com.x.mymall.store.dao.analysisApp.GiftStatisticsNotBillionInShopsMapper.queryUnionSalesTotal
+	==> SQL: select round(ifnull(sum(reor_receivableAmount),0.00)/10000,6) as unionSalesTotal from receipts_order where reor_status = '3' and reor_id in ( select distinct regt_orderId from receipts_order_gift_token where regt_giftTokenId in ( select distinct cgt_id from customer_gift_token where cgt_sellerId = ? and cgt_source = 1 and cgt_isUsed = true and cgt_giftDefType = 1 and cgt_fromStoreId = ? ) ) and reor_createdTime >= concat(year(current_date),'-01-01 00:00:00') and reor_createdTime <= concat(year(current_date),'-12-31 23:59:59') 
+	==> Parameters: 1474961(Long), 1262205(Long)
+	==> Duration: 55.855s
+
+
+
+1.8min -- /getExpenseStatisticsInfo： 多个sql：SaleAnalysisAppServiceImpl.selectHaveMallAnalysis
+
+
+GiftStatisticsNotBillionInShopsMapper.queryUnionSalesTotal
+
+SaleAnalysisAppMapper.selectTradeAmountByYear

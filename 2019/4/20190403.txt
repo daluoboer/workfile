@@ -1,0 +1,8 @@
+首页（会员卡页面）：wxh/ecard?sellerid=31&storeid=76
+（修改）：
+	总金额=可提现金额+未到账金额
+
+
+总金额查询明细：wxh/coinPurse/toAccountPage（修改）
+
+未到账金额-->去激活：	新页面-->未到账明细

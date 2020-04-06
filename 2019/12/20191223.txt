@@ -1,0 +1,137 @@
+找到了必须关注活动的原因了，因为批量预执行的时候判断了一下是否要预执行，跟之前执行的时候判断条件是一样的，需要加一个使用联盟卡支付的判断条件
+
+3667
+
+
+1.改活动名称 -- 为啥那一列说undefined，但是把sql拿出来就可以正常查询到啊。。。我猜是因为sql太长了，算了算了先不管，先改代码吧，拉图说不应该用这种方法，应该修改旧数据
+
+2.创建活动的时候修改活动名称 -- 如果指定用户有活动，先存起来，再拼接
+
+3.一个新的问题，账单那里是咋存的？？？要不这次全改了吧，要不每次修改个细节都得该一堆~
+噢~~~~没事儿，那里是写死的，不是传的活动名称，
+
+
+入账有类型，只有商品补贴和红包活动不是同一种类型，其实也可以写成同一种类型的，可能可以再加一个子类型
+
+啊好复杂啊，不知道该咋办呐
+算了先不想，反正暂时不会有影响
+
+
+
+
+写个p？把历史数据 -- 活动名称都给改喽~
+
+
+
+
+
+
+
+
+
+concat(
+	CASE
+			
+			WHEN mac_marketingName LIKE '%红包活动-消费满N元返M元%' THEN
+			concat( "满", mac_executeAmount, "元返", mac_cashAmount, CASE WHEN mac_executeType = 1 THEN "元" WHEN mac_executeType = 3 THEN "%" END ) 
+			WHEN mac_marketingName NOT LIKE '%红包活动-消费满N元返M元%' THEN
+			mac_marketingName 
+		END,
+	CASE
+			
+			WHEN mcr_cashAmount IS NOT NULL and mcr_cashAmount>0 then concat( "指定用户返", mcr_cashAmount, CASE WHEN mcr_executeType = 1 THEN "元" WHEN mac_executeType = 3 THEN "%" END ) 
+			when mcr_cashAmount is null or mcr_cashAmount<=0 then ""
+		END 
+		)
+
+
+
+啊啊啊啊啊以后改报表的时候一定要先备份啊啊啊啊啊啊！！！
+
+
+
+MarketingResultMap
+
+<include refid="com.x.mymall.store.dao.MarketingCashEntityMapper.Base_Column_List"/>,
+<include refid="com.x.mymall.store.dao.MarketingCashRuleEntityMapper.Base_Column_List"/>,
+<include refid="com.x.mymall.store.dao.MarketingCashGoodsEntityMapper.Base_Column_List"/>,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+测试大数据：
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+指定用户购买零一二三四五六七八九零一二三四五六七八九零一二三四五六七八九返7.00%普通用户返6.00%
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

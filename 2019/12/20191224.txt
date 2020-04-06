@@ -1,0 +1,104 @@
+🆗	1.排序：e...加了个筛选，等会儿跟产品确认一下
+🆗	2.活动名称，咋跟之前又不一样呢，改了改了
+3.暂时没了吧
+
+噢包含指定活动的 需不需要关注？
+
+
+分账：如果要在计算订单的时候就获取到，那可以直接在计算订单的地方调用？e...可是这样其实还是类似于加锁的
+
+拉图跟鹏举在讨论
+
+
+正式版需要先请求一下这两个，处理历史数据
+
+（活动名称）：/updateMarketingName
+
+（实际执行金额）：/updateMarketingPaidAmount
+
+
+啊啊啊啊！好气啊！
+
+
+	1.活动列表中活动预算更改为实际数值（现在为负数）
+	2.活动详情中“活动预算”和“红包个数”也要更改为实际数值（现在为负数）
+
+
+报表还没有完啊！！！别忘了！！！！！！
+
+OK，暂时没啦？？还有钱包明细--补贴详情页面的东西
+
+补贴详情：wxh/coinPurse/goAccountDetail?logId=11365
+
+活动详情：
+
+
+
+
+/*查询冠名数据*/
+        MarketingTitleEntity marketingTitle = marketingTitleService.getMarketingTitle(marketingCashEntity.getSellerId(),marketingCashEntity.getStoreId(), marketingCashEntity.getStartDate());
+        marketingCashEntity.setMarketingTitleEntity(marketingTitle);
+
+        /*查询联盟商户*/
+        List<Map<String, Object>> canUsePrepaidCardUnionSellerList = prepaidCardUnionSellerService.getCanUsePrepaidCardUnionSellerList(marketingCashEntity.getSellerId(), marketingCashEntity.getStoreId());
+
+        mv.addObject("prepaidCardUnionSeller",Utils.isNotEmptyCollection(canUsePrepaidCardUnionSellerList)?Utils.first(canUsePrepaidCardUnionSellerList):null);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+🆗	1.先创建一个新字段
+
+🆗	2.然后在执行活动的时候更新活动数据
+
+🆗	3.然后更新历史数据
+
+	4.然后修改页面上展示的地方
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

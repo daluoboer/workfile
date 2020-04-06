@@ -1,0 +1,253 @@
+-- ----------------------------------------------------------------------------------------------------------------------------------------------------------
+-- 一、会员列表页
+
+-- 1.页面数据：
+-- ReceiptsOrderCustomEntityMapper.getTotalAddNewMemberCount
+-- 项目中查询时间：12-16s，数据库中查询时间12-16s
+-- SELECT count(*) FROM (SELECT cst_customerId FROM customer_store WHERE cst_sellerId = 769 AND cst_storeId = 839 AND cst_createdTime >= "2019-12-9 0:0:0" AND cst_createdTime <= "2019-12-9 23:59:59" ) AS a; 
+
+-- 2.会员列表（会员数73199）：
+-- MallOrderExMapper.getCustomerListWithTotalAmountCountInStore：
+-- 项目中查询时间261.964s，数据库中查询时间19.141s：（正常情况下20s左右，在数据库同时进行其他查询的时候速度就特别慢）
+-- SELECT
+-- 	cus_id,
+-- 	cus_idNumber,
+-- 	cus_name,
+-- 	cus_displayName,
+-- 	cus_realName,
+-- 	cus_password,
+-- 	cus_email,
+-- 	cus_phoneNumber,
+-- 	cus_gender,
+-- 	cus_birthday,
+-- 	cus_qq,
+-- 	cus_createdTime,
+-- 	cus_lastLoginTime,
+-- 	cus_lastCheckTime,
+-- 	cus_avatarImageUrl,
+-- 	cus_status,
+-- 	cus_isEnabled,
+-- 	cus_token,
+-- 	cus_token1,
+-- 	cus_token2,
+-- 	cus_salt,
+-- 	cus_isRegistered,
+-- 	cus_registerDate,
+-- 	cus_shippingAddress,
+-- 	cus_sellerId,
+-- 	cus_wxOpenId,
+-- 	cus_wxNickName,
+-- 	cus_alipayOpenId,
+-- 	cus_wxOpenIdForSeller,
+-- 	cus_wxAppletOpenId,
+-- 	cus_wxUnionid,
+-- 	cus_wxSubscribed,
+-- 	cus_wxSubscribedForSeller,
+-- 	cus_fromType,
+-- 	( SELECT SUM( reor_totalAmount ) FROM receipts_order WHERE reor_customerId = cus_id AND reor_status = 3 AND reor_sellerId = 769 AND reor_storeId = 839 ) AS totalAmount,
+-- 	( SELECT COUNT( * ) FROM receipts_order WHERE reor_customerId = cus_id AND reor_status = 3 AND reor_sellerId = 769 AND reor_storeId = 839 ) AS totalCount,
+-- 	cpc_expenseCardBalance,
+-- 	(
+-- 	SELECT
+-- 		cpcd_discount 
+-- 	FROM
+-- 		prepaid_card_discount_info 
+-- 	WHERE
+-- 		cpcd_sellerId = 769 
+-- 		AND cpcd_id IN ( SELECT cdst_discountInfoId FROM prepaid_card_discount_store WHERE cdst_sellerId =769 AND cdst_storeId =839 ) 
+-- 		AND cpcd_customerPrepaidCardId = cpc_id 
+-- 		AND cpcd_enabled = 1 
+-- 		AND (
+-- 			( ( cpcd_isLimitDate = 1 AND cpcd_limitStartDate <= now( ) AND cpcd_limitEndDate >= now( ) ) OR cpcd_isLimitDate = 0 ) 
+-- 			AND ( ( cpcd_isLimitCount = 1 AND cpcd_limitCount > 0 AND cpcd_limitCount > cpcd_discountCount ) OR cpcd_isLimitCount = 0 ) 
+-- 		) 
+-- 	) AS cpcd_discount,
+-- 	cpc_identity AS identity 
+-- FROM
+-- 	customer_store
+-- 	LEFT JOIN customer ON cus_id = cst_customerId
+-- 	LEFT JOIN customer_prepaid_card ON cpc_customerId = cus_id 
+-- 	AND cpc_sellerId = 769 
+-- WHERE
+-- 	cst_sellerId = 769 
+-- 	AND cst_storeId = 839 
+-- 	AND cus_id IS NOT NULL 
+-- ORDER BY
+-- 	identity DESC 
+-- 	LIMIT 0,
+-- 	10
+
+
+
+-- -------------------------------------------------------------------------------------------------------------------------------------
+-- 二、会员营销页面
+
+-- TradeOrderExMapper.getMemberListCount
+-- 以下三个查询都对应该方法，只是筛选方式不同，执行时间也差不多
+
+-- 1、消费时间筛选（会员数73199）一年：
+-- 项目中查询时间6.767s，数据库中查询时间6.630s：
+-- SELECT
+-- 	count( * ) 
+-- FROM
+-- 	(
+-- 	SELECT
+-- 		cst_customerId AS id,
+-- 		cst_tradeNumber tradeNumber,
+-- 		cst_tradeAmount tradeAmount,
+-- 		sum( ifnull( reor_totalAmount, 0.0 ) ) orderTotalAmount,
+-- 		count( reor_id ) orderCount 
+-- 	FROM
+-- 		customer_store
+-- 		LEFT JOIN customer customer1 ON customer1.cus_id = cst_customerId
+-- 		LEFT JOIN receipts_order ON reor_customerId = cst_customerId 
+-- 		AND reor_sellerId = 769 
+-- 		AND reor_storeId = 839 
+-- 		AND reor_status = 3 
+-- 		AND reor_customerId IS NOT NULL 
+-- 		AND reor_createdTime >= "2018-12-6" 
+-- 	AND reor_createdTime <= "2019-12-6" WHERE cst_sellerId = 769 AND cst_storeId = 839 AND cst_customerId IS NOT NULL GROUP BY cst_customerId HAVING 1 = 1 AND orderCount > 0 
+-- 	) AS tt
+
+-- 2、消费金额筛选
+-- 项目中查询时间7.425s，数据库中查询时间7.437s：
+--  SELECT
+-- count( * ) 
+-- FROM
+-- 	(
+-- 	SELECT
+-- 		cst_customerId AS id,
+-- 		cst_tradeNumber tradeNumber,
+-- 		cst_tradeAmount tradeAmount,
+-- 		sum( ifnull( reor_totalAmount, 0.0 ) ) orderTotalAmount,
+-- 		count( reor_id ) orderCount 
+-- 	FROM
+-- 		customer_store
+-- 		LEFT JOIN customer customer1 ON customer1.cus_id = cst_customerId
+-- 		LEFT JOIN receipts_order ON reor_customerId = cst_customerId 
+-- 		AND reor_sellerId = 769 
+-- 		AND reor_storeId = 839 
+-- 		AND reor_status = 3 
+-- 		AND reor_customerId IS NOT NULL 
+-- 	WHERE
+-- 		cst_sellerId = 769 
+-- 		AND cst_storeId = 839 
+-- 		AND cst_customerId IS NOT NULL 
+-- 	GROUP BY
+-- 		cst_customerId 
+-- 	HAVING
+-- 		1 = 1 
+-- 		AND tradeAmount >= 12 
+-- 	AND tradeAmount <= 100 
+-- 	) AS tt
+
+-- 3、消费次数筛选
+-- 项目中查询时间7.558s，数据库中查询时间7.459s：
+-- SELECT
+-- count( * ) 
+-- FROM
+-- 	(
+-- 	SELECT
+-- 		cst_customerId AS id,
+-- 		cst_tradeNumber tradeNumber,
+-- 		cst_tradeAmount tradeAmount,
+-- 		sum( ifnull( reor_totalAmount, 0.0 ) ) orderTotalAmount,
+-- 		count( reor_id ) orderCount 
+-- 	FROM
+-- 		customer_store
+-- 		LEFT JOIN customer customer1 ON customer1.cus_id = cst_customerId
+-- 		LEFT JOIN receipts_order ON reor_customerId = cst_customerId 
+-- 		AND reor_sellerId = 769 
+-- 		AND reor_storeId = 839 
+-- 		AND reor_status = 3 
+-- 		AND reor_customerId IS NOT NULL 
+-- 	WHERE
+-- 		cst_sellerId = 769 
+-- 		AND cst_storeId = 839 
+-- 		AND cst_customerId IS NOT NULL 
+-- 	GROUP BY
+-- 		cst_customerId 
+-- 	HAVING
+-- 		1 = 1 
+-- 		AND tradeNumber >= 0
+-- 	AND tradeNumber <= 100000
+-- 	) AS tt
+
+
+
+-- -------------------------------------------------------------------------------------------------------------------------------------------
+-- 三、账目查询页面
+
+
+-- 1.进入页面慢：数据过多（五个tab，页面数据全部查询出来之后才进入页面）
+
+-- 2.列表数据
+-- 项目中查询超时，数据库中查询时间：500s都没有出来：
+-- 又可以了...项目中时间：13.654s，数据库中查询时间：17.210s
+-- select reor_id, reor_sellerId, reor_storeId, reor_customerId, reor_prepaidCardId, reor_serialNumber, reor_description, reor_createdTime, reor_discount, reor_discountInfoId, reor_totalAmount, reor_receivableAmount, reor_otherReceivableAmount, reor_actuallyAmount, reor_discountAmount, reor_preferenceTotalAmount, reor_consumerNumber, reor_gifttokenTotalAmount, reor_gifttokenCount, reor_goodsTotalAmount, reor_goodsDiscountTotalAmount, reor_goodsCount, reor_mergeCardPaymentAmount, reor_mergeExpenseCardPaymentAmount, reor_expenseCardSellerId, reor_eraseAmount, reor_changeAmount, reor_paymentAmount, reor_paymentType, reor_paymentProvider, reor_paymentMessage, reor_paymentTime, reor_authMethod, reor_outTradeId, reor_operatorId, reor_invoiceNo, reor_postscript, reor_status, reor_finishedTime, reor_revokeOperatorId, reor_revokeRemark, reor_revokeTime, reor_updatedTime, reor_lastOperatorId, reor_lastOperatedTime, reor_version, reor_unifiedOrderIds, reor_outSerialNumber, reor_deviceInfo, reor_deviceIpAddr, reor_operatorCode, reor_deviceCode, reor_isPrepaidCardDiscount, reor_channelId, reor_goodsVipPrice, reor_callBackUrl, reor_isCallBackOver, reor_relateOrderId, reor_refundAmount, reor_secretId, reor_preAmount, reor_preDiscount, reor_dpllId , sto_id, sto_sellerId, sto_name, sto_description, sto_logoImageUrl, sto_category, sto_addressDescription, sto_addressDetail, sto_addressLongitude, sto_addressLatitude, sto_geoHash, sto_globalRegionPath, sto_openingHours, sto_mobilePhoneNumber, sto_telephoneNumber, sto_createdTime, sto_updatedTime, sto_regionId, sto_operatorId, sto_stopStatus, sto_stopRemark, sto_auditStatus, sto_auditRemark, sto_validityTime, sto_isOpenMall, sto_viewImageUrls, sto_code, sto_industryCategoryId, sto_isTest, sto_accountingCode , customer1.cus_id as customer1_cus_id, customer1.cus_idNumber as customer1_cus_idNumber, customer1.cus_name as customer1_cus_name, customer1.cus_displayName as customer1_cus_displayName, customer1.cus_realName as customer1_cus_realName, customer1.cus_password as customer1_cus_password, customer1.cus_email as customer1_cus_email, customer1.cus_phoneNumber as customer1_cus_phoneNumber, customer1.cus_gender as customer1_cus_gender, customer1.cus_birthday as customer1_cus_birthday, customer1.cus_qq as customer1_cus_qq, customer1.cus_createdTime as customer1_cus_createdTime, customer1.cus_lastLoginTime as customer1_cus_lastLoginTime, customer1.cus_lastCheckTime as customer1_cus_lastCheckTime, customer1.cus_avatarImageUrl as customer1_cus_avatarImageUrl, customer1.cus_status as customer1_cus_status, customer1.cus_isEnabled as customer1_cus_isEnabled, customer1.cus_token as customer1_cus_token, customer1.cus_token1 as customer1_cus_token1, customer1.cus_token2 as customer1_cus_token2, customer1.cus_salt as customer1_cus_salt, customer1.cus_isRegistered as customer1_cus_isRegistered, customer1.cus_registerDate as customer1_cus_registerDate, customer1.cus_shippingAddress as customer1_cus_shippingAddress, customer1.cus_sellerId as customer1_cus_sellerId, customer1.cus_wxOpenId as customer1_cus_wxOpenId, customer1.cus_wxNickName as customer1_cus_wxNickName, customer1.cus_alipayOpenId as customer1_cus_alipayOpenId, customer1.cus_wxOpenIdForSeller as customer1_cus_wxOpenIdForSeller, customer1.cus_wxAppletOpenId as customer1_cus_wxAppletOpenId, customer1.cus_wxUnionid as customer1_cus_wxUnionid, customer1.cus_wxSubscribed as customer1_cus_wxSubscribed, customer1.cus_wxSubscribedForSeller as customer1_cus_wxSubscribedForSeller, customer1.cus_fromType as customer1_cus_fromType , cemp_id, cemp_sellerId, cemp_storeId, cemp_customerId, cemp_code, cemp_remark, cemp_isAdmin, cemp_postDescription, cemp_isEnabled, cemp_creatorId, cemp_createdTime, cemp_lastVisitTime, cemp_lastVisitIp, cemp_lastVisitDevice, cemp_lastVisitCount, cemp_bindDeviceId, cemp_bindDeviceName, cemp_updateTime, cemp_isPushMsg, cemp_role, cemp_pushMsg, cemp_referrerId, cemp_name , seller1.sel_id as seller1_sel_id, seller1.sel_identifier as seller1_sel_identifier, seller1.sel_displayName as seller1_sel_displayName, seller1.sel_description as seller1_sel_description, seller1.sel_industryCategoryId as seller1_sel_industryCategoryId, seller1.sel_contactsName as seller1_sel_contactsName, seller1.sel_contactsIdCardNumber as seller1_sel_contactsIdCardNumber, seller1.sel_contactsIdCardImageUrl as seller1_sel_contactsIdCardImageUrl, seller1.sel_contactsIdCardImageUrl1 as seller1_sel_contactsIdCardImageUrl1, seller1.sel_contactsPhoneNumber as seller1_sel_contactsPhoneNumber, seller1.sel_contactsEmail as seller1_sel_contactsEmail, seller1.sel_telephone as seller1_sel_telephone, seller1.sel_legalPersonName as seller1_sel_legalPersonName, seller1.sel_legalPersonIDCardNumber as seller1_sel_legalPersonIDCardNumber, seller1.sel_legalPersonIDCardImageUrl as seller1_sel_legalPersonIDCardImageUrl, seller1.sel_legalPersonIDCardImageUrl1 as seller1_sel_legalPersonIDCardImageUrl1, seller1.sel_licenseNumber as seller1_sel_licenseNumber, seller1.sel_licenseImageUrl as seller1_sel_licenseImageUrl, seller1.sel_proxyLetterImageUrl as seller1_sel_proxyLetterImageUrl, seller1.sel_createdTime as seller1_sel_createdTime, seller1.sel_updatedTime as seller1_sel_updatedTime, seller1.sel_isEnabled as seller1_sel_isEnabled, seller1.sel_isAudit as seller1_sel_isAudit, seller1.sel_auditTime as seller1_sel_auditTime, seller1.sel_auditReason as seller1_sel_auditReason, seller1.sel_auditPerson as seller1_sel_auditPerson, seller1.sel_auditSubmitTime as seller1_sel_auditSubmitTime, seller1.sel_industryPath as seller1_sel_industryPath, seller1.sel_globalRegionPath as seller1_sel_globalRegionPath, seller1.sel_storeCount as seller1_sel_storeCount, seller1.sel_storeCountLimit as seller1_sel_storeCountLimit, seller1.sel_creatorId as seller1_sel_creatorId, seller1.sel_servicePersonName as seller1_sel_servicePersonName, seller1.sel_marketPersonName as seller1_sel_marketPersonName, seller1.sel_appId as seller1_sel_appId, seller1.sel_mchId as seller1_sel_mchId, seller1.sel_remark as seller1_sel_remark, seller1.sel_tag as seller1_sel_tag, seller1.sel_enterpriseName as seller1_sel_enterpriseName, seller1.sel_expiryDateFrom as seller1_sel_expiryDateFrom, seller1.sel_expiryDateTo as seller1_sel_expiryDateTo, seller1.sel_settingId as seller1_sel_settingId, seller1.sel_payChannel as seller1_sel_payChannel, seller1.sel_exMerchtNm as seller1_sel_exMerchtNm, seller1.sel_registAddr as seller1_sel_registAddr, seller1.sel_cooperationId as seller1_sel_cooperationId, seller1.sel_saleManPhoneNumber as seller1_sel_saleManPhoneNumber , CONCAT(operator.cus_phoneNumber,'(', cemp_name, ')') as operatorName, (CASE WHEN revoke_operator.cus_realName is NULL THEN revoke_operator.cus_phoneNumber ELSE CONCAT(revoke_operator.cus_phoneNumber,'(', revoke_operator.cus_realName, ')') END ) as revokeOperatorName, (CASE WHEN last_operator.cus_realName is NULL THEN last_operator.cus_phoneNumber ELSE CONCAT(last_operator.cus_phoneNumber,'(', last_operator.cus_realName, ')') END ) as lastOperatorName, (CASE WHEN ecd_prepaidCardName is NULL THEN CONCAT(seller2.sel_displayName,'储值卡') ELSE ecd_prepaidCardName END ) AS userExpenseCardName, cst_tradeNumber AS customerOrderCount, operator.cus_phoneNumber AS operatorPhone from receipts_order left join store on sto_id=reor_storeId left join customer as customer1 on reor_customerId=customer1.cus_id left join customer as operator on operator.cus_id=reor_operatorId left join customer_employee on cemp_customerId=reor_operatorId AND cemp_sellerId =reor_sellerId AND (cemp_storeId = reor_storeId or cemp_isAdmin = 1) left join customer as revoke_operator on revoke_operator.cus_id=reor_revokeOperatorId left join customer as last_operator on last_operator.cus_id=reor_lastOperatorId left join seller as seller2 on seller2.sel_id=reor_expenseCardSellerId left join seller as seller1 on seller1.sel_id=reor_sellerId left join expense_card_def on ecd_sellerId=reor_expenseCardSellerId left join customer_store on cst_customerId=reor_customerId AND cst_sellerId = reor_sellerId AND cst_storeId = reor_storeId WHERE ( reor_sellerId = 769 and reor_storeId = 839 and reor_status <> 1 and reor_status <> 126 and reor_status <> 125 ) order by reor_finishedTime DESC limit 0 , 15 
+
+-- -------------------------------------------------------------------------------------------------------------------------------------------
+-- 四、经营分析页面：（已经通过ajax加载每一个数据，但数据较多且每个都不太快，导致页面数据出现较慢）
+
+-- 1.查询订单总金额：
+-- ReceiptsOrderCustomEntityMapper.getTotalOrderAmont
+-- 项目中查询时间：7.841ss，数据库中查询时间：2.866s
+-- SELECT sum(reor_totalAmount) FROM receipts_order WHERE reor_status =3 AND reor_sellerId = 769 AND reor_storeId = 839 
+
+-- 2.查询实付总金额：
+-- 项目中查询时间：7.838s，数据库中查询时间：2.887s
+-- ReceiptsOrderCustomEntityMapper.getTotalActuallyAmount
+-- SELECT sum(reor_actuallyAmount) FROM receipts_order WHERE reor_status =3 AND reor_sellerId = 769 AND reor_storeId = 839 
+
+-- 3.查询新会员消费总金额：
+-- 项目中查询时间：27.660s，数据库中查询时间：6.706s
+-- ReceiptsOrderCustomEntityMapper.getTotalNewMemberAmount
+-- SELECT sum(totalAmount) FROM (SELECT sum(reor_totalAmount) as totalAmount FROM customer_store LEFT JOIN receipts_order ON reor_customerId = cst_customerId AND reor_sellerId = 769 AND reor_storeId = 839 AND reor_status = 3 WHERE cst_sellerId = 769 AND cst_storeId = 839 GROUP BY cst_customerId HAVING count(reor_id)<=1) AS a; 
+
+
+-- 4.查询老会员消费总金额：
+-- ReceiptsOrderCustomEntityMapper.getTotalOldMemberAmount
+-- 项目中查询时间：29.772s，数据库中查询时间：7.157s
+-- SELECT sum(totalAmount) FROM (SELECT sum(reor_totalAmount) as totalAmount FROM customer_store LEFT JOIN receipts_order ON reor_customerId = cst_customerId AND reor_sellerId = 769 AND reor_storeId = 839 AND reor_status = 3 WHERE cst_sellerId = 769 AND cst_storeId = 839 GROUP BY cst_customerId HAVING count(reor_id)>=2) AS a; 
+
+-- 5.查询(新/老)会员数量：
+-- TradeOrderExMapper.getMemberListCount
+-- 项目中查询时间：33.821s，数据库中查询时间：7.537s
+-- SELECT count(*) FROM ( SELECT cst_customerId AS id, cst_tradeNumber tradeNumber, cst_tradeAmount tradeAmount, sum(ifnull(reor_totalAmount, 0.0)) orderTotalAmount, count(reor_id) orderCount FROM customer_store LEFT JOIN customer customer1 ON customer1.cus_id = cst_customerId LEFT JOIN receipts_order ON reor_customerId = cst_customerId AND reor_sellerId = 769 AND reor_storeId = 839 AND reor_status = 3 AND reor_customerId IS NOT NULL WHERE cst_sellerId = 769 AND cst_storeId = 839 AND cst_customerId IS NOT NULL GROUP BY cst_customerId HAVING 1 = 1 AND tradeNumber >= 2 ) as tt 
+	
+	
+	
+	
+-- -------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- 	五、退款管理页面
+
+-- ReceiptsOrderCustomEntityMapper.getAbleRefundListByConditions
+-- 项目中查询时间：103.215s，数据库中查询时间：80.212s
+
+-- select reor_id, reor_sellerId, reor_storeId, reor_customerId, reor_prepaidCardId, reor_serialNumber, reor_description, reor_createdTime, reor_discount, reor_discountInfoId, reor_totalAmount, reor_receivableAmount, reor_otherReceivableAmount, reor_actuallyAmount, reor_discountAmount, reor_preferenceTotalAmount, reor_consumerNumber, reor_gifttokenTotalAmount, reor_gifttokenCount, reor_goodsTotalAmount, reor_goodsDiscountTotalAmount, reor_goodsCount, reor_mergeCardPaymentAmount, reor_mergeExpenseCardPaymentAmount, reor_expenseCardSellerId, reor_eraseAmount, reor_changeAmount, reor_paymentAmount, reor_paymentType, reor_paymentProvider, reor_paymentMessage, reor_paymentTime, reor_authMethod, reor_outTradeId, reor_operatorId, reor_invoiceNo, reor_postscript, reor_status, reor_finishedTime, reor_revokeOperatorId, reor_revokeRemark, reor_revokeTime, reor_updatedTime, reor_lastOperatorId, reor_lastOperatedTime, reor_version, reor_unifiedOrderIds, reor_outSerialNumber, reor_deviceInfo, reor_deviceIpAddr, reor_operatorCode, reor_deviceCode, reor_isPrepaidCardDiscount, reor_channelId, reor_goodsVipPrice, reor_callBackUrl, reor_isCallBackOver, reor_relateOrderId, reor_refundAmount, reor_secretId, reor_preAmount, reor_preDiscount, reor_dpllId , sto_id, sto_sellerId, sto_name, sto_description, sto_logoImageUrl, sto_category, sto_addressDescription, sto_addressDetail, sto_addressLongitude, sto_addressLatitude, sto_geoHash, sto_globalRegionPath, sto_openingHours, sto_mobilePhoneNumber, sto_telephoneNumber, sto_createdTime, sto_updatedTime, sto_regionId, sto_operatorId, sto_stopStatus, sto_stopRemark, sto_auditStatus, sto_auditRemark, sto_validityTime, sto_isOpenMall, sto_viewImageUrls, sto_code, sto_industryCategoryId, sto_isTest, sto_accountingCode , customer1.cus_id as customer1_cus_id, customer1.cus_idNumber as customer1_cus_idNumber, customer1.cus_name as customer1_cus_name, customer1.cus_displayName as customer1_cus_displayName, customer1.cus_realName as customer1_cus_realName, customer1.cus_password as customer1_cus_password, customer1.cus_email as customer1_cus_email, customer1.cus_phoneNumber as customer1_cus_phoneNumber, customer1.cus_gender as customer1_cus_gender, customer1.cus_birthday as customer1_cus_birthday, customer1.cus_qq as customer1_cus_qq, customer1.cus_createdTime as customer1_cus_createdTime, customer1.cus_lastLoginTime as customer1_cus_lastLoginTime, customer1.cus_lastCheckTime as customer1_cus_lastCheckTime, customer1.cus_avatarImageUrl as customer1_cus_avatarImageUrl, customer1.cus_status as customer1_cus_status, customer1.cus_isEnabled as customer1_cus_isEnabled, customer1.cus_token as customer1_cus_token, customer1.cus_token1 as customer1_cus_token1, customer1.cus_token2 as customer1_cus_token2, customer1.cus_salt as customer1_cus_salt, customer1.cus_isRegistered as customer1_cus_isRegistered, customer1.cus_registerDate as customer1_cus_registerDate, customer1.cus_shippingAddress as customer1_cus_shippingAddress, customer1.cus_sellerId as customer1_cus_sellerId, customer1.cus_wxOpenId as customer1_cus_wxOpenId, customer1.cus_wxNickName as customer1_cus_wxNickName, customer1.cus_alipayOpenId as customer1_cus_alipayOpenId, customer1.cus_wxOpenIdForSeller as customer1_cus_wxOpenIdForSeller, customer1.cus_wxAppletOpenId as customer1_cus_wxAppletOpenId, customer1.cus_wxUnionid as customer1_cus_wxUnionid, customer1.cus_wxSubscribed as customer1_cus_wxSubscribed, customer1.cus_wxSubscribedForSeller as customer1_cus_wxSubscribedForSeller, customer1.cus_fromType as customer1_cus_fromType , seller1.sel_id as seller1_sel_id, seller1.sel_identifier as seller1_sel_identifier, seller1.sel_displayName as seller1_sel_displayName, seller1.sel_description as seller1_sel_description, seller1.sel_industryCategoryId as seller1_sel_industryCategoryId, seller1.sel_contactsName as seller1_sel_contactsName, seller1.sel_contactsIdCardNumber as seller1_sel_contactsIdCardNumber, seller1.sel_contactsIdCardImageUrl as seller1_sel_contactsIdCardImageUrl, seller1.sel_contactsIdCardImageUrl1 as seller1_sel_contactsIdCardImageUrl1, seller1.sel_contactsPhoneNumber as seller1_sel_contactsPhoneNumber, seller1.sel_contactsEmail as seller1_sel_contactsEmail, seller1.sel_telephone as seller1_sel_telephone, seller1.sel_legalPersonName as seller1_sel_legalPersonName, seller1.sel_legalPersonIDCardNumber as seller1_sel_legalPersonIDCardNumber, seller1.sel_legalPersonIDCardImageUrl as seller1_sel_legalPersonIDCardImageUrl, seller1.sel_legalPersonIDCardImageUrl1 as seller1_sel_legalPersonIDCardImageUrl1, seller1.sel_licenseNumber as seller1_sel_licenseNumber, seller1.sel_licenseImageUrl as seller1_sel_licenseImageUrl, seller1.sel_proxyLetterImageUrl as seller1_sel_proxyLetterImageUrl, seller1.sel_createdTime as seller1_sel_createdTime, seller1.sel_updatedTime as seller1_sel_updatedTime, seller1.sel_isEnabled as seller1_sel_isEnabled, seller1.sel_isAudit as seller1_sel_isAudit, seller1.sel_auditTime as seller1_sel_auditTime, seller1.sel_auditReason as seller1_sel_auditReason, seller1.sel_auditPerson as seller1_sel_auditPerson, seller1.sel_auditSubmitTime as seller1_sel_auditSubmitTime, seller1.sel_industryPath as seller1_sel_industryPath, seller1.sel_globalRegionPath as seller1_sel_globalRegionPath, seller1.sel_storeCount as seller1_sel_storeCount, seller1.sel_storeCountLimit as seller1_sel_storeCountLimit, seller1.sel_creatorId as seller1_sel_creatorId, seller1.sel_servicePersonName as seller1_sel_servicePersonName, seller1.sel_marketPersonName as seller1_sel_marketPersonName, seller1.sel_appId as seller1_sel_appId, seller1.sel_mchId as seller1_sel_mchId, seller1.sel_remark as seller1_sel_remark, seller1.sel_tag as seller1_sel_tag, seller1.sel_enterpriseName as seller1_sel_enterpriseName, seller1.sel_expiryDateFrom as seller1_sel_expiryDateFrom, seller1.sel_expiryDateTo as seller1_sel_expiryDateTo, seller1.sel_settingId as seller1_sel_settingId, seller1.sel_payChannel as seller1_sel_payChannel, seller1.sel_exMerchtNm as seller1_sel_exMerchtNm, seller1.sel_registAddr as seller1_sel_registAddr, seller1.sel_cooperationId as seller1_sel_cooperationId, seller1.sel_saleManPhoneNumber as seller1_sel_saleManPhoneNumber , cemp_id, cemp_sellerId, cemp_storeId, cemp_customerId, cemp_code, cemp_remark, cemp_isAdmin, cemp_postDescription, cemp_isEnabled, cemp_creatorId, cemp_createdTime, cemp_lastVisitTime, cemp_lastVisitIp, cemp_lastVisitDevice, cemp_lastVisitCount, cemp_bindDeviceId, cemp_bindDeviceName, cemp_updateTime, cemp_isPushMsg, cemp_role, cemp_pushMsg, cemp_referrerId, cemp_name , (CASE WHEN operator.cus_realName is NULL THEN operator.cus_phoneNumber ELSE CONCAT(operator.cus_phoneNumber,'(', operator.cus_realName, ')') END ) as operatorName, (CASE WHEN revoke_operator.cus_realName is NULL THEN revoke_operator.cus_phoneNumber ELSE CONCAT(revoke_operator.cus_phoneNumber,'(', revoke_operator.cus_realName, ')') END ) as revokeOperatorName, (CASE WHEN last_operator.cus_realName is NULL THEN last_operator.cus_phoneNumber ELSE CONCAT(last_operator.cus_phoneNumber,'(', last_operator.cus_realName, ')') END ) as lastOperatorName, (CASE WHEN ecd_prepaidCardName is NULL THEN CONCAT(seller2.sel_displayName,'储值卡') ELSE ecd_prepaidCardName END ) AS userExpenseCardName, operator.cus_phoneNumber AS operatorPhone from receipts_order left join store on sto_id=reor_storeId left join customer as customer1 on reor_customerId=customer1.cus_id left join customer as operator on operator.cus_id=reor_operatorId left join customer as revoke_operator on revoke_operator.cus_id=reor_revokeOperatorId left join customer as last_operator on last_operator.cus_id=reor_lastOperatorId left join seller as seller2 on seller2.sel_id=reor_expenseCardSellerId left join seller as seller1 on seller1.sel_id=reor_sellerId left join expense_card_def on ecd_sellerId=reor_expenseCardSellerId left join customer_employee on cemp_customerId=reor_operatorId and cemp_sellerId=reor_sellerId WHERE reor_sellerId = 769 AND reor_storeId in ( 769, 1320469, 771, 1320471, 773, 1320477, 1320479, 1320473, 1320475, 809, 1320485, 1320487, 821, 1320481, 1320483, 1320533, 1320535, 837, 1320529, 839, 1320531, 841, 1320541, 843, 1320543, 845, 1320537, 847, 1320539, 849, 851, 853, 855, 857, 1320525, 859, 1320527, 861, 1320521, 863, 1320523, 865, 867, 869, 871, 873, 875, 5995, 877, 5997, 879, 881, 883, 885, 887, 1318243, 889, 891, 893, 895, 897, 899, 901, 903, 905, 907, 1317791, 909, 911, 913, 915, 917, 1320321, 919, 1320323, 921, 923, 925, 927, 1314955, 929, 931, 933, 935, 937, 939, 941, 943, 945, 947, 949, 1317793, 951, 953, 955, 957, 959, 961, 963, 965, 967, 969, 971, 5579, 973, 5581, 975, 3023, 977, 1317109, 1317111, 1317105, 1317107, 1320435, 1317113, 1317101, 1317103, 1320431
+-- 	) AND reor_status = 3 AND ((reor_refundAmount is NULL) OR (reor_refundAmount is NOT NULL AND reor_refundAmount < reor_actuallyAmount)) order by reor_createdTime desc limit 0 , 15 
+
+
+-- ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- 六、店员业绩页面（该页面，页面数据为每次与页面列表一起加载）
+
+
+-- 页面列表 
+
+
+-- 1.
+-- ReceiptsOrderCustomEntityMapper.getStorePerformanceTotalAmount
+-- 项目中查询时间： 12.000s，数据库中查询时间：7.485s
+-- 再次测试的时候变成了300多s...不知道是不是数据库并发的问题
+--  SELECT SUM(reor_totalAmount) FROM receipts_order WHERE reor_status = 3 AND reor_sellerId = 769 AND reor_storeId = 839 AND reor_createdTime >= "2018-12-01 00:00:00" AND reor_createdTime < "2019-12-09 23:59:59" 
+
+-- 2.
+-- ReceiptsOrderCustomEntityMapper.getReceiptsListTotalAmount
+-- 项目中查询时间： 47.057s，数据库中查询时间：38.487s（这个一直都比较慢）
+-- select SUM(reor_totalAmount) from receipts_order WHERE ( reor_sellerId = 769 and reor_storeId = 839 and reor_finishedTime between "2019-12-1 0:0:0" and "2019-12-6 16:53:48" and reor_operatorId is null ) 
+
+-- 3.列表数据
+-- ReceiptsOrderCustomEntityMapper.getStorePerformanceListByPage
+-- 项目中查询时间：7.634s，数据库中查询时间：7.758s
+-- 有时候会查询超时，大概是数据库并发的问题....
+-- SELECT ab.* FROM ( SELECT ta.*, CASE WHEN @preRank = ta.customerOrderAmount THEN @rank WHEN @preRank := ta.customerOrderAmount THEN @rank := @rank + 1 WHEN @preRank = 0.00 THEN @rank := @rank + 1 END AS rank FROM ( SELECT cus_id, cus_idNumber, cus_name, cus_displayName, cus_realName, cus_password, cus_email, cus_phoneNumber, cus_gender, cus_birthday, cus_qq, cus_createdTime, cus_lastLoginTime, cus_lastCheckTime, cus_avatarImageUrl, cus_status, cus_isEnabled, cus_token, cus_token1, cus_token2, cus_salt, cus_isRegistered, cus_registerDate, cus_shippingAddress, cus_sellerId, cus_wxOpenId, cus_wxNickName, cus_alipayOpenId, cus_wxOpenIdForSeller, cus_wxAppletOpenId, cus_wxUnionid, cus_wxSubscribed, cus_wxSubscribedForSeller, cus_fromType , cemp_id, cemp_sellerId, cemp_storeId, cemp_customerId, cemp_code, cemp_remark, cemp_isAdmin, cemp_postDescription, cemp_isEnabled, cemp_creatorId, cemp_createdTime, cemp_lastVisitTime, cemp_lastVisitIp, cemp_lastVisitDevice, cemp_lastVisitCount, cemp_bindDeviceId, cemp_bindDeviceName, cemp_updateTime, cemp_isPushMsg, cemp_role, cemp_pushMsg, cemp_referrerId, cemp_name , IFNULL(re.customerOrderAmount,0) customerOrderAmount FROM customer_employee tt LEFT JOIN customer ON cemp_customerId = cus_id LEFT JOIN ( SELECT reor_operatorId, reor_sellerId, reor_storeId, SUM(reor_totalAmount) customerOrderAmount FROM receipts_order WHERE reor_status = 3 AND reor_sellerId = 769 AND reor_storeId = 839 AND reor_createdTime >= "2018-12-01 00:00:00" AND reor_createdTime < "2019-12-09 23:59:59" AND reor_operatorId is not null GROUP BY reor_operatorId ) re ON re.reor_operatorId = cus_id AND tt.cemp_storeId = re.reor_storeId AND tt.cemp_sellerId = re.reor_sellerId WHERE tt.cemp_sellerId = 769 AND tt.cemp_storeId = 839 AND (tt.cemp_isEnabled = 1 or re.customerOrderAmount > 0) ORDER BY re.customerOrderAmount DESC,cus_id DESC ) ta, (SELECT @rank := 0, @preRank := NULL) r) ab limit 10 , 10 

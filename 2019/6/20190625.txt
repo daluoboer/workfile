@@ -1,0 +1,20 @@
+今天重新装了一个Navicat然后成功激活啦
+装完一定不能打开软件~
+
+今天合并失败了，因为版本号被改了，要setVersion，然后再合并就可以了~
+
+InitialDataController
+
+又学到一个~
+17:00:38  update marketing_cash set mac_careNumber =  (select count(distinct mcl_customerId)  from marketing_cash_log where mcl_marketingCashId = mac_id)  
+Error Code: 1175. You are using safe update mode and you tried to update a table without a WHERE that uses a KEY column To disable safe mode, toggle the option in Preferences -> SQL Editor and reconnect.  0.016 sec
+因为修改数据库的时候没有where字句
+所以在InitialDataController里面写一个controller，然后发版后访问执行一次就可以啦！
+神奇！
+
+刚刚修改代码的时候直接在master上提了，然后又在develop上提了一下，而不是通过修改分支--合并分支的方法来修改master和develop的，所以导致下一次合并的时候总是失败，提示develop提前一个分支啥的
+
+
+#10801（无分支，直接改的数据库）将H5 宜店商户公众号里的现金活动链接，配置进宜店后台的H5页面链接里
+
+AppReceiptsOrderServiceImpl 775 3行注掉了

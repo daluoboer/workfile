@@ -1,0 +1,47 @@
+function reprintNote() {
+                $.showPreloader('正在打印');
+                var orderId = $("#orderId").val();
+                AjaxService.ajaxService({
+                    url: "wxh/seller/ajax/reprintNote",
+                    data: {"orderId":orderId},
+                    success: function (data) {
+                        $.alert("打印成功");
+                    },
+                    error: function (msg) {
+                        $.alert(msg);
+                    },
+                    afinal: function () {
+                        $.hidePreloader();
+                    }
+                });
+            }
+
+
+<a href="javascript:reprintNote()" class="item-content">
+                                <div class="item-inner">补打小票</div>
+                            </a>
+
+
+/**
+     * 补打小票
+     * @return
+     */
+    @RequestMapping(value = "/reprintNote")
+    @ResponseBody
+    public ApiResult getTicketsAjax(
+            @RequestParam(value = "orderId",required = true) final Long orderId
+    ) {
+        return this.apiHandler( new ApiInvoker(){
+            @Override
+            public Integer invoke() {
+                printUnifiedOrderService.finishSellerUnifiedOrder(orderId);
+                return 0;
+            }
+        });
+    }
+
+
+
+WXSellerApiController
+
+receips-order-detail

@@ -1,0 +1,11 @@
+＜（＾－＾）＞	1.显示哪一家的联盟卡
+
+2.执行活动时 如果够返现不够返佣怎么办
+
+3.页面滚动文字
+
+/*查询联盟商户*/
+            List<Map<String, Object>> canUsePrepaidCardUnionSellerList = prepaidCardUnionSellerService.getCanUsePrepaidCardUnionSellerList(marketingCashEntity.getSellerId(), marketingCashEntity.getStoreId());
+            mv.addObject("prepaidCardUnionSeller",Utils.isNotEmptyCollection(canUsePrepaidCardUnionSellerList)?Utils.first(canUsePrepaidCardUnionSellerList):null);
+
+${prepaidCardUnionSeller.prepaidCardName}

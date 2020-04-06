@@ -1,0 +1,32 @@
+http://192.168.3.192:8080/wxh/seller/customerList
+
+修改建议：
+1.会员总数、本周新增会员、本周消费会员 获取方式改为ajax
+2.本周消费会员 该用 kylin
+
+http://192.168.3.192:8080/wxh/seller/receiptsOrder --- 文豪
+修改建议：
+1.页面统计项改为ajax，涉及线下订单的使用kylin（今日统计项除外）
+2.推广记录改为分页加载
+
+http://192.168.3.192:8080/wxh/seller/receiptsOrderAnalysisByStore?timeUnit=1
+修改建议：
+1.页面统计项改为ajax，涉及线下订单、商品的使用kylin（今日统计项除外）
+
+http://192.168.3.192:8080/wxh/seller/appSellerGeneral
+
+修改建议：
+1.统计方法统一 （/getTotalOrderAmount、/getTotalActuallyAmount、/getTotalOrderCount、/getTotalNewMemberAmount 等等）
+2.注意app页面同步 /appSellerGeneral
+
+http://192.168.3.192:8080/wxh/seller/accurateMarketing
+修改建议：
+1./getTotalNewMemberOrderCount 改为查 
+
+http://192.168.3.192:8080/wxh/seller/ableRefundReceiptsList
+修改建议：
+1.取消列表
+
+http://192.168.3.192:8080/wxh/seller/storePerformance?startDate=1575129600000&endDate=1575622428645&timeUnit=2&sellerId=769&storeId=
+修改建议：
+1.页面统计项改为ajax，涉及线下订单的使用kylin（今日统计项除外）
