@@ -1,0 +1,6 @@
+url:updateImage
+参数：
+image:上传的图片文件
+sellerId
+storeId
+

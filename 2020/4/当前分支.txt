@@ -1,0 +1,17 @@
+feature/discountCard：
+1.商户后台创建折扣券，增加选择适用门店
+（折扣券分为平台级和商户级，H5为平台级，这儿是门店级）
+2.需要在订单处理的地方进行确认
+
+
+
+feature/yst_regist：
+上传图片和发送邮件的功能 ok
+
+
+
+feature/page_style：
+单品返现 ok
+
+刚发版的：
+feature/goods_sale
