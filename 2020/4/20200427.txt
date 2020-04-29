@@ -1,0 +1,8 @@
+商品券：
+修改商品券：添加修改图片，弹窗改为新页面
+
+               common.js:533   console.log("tObj = "+tObj + ", " + tObj + ".attr("+ attrName +") = " + propertyVal + ", entity["+ propertyVal +"] = " + enValue);
+
+
+
+                 common.js:535    console.log("radio||checkbox");
