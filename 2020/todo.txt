@@ -1,0 +1,25 @@
+what to do:
+
+1.算法
+
+2.中间件
+
+3.源码
+
+4.网络
+
+5.并发
+
+6.系统（Linux）、计算机基础、计算机是如何跑起来的
+
+7.数据库（MySQL、Oracle）
+
+8.shell
+
+9.英语
+
+中间件： dubbo、redis、mybatis、zookeeper、消息中间件、netty
+
+希尔排序
+
+桶排序（基数排序）
