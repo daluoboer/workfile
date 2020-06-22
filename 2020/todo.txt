@@ -23,3 +23,5 @@ what to do:
 希尔排序
 
 桶排序（基数排序）
+
+技术储备 hbase elasticseach flink spark storm zookeeper 这些大家有时间都学习一下 语言 以java 为主其他语言 Scala python go r 这四个
