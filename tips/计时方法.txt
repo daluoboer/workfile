@@ -1,0 +1,6 @@
+        Map<Integer, Long> timeMap = new HashMap<>();
+        int i = 0;
+        Long start = System.currentTimeMillis();
+        CustomerAgentEntity customerAgentEntity = customerAgentService.getCustomerAgent(getUser().getUserId(), sellerId);
+        Long end = System.currentTimeMillis();
+        timeMap.put(i++,end-start);

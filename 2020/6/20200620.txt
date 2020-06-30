@@ -1,0 +1,44 @@
+混合支付？
+
+锁库存~
+
+1.创建订单的时候锁住，支付完成的时候解锁
+
+确认收货后增加库存做了吗？没呢。这次要做吗？
+
+
+if (customerAgent.getDeliverType() == AgentDeliverType.SELLER_SEND) {
+                        MallGoodsSupplierEntity mallGoodsSupplierEntity = new MallGoodsSupplierEntity();
+                        mallGoodsSupplierEntity.setSellerId(orderExEntity.getSellerId());
+                        mallGoodsSupplierEntity.setStoreId(orderExEntity.getStoreId());
+                        mallGoodsSupplierEntity.setCustomerId(orderExEntity.getCustomerId());
+                        mallGoodsSupplierEntity.setGoodsId(mallOrderGoodsExEntity.getGoodsId());
+                        mallGoodsSupplierEntity.setStockNumber(mallOrderGoodsExEntity.getQuantity());
+                        mallGoodsSupplierEntity.setCreateTime(new Date());
+                        mallGoodsSupplierEntity.setPrice(mallOrderGoodsExEntity.getUnitPrice());
+                        giftGoodsMallService.addOrUpdateMallGoodsSupplier(mallGoodsSupplierEntity);
+                    }
+
+
+
+MallOrderEntity lastOrder = getLastOrder(orderNo);
+                if (lastOrder.getSupplierId() == null) {
+                    //增加厂商售卖数量
+                    MallGoodsEntity updateGoods = new MallGoodsEntity();
+                    updateGoods.setId(mallGiftGoodsExEntity.getId());
+                    updateGoods.setSoldNumber(mallGiftGoodsExEntity.getSoldNumber() + mallOrderGoodsExEntity.getQuantity());
+                    updateGoods.setStockNumber(updateGoods.getStockNumber() - mallOrderGoodsExEntity.getQuantity());
+//                    updateGoods.setLockNumber(mallGiftGoodsExEntity.getLockNumber() - mallOrderGoodsExEntity.getQuantity());
+                    mallGoodsEntityMapper.updateByPrimaryKeySelective(updateGoods);
+                } else {
+                    //增加代理商售卖数量
+                    MallGoodsSupplierEntity mallGoodsSupplierEntity = new MallGoodsSupplierEntity();
+                    mallGoodsSupplierEntity.setSellerId(lastOrder.getSellerId());
+                    mallGoodsSupplierEntity.setStoreId(lastOrder.getStoreId());
+                    mallGoodsSupplierEntity.setCustomerId(lastOrder.getSupplierId());
+                    mallGoodsSupplierEntity.setGoodsId(mallOrderGoodsExEntity.getGoodsId());
+                    mallGoodsSupplierEntity.setSoldNumber(mallOrderGoodsExEntity.getQuantity());
+                    mallGoodsSupplierEntity.setStockNumber(-mallOrderGoodsExEntity.getQuantity());
+//                    mallGoodsSupplierEntity.setLockNumber(-mallOrderGoodsExEntity.getQuantity());
+                    giftGoodsMallService.addOrUpdateMallGoodsSupplier(mallGoodsSupplierEntity);
+                }
