@@ -1,0 +1,31 @@
+嗯...
+
+Cookie: Hm_lvt_50022cd4072fc9ddbeff4779104ce0dc=1571032044; currcmp_1449="31,76"; SESSION=c2e9283f-a469-446a-9aca-f4da1eff3235; JSESSIONID=1bcjoqq8b28rhg168ljwmomxi
+Cookie: Hm_lvt_50022cd4072fc9ddbeff4779104ce0dc=1571032044; currcmp_1449="31,76"; SESSION=8045235e-9cc6-4cb1-9e76-5e07c2e6b5d4; JSESSIONID=1j707kgxwpw8z1m1dvz6ip9spd
+
+1.老会员数量：直接用kylin那个查询就行（之前是分情况的，有日期就从kylin的receipts_order查，没有就从customer_store查）
+
+2.未消费会员数：kylin中customer_store没有相应字段，从kylin中连表查也不行
+
+select * from customer_store where not exists (select * from  receipts_order where cst_customerId = reor_customerId and cst_sellerId = reor_sellerId and cst_storeId = reor_storeId) and cst_sellerId = 31 and cst_storeId = 76
+
+select count(*) from 
+(select customer_store.*,count(reor_id) as count1 from customer_store left join receipts_order on cst_customerId = reor_customerId
+where cst_sellerId = 31 and cst_storeId = 76
+group by cst_customerId
+) a where count1 < 1
+
+reor_id 不存在
+
+3.活跃用户：消费次数大于平均消费次数ok
+
+4.睡眠用户：消费次数小于平均消费次数并且30天内没有消费过，e...一堆错...  okok
+
+select count(*) from (
+	SELECT reor_customerId as customerId, count( * ) AS count1,max(reor_createdTime_dt) as lastTime FROM receipts_order WHERE reor_sellerId = 31 AND reor_storeId = 76 GROUP BY reor_customerId
+	) a where count1 < 30 and lastTime < '20200614'
+
+
+
+
+SELECT         count( * )         FROM         (         SELECT         reor_customerId AS customerId,         count( * ) AS count1,         max( reor_createdTime_dt ) AS lastTime         FROM         receipts_order         WHERE 1=1                       AND reor_sellerId = 31                                 AND reor_storeId = 76                   GROUP BY         reor_customerId         ) a         WHERE         count1 <30 and lastTime < "2020-07-12"

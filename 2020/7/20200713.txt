@@ -1,0 +1,40 @@
+what to do today？
+
+1.work
+
+核销券的时候发放推广金
+
+marketingCashService.afterMarketingThirteen(states.getOrderNumber());
+
+sellerCapitalAccountService.releaseReversalCashByOrder(states.getOrderNumber(),"券配送完成");
+
+e...好像不行吧！现在是以订单去发放推广金的，如果是在券使用时发放，那就不能根据订单去查询了啊，必须要去查询当前的券是否已发放推广金，一笔订单中的多个券呢？怎样将一张券对应到一个cashlog记录上呢？
+
+
+
+
+方案一：（便于现在处理）
+
+	a.根据这个券是从哪个订单得到的，找到该订单对应的cashlog，获取其中一条
+	b.执行该log
+	（是否有必要：并记录该log已经被这张券执行，在log上新增一个字段，属于哪个券）
+	c.为该记录冲正
+
+
+方案二：（可能需要将券和该券得到的权益关联起来）
+
+	1.创建活动时，指定哪一条cashlog属于哪一个券
+	2.券核销时直接查找对应的log，执行该log
+	3.为该记录冲正
+
+
+
+
+
+
+
+2.study
+
+工作任务是啥？
+
+学习啥呢？看书吧！
