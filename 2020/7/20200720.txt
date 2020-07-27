@@ -1,0 +1,69 @@
+新建活动
+
+1.单品返现
+
+2.营销
+
+看看这俩是咋实现的，咋把它们搞起来
+
+
+
+单品营销执行相关字段（营销表：marketing_means，实体：MarketingMeansEntity）：
+
+  1.消费满n元可用 meansDetail.executeAmount
+
+  2.可购买几个 meansDetail.executeLimitCount
+
+  3.会员类型：memberSign
+
+  4.营销
+
+	a.折扣  meansDetail.discountCount
+
+	b.消费立减 meansDetail.cashAmount
+
+
+
+
+√ 1.到创建活动的页面 
+
+√ 2.创建活动
+
+√ 3.给鹏举的接口
+
+4.创建活动记录
+
+会员类型：
+MarketingMeansEntity.memberSign
+
+MarketingMeansEntity.sellerId
+
+MarketingMeansEntity.storeId
+
+规则：
+MarketingMeansEntity.description
+
+营销方式：1.折扣 2.消费立减
+MarketingMeansEntity.meansDetail.executeType
+
+立减金额：
+MarketingMeansEntity.meansDetail.cashAmount
+s
+折扣：
+MarketingMeansEntity.meansDetail.discountCount
+
+返现条件（满多少）
+MarketingMeansEntity.meansDetail.executeAmount
+
+商品限购数量
+MarketingMeansEntity.meansDetail.executeLimitCount
+
+开始日期
+MarketingMeansEntity.startDate
+
+结束日期
+MarketingMeansEntity.endDate
+
+
+
+

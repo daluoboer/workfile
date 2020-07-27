@@ -1,0 +1,43 @@
+
+之前的还要测试吗~要的吧，但是整个流程应该咋测啊，头大
+
+推广发放时机：券使用时发放推广
+
+1.创建活动，买券得推广
+
+2.购买券
+
+3.确认收货
+
+4.使用券（单次券在确认收货时即核销，多次券要配送多次吗？那就是之后的配送不需要发放推广嘛~）
+
+
+
+
+
+
+
+
+
+
+
+给鹏举的：
+
+1.
+
+分支：feature/gift_optimze_13169
+
+需求：Requirement #13193
+
+根据marketingCashLog的id释放待冲正金额的接口： SellerCapitalAccountService.releaseReversalCashByCashLog
+（你给我的接口）
+
+
+2.
+
+分支：feature/requirement_13223
+
+需求：Requirement #13223
+
+获取费率的接口：AgentSettingsService.getEnableRate
+（我给你的接口，需要别的跟我说）
