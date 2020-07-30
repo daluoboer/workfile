@@ -1,0 +1,17 @@
+kylin
+http://192.168.1.206:7070/kylin/
+ADMIN
+KYLIN
+
+
+Cloudera Manager
+http://182.92.106.149:8180/cmf/home
+admin
+8jf9GUWm^4%Crp&4
+
+
+try (DataSourceScope scope = new DataSourceScope(DataSourceNames.KYLIN)) {
+    return receiptsOrderCustomEntityMapper.getLastLastLastMonthInsightList(sellerId, storeId, startDate, endDate);
+}
+
+
