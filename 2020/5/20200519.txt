@@ -1,0 +1,7 @@
+1、商品 & 商品券
+
+2、mallGoods & GiftTokenDef
+
+3、mall_order & receipts_order
+
+4、礼品券 & 折扣券 & 商品券

@@ -1,0 +1,9 @@
+今天干啥？
+
+
+
+alter table marketing_cash modify mac_rebate decimal(10,2) default 0.00 not null;
+
+alter table marketing_cash_log modify mcl_spreaderRebate decimal(10,2) default 0.00 not null comment '推荐人返利';
+
+alter table marketing_cash_log modify mcl_spreaderCRebate decimal(10,2) default 0.00 not null comment '普通C返佣金额';

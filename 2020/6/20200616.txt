@@ -1,0 +1,29 @@
+<div class="tabChoose">
+                    <c:if test="${!orderEntity.isBatch}">
+                        <p class="collect">收藏店铺</p>
+                        <p class="checkOrder">查看订单</p>
+                        <p class="checkLogstics">查看物流</p>
+                    </c:if>
+                    <c:if test="${orderEntity.isBatch}">
+                        <p class="checkOrder">查看订单</p>
+                        <p class="goSell">去销售</p>
+                        <p class="goMyAccount">我的账户</p>
+                    </c:if>
+                </div>
+
+
+
+$('.goSell').click(function(){
+                    window.location.href = '${webRootPath}wxh/toMyAgent?sellerId=${orderEntity.sellerId}';
+                });
+                $('.goMyAccount').click(function(){
+                    window.location.href = '${webRootPath}wxh/oneMall?sellerId=${orderEntity.sellerId}';
+                });
+
+
+
+
+
+-Dmaven.test.skip=true -Dmaven.yuicompressor.skip=true clean compile package install
+
+-Djetty.skip=true -Dmaven.test.skip=true -Dmaven.exec.skip=true -Dmaven.yuicompressor.skip=true -Dmaven.copyWebRes.skip=false -Dmaven.war.skip=true -pl mymall-web,!mymall-web -am clean install

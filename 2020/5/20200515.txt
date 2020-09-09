@@ -1,0 +1,425 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
+<%@ taglib prefix="f" uri="http://example.com/functions" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<c:url value="/" var="webRootPath"/>
+
+
+<c:if test="${type == 1}">
+    <c:forEach items="${orderCustomEntities}" var="order">
+        <li>
+            <a href="${webRootPath}wxh/seller/ajax/accountDetails?orderId=${order.id}" class="item-content" onclick="MtaH5.clickStat('receipt_order_account');MtaH5.clickStat('zhangdanfenxi',{'acct':'true'});MtaH5.clickStat('zhangdanfenxi1',{'acct':'true'})">
+                <div class="item-inner">
+                    <div class="item-title-row">
+                        <div class="item-title" style="font-size: 0.9rem;color: black">
+                            ¥ <span style="font-size: 1rem;">${order.totalAmount}</span>
+                        </div>
+
+                        <c:if test="${order.status == 126 || order.status == 127}">
+                            <div class="item-after" style="color: #999;"><fmt:formatDate value="${order.lastOperatedTime}" pattern="yyyy-MM-dd HH:mm:ss"/></div>
+                        </c:if>
+                        <c:if test="${order.status != 126 && order.status != 127}">
+                            <div class="item-after" style="color: #999;"><fmt:formatDate value="${order.finishedTime}" pattern="yyyy-MM-dd HH:mm:ss"/></div>
+                        </c:if>
+                       <%-- <div class="item-after" style="color: #92969C">
+                            <c:if test="${order.status == 1}">
+                                待支付
+                            </c:if>
+                            <c:if test="${order.status == 2}">
+                                已支付
+                            </c:if>
+                            <c:if test="${order.status == 3}">
+                                收款成功
+                            </c:if>
+                            <c:if test="${order.status == 126}">
+                                已取消
+                            </c:if>
+                            <c:if test="${order.status == 127}">
+                                已退款
+                            </c:if>
+                        </div>--%>
+                    </div>
+                    <div class="item-title-row">
+                        <div class="item-title flex alignCenter" style="color: #333">
+                            <!-- 手机号-->
+                            <c:choose>
+                                <c:when test="${order.customerEntity.phoneNumber != null }">
+                                    ${f:ensureDisplayNameDefinition(order.customerEntity,true,1,4)}
+                                    <img src="${webRootPath}static/images/wxh/bg_img_mob.png" alt="" style="width: 0.675rem;height: 0.675rem;margin-left: 0.35rem;">
+                                </c:when>
+                                <c:otherwise>
+                                    ${f:ensureDisplayNameDefinition(order.customerEntity,true,1,4)}
+                                    <c:if test="${order.customerEntity.wxOpenId != null }">
+                                        <img src="${webRootPath}static/images/wxh/bg_img_wx.png" alt="" style="width: 0.675rem;height: 0.675rem;margin-left: 0.35rem;">
+                                    </c:if>
+                                    <c:if test="${order.customerEntity.alipayOpenId != null }">
+                                        <img src="${webRootPath}static/images/wxh/bg_img_ali.png" alt="" style="width: 0.675rem;height: 0.675rem;margin-left: 0.35rem;">
+                                    </c:if>
+                                </c:otherwise>
+                            </c:choose>
+
+                            <!-- 支付宝-->
+
+                            <!-- 微信-->
+
+                        </div>
+                        <div class="item-subtitle" style="margin-top: 0.35rem;color: #999;">
+                                <%--
+                                                        <c:if test="${order.mergeCardPaymentAmount > 0 || (order.mergeExpenseCardPaymentAmount > 0 and order.expenseCardSellerId == order.sellerId)}">
+                                                            ${customerPrepaidCardExEntity.prepaidCardDefEntity.name}支付
+                                                            <br/>
+                                                        </c:if>
+                                --%>
+                                <%--
+                            <c:if test="${order.mergeExpenseCardPaymentAmount > 0 and order.expenseCardSellerId != order.sellerId and (order.actuallyAmount - order.mergeCardPaymentAmount) >0.0}">
+                                ${order.userExpenseCardName}支付<br/>
+                            </c:if>
+                            <c:if test="${order.paymentAmount > 0 and order.paymentType == 1}">
+                                现金支付<br/>
+                            </c:if>
+                            <c:if test="${order.paymentAmount > 0 and order.paymentType == 2}">
+                                刷卡支付<br/>
+                            </c:if>
+                            <c:if test="${order.paymentAmount > 0 and order.paymentType == 4}">
+                                &lt;%&ndash;<c:if test="${order.paymentProvider != null and order.paymentProvider != ''}">&ndash;%&gt;
+                                &lt;%&ndash;${order.paymentProvider}:${order.paymentAmount}<br/>&ndash;%&gt;
+                                &lt;%&ndash;</c:if>&ndash;%&gt;
+                                &lt;%&ndash;<c:if test="${order.paymentProvider == null or order.paymentProvider == ''}">&ndash;%&gt;
+                                微信支付<br/>
+                                &lt;%&ndash;</c:if>&ndash;%&gt;
+                            </c:if>
+                            <c:if test="${order.paymentAmount > 0 and order.paymentType==127}">
+                                其他方式支付
+                            </c:if>
+                            <c:if test="${order.paymentAmount > 0 and order.paymentType == 5}">
+                                拉卡拉刷卡支付
+                            </c:if>
+                            <c:if test="${order.paymentAmount > 0 and order.paymentType == 10}">
+                                支付宝支付
+                            </c:if>
+                            <c:if test="${order.paymentAmount > 0 and order.paymentType == 6}">
+                                拉卡拉扫码支付
+                            </c:if>
+--%>
+                            <c:if test="${(order.mergeExpenseCardPaymentAmount > 0 and order.expenseCardSellerId == order.sellerId)}">
+                                <%--  <a href="${webRootPath}wxh/seller/setMemberAccount?customerId=${receiptsOrder.customerEntity.id}&orderId=${receiptsOrder.id}">${customerPrepaidCardExEntity.prepaidCardDefEntity.name}支付</a>--%>
+                                ${order.userExpenseCardName}支付
+                            </c:if>
+                            <!-- 储值卡 -->
+                            <c:if test="${order.mergeExpenseCardPaymentAmount > 0 and order.expenseCardSellerId != order.sellerId}">
+                                ${order.userExpenseCardName}支付
+                            </c:if>
+                                <%--第三方支付--%>
+                            <c:if test="${order.paymentAmount >0}">
+                                ${f:receiptsOrderPaymentType(order.paymentType)}
+                            </c:if>
+                            <c:if test="${order.mergeCardPaymentAmount  > 0 && order.actuallyAmount <= 0}">
+                                消费立减
+                            </c:if>
+
+
+                        </div>
+                        <%--<div class="item-after" style="font-size: 1rem;color: black">
+                            <span style="font-size: 0.8rem;color: black;padding-right: .2rem;padding-top: .1rem;">¥</span>
+                                ${order.actuallyAmount - order.mergeCardPaymentAmount}
+                        </div>--%>
+                    </div>
+                    <div class="item-subtitle" style="text-overflow: clip;white-space:normal">
+                        <c:if test="${order.customerOrderCount == 1}">
+                            首次消费
+                        </c:if>
+                        <c:if test="${order.customerOrderCount > 1}">
+                            ${order.customerOrderCount}次消费
+                        </c:if>
+                    </div>
+<%--
+                    <c:if test="${order.description != null and order.description != ''  and order.description != 'undefined' }">
+                        <div class="item-subtitle" style="text-overflow: clip;white-space:normal">
+                            备注：${order.description}
+                        </div>
+                    </c:if>
+--%>
+                </div>
+            </a>
+        </li>
+    </c:forEach>
+</c:if>
+<c:if test="${type == 2}">
+    <c:forEach items="${orderCustomEntities}" var="order">
+        <li>
+            <a href="${webRootPath}wxh/seller/shoppingMallOrderDetail?orderId=${order.id}" class="item-content">
+                    <div class="item-inner">
+                        <div class="item-title-row">
+                            <div class="item-title" style="font-size: 1rem;color: black">
+                                <span style="font-size: 0.9rem;">¥</span>
+                                <c:if test="${order.type != 2}">
+                                    <c:out value="${order.orderAmount}"></c:out>
+                                </c:if>
+                                <c:if test="${order.type == 2}">0.00</c:if>
+                            </div>
+                            <div class="item-after" style="color: #92969C">
+                                <fmt:formatDate value="${order.createdTime}" pattern="yyyy-MM-dd HH:mm:ss"/>
+                            </div>
+                        </div>
+                        <c:forEach items="${order.goodsEntities}" var="goodsEntities">
+                            <div class="item-title-row">
+                                <div class="item-title" style="color: black">
+                                    ${goodsEntities.goodsName}
+                                </div>
+                                <div class="item-after" style="color: #92969C">
+                                    <c:if test="${order.type == 3}">商品券</c:if>
+                                    <c:if test="${order.type == 2}">礼品券</c:if>
+                                </div>
+                            </div>
+                        </c:forEach>
+                        <div class="item-title-row">
+                            <div class="item-title" style="color:black;">
+                                <c:choose>
+                                    <c:when test="${order.customerEntity.phoneNumber != null }">
+                                        ${f:ensureDisplayNameDefinition(order.customerEntity,true,1,4)}
+                                        <img src="${webRootPath}static/images/wxh/bg_img_mob.png" alt="" style="width: 0.675rem;height: 0.675rem;">
+                                    </c:when>
+                                    <c:otherwise>
+                                        ${f:ensureDisplayNameDefinition(order.customerEntity,true,1,4)}
+                                        <c:if test="${order.customerEntity.wxOpenId != null }">
+                                            <img src="${webRootPath}static/images/wxh/bg_img_wx.png" alt="" style="width: 0.675rem;height: 0.675rem;">
+                                        </c:if>
+                                        <c:if test="${order.customerEntity.alipayOpenId != null }">
+                                            <img src="${webRootPath}static/images/wxh/bg_img_ali.png" alt="" style="width: 0.675rem;height: 0.675rem;">
+                                        </c:if>
+                                    </c:otherwise>
+                                </c:choose>
+                            </div>
+                            <div class="item-subtitle">
+                                <c:if test="${order.type == 2}">
+                                    领取
+                                </c:if>
+                                <c:if test="${order.type != 2}">
+                                    ${order.payTypeName}
+                                </c:if>
+                            </div>
+                        </div>
+                       <%-- <div class="item-after" style="font-size: 1rem;color: black">
+                                ${f:mallOrderStatusName(order.status) }
+                        </div>--%>
+                    </div>
+                </a>
+        </li>
+    </c:forEach>
+</c:if>
+<c:if test="${type == 3}">
+    <c:forEach items="${orderCustomEntities}" var="order">
+        <li>
+            <a href="${webRootPath}wxh/seller/mallOrderDetail?orderId=${order.id}" class="item-content">
+                <div class="item-inner">
+                    <div class="item-title-row">
+                        <div class="item-title" style="color: black"><fmt:formatDate value="${order.createdTime}" pattern="yyyy-MM-dd HH:mm:ss"/></div>
+                        <div class="item-after" style="color: #92969C">
+                                ${f:mallOrderStatusName(order.status) }
+                        </div>
+                    </div>
+                    <div class="item-title-row">
+                        <div class="item-title" style="color: #92969C">付款人：
+                            <c:choose>
+                                <c:when test="${order.customerEntity.phoneNumber != null }">
+                                    ${f:ensureDisplayNameDefinition(order.customerEntity,true,1,4)}
+                                    <img src="${webRootPath}static/images/wxh/bg_img_mob.png" alt="" style="width: 0.675rem;height: 0.675rem;">
+                                </c:when>
+                                <c:otherwise>
+                                    ${f:ensureDisplayNameDefinition(order.customerEntity,true,1,4)}
+                                    <c:if test="${order.customerEntity.wxOpenId != null }">
+                                        <img src="${webRootPath}static/images/wxh/bg_img_wx.png" alt="" style="width: 0.675rem;height: 0.675rem;">
+                                    </c:if>
+                                    <c:if test="${order.customerEntity.alipayOpenId != null }">
+                                        <img src="${webRootPath}static/images/wxh/bg_img_ali.png" alt="" style="width: 0.675rem;height: 0.675rem;">
+                                    </c:if>
+                                </c:otherwise>
+                            </c:choose>
+                        </div>
+                        <div class="item-after" style="font-size: 1rem;color: black">
+                            <span style="font-size: 0.8rem;color: black;padding-right: .2rem;padding-top: .1rem;">¥</span>
+                            <c:out value="${order.orderAmount}"></c:out>
+                        </div>
+                    </div>
+                    <div class="item-subtitle">
+                        ${order.sellerEntity.displayName}
+                    </div>
+                </div>
+            </a>
+        </li>
+    </c:forEach>
+</c:if>
+<c:if test="${type == 4}">
+    <c:forEach items="${orderCustomEntities}" var="order">
+        <li>
+            <div class="item-content">
+                <div class="item-inner">
+                    <%--<div class="item-title-row">--%>
+                        <%--<div class="item-title"><fmt:formatDate value="${order.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/></div>--%>
+                        <%--<div class="item-after">--%>
+                        <%--</div>--%>
+                    <%--</div>--%>
+                    <%--<div class="item-title-row">--%>
+                        <%--<div class="item-subtitle" style="white-space: nowrap;width: 60%;color: #333;">--%>
+                            <%--商户：${order.sellerEntity.displayName}--%>
+                        <%--</div>--%>
+                            <%--&lt;%&ndash;<c:if test="${order.receiptsOrderEntity != null && order.receiptsOrderEntity.customerEntity != null && order.receiptsOrderEntity.customerEntity.phoneNumber != null}">&ndash;%&gt;--%>
+                            <%--&lt;%&ndash;${order.receiptsOrderEntity.customerEntity.phoneNumber}&ndash;%&gt;--%>
+                            <%--&lt;%&ndash;</c:if>&ndash;%&gt;--%>
+                            <%--&lt;%&ndash;<c:if test="${order.receiptsOrderEntity != null && order.receiptsOrderEntity.customerEntity != null && order.receiptsOrderEntity.customerEntity.idNumber != null}">&ndash;%&gt;--%>
+                            <%--&lt;%&ndash;(${order.receiptsOrderEntity.customerEntity.idNumber})&ndash;%&gt;--%>
+                            <%--&lt;%&ndash;</c:if>&ndash;%&gt;--%>
+                        <%--<div class="item-subtitle">实收 ¥ ${order.receiptsOrderEntity.actuallyAmount}</div>--%>
+
+
+                    <%--</div>--%>
+
+                    <%--<div class="item-text" style="color: #333;">返卡: ${order.backAmount}元</div>--%>
+                    <%--<c:if test="${order.giftTokenDefEntity != null}">--%>
+                        <%--<div class="item-text" style="color: #333;">返券 : ${order.giftTokenDefEntity.name}</div>--%>
+                    <%--</c:if>--%>
+
+                        <div class="item-title-row">
+                            <div class="item-title">时间：<fmt:formatDate value="${order.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/></div>
+                        </div>
+                        <div class="item-title-row">
+                            <div class="item-title" style="color: #333;">券名称：${order.mallGoodsName}</div>
+                            <%--<div class="item-after" style="color: #333;">实收：</div>--%>
+                        </div>
+                        <c:if test="${order.toEmployeeBackAmount != null}">
+                            <div class="item-subtitle" style="color: #333;">返卡：${order.toEmployeeBackAmount}</div>
+                        </c:if>
+                        <c:if test="${order.toEmployeeGiftName != null}">
+                            <div class="item-subtitle" style="color: #333;">返券：${order.toEmployeeGiftName}</div>
+                        </c:if>
+
+                   <%-- <p style="margin: 0rem;padding: 0rem">推广商品券：${order.mallGoodsName}</p>
+                    <p style="margin: 0rem;padding: 0rem">用户：${order.toCustomerPhoneNumber}</p>
+                    <p style="margin: 0rem;padding: 0rem">给用户券：${order.toCustomerGiftName}</p>
+                    <p style="margin: 0rem;padding: 0rem">给用户卡：${order.toCustomeBackAmount}</p>
+                    <p style="margin: 0rem;padding: 0rem">兼职：${order.toEmployeePhoneNumber}</p>
+                    <p style="margin: 0rem;padding: 0rem">给兼职券：${order.toEmployeeGiftName}</p>
+                    <p style="margin: 0rem;padding: 0rem">给兼职卡：${order.toEmployeeBackAmount}</p>
+                    <p style="margin: 0rem;padding: 0rem">时间：<fmt:formatDate value="${order.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/></p>--%>
+                </div>
+            </div>
+        </li>
+    </c:forEach>
+</c:if>
+
+<c:if test="${type == 5}">
+    <c:forEach items="${orderCustomEntities}" var="order">
+        <li>
+            <a href="${webRootPath}wxh/seller/mallOrderDetail?orderId=${order.id}" class="item-content">
+                <div class="item-inner">
+                    <div class="item-title-row">
+                        <div class="item-title" style="color: black"><fmt:formatDate value="${order.createdTime}" pattern="yyyy-MM-dd HH:mm:ss"/></div>
+                        <div class="item-after" style="color: #92969C">
+                                ${f:mallOrderStatusName(order.status) }
+                        </div>
+                    </div>
+                    <div class="item-title-row">
+                        <div class="item-title" style="color: #92969C">付款人：
+                            ${f:ensureDisplayName(order.customerEntity,true)}
+                        </div>
+                        <div class="item-after" style="font-size: 1rem;color: black">
+                            <span style="font-size: 0.8rem;color: black;padding-right: .2rem;padding-top: .1rem;">¥</span>
+                            <c:out value="${order.orderAmount}"></c:out>
+                        </div>
+                    </div>
+                    <div class="item-subtitle">
+                            ${order.payTypeName}
+                    </div>
+                </div>
+            </a>
+        </li>
+    </c:forEach>
+</c:if>
+
+<c:if test="${type == 6}">
+    <c:forEach items="${refundOrderEntities}" var="order">
+        <li>
+            <a href="${webRootPath}wxh/seller/refundDetail?refundOrderId=${order.id}" class="item-content">
+                <div class="item-inner">
+                    <div class="item-title-row">
+                        <div class="item-title" style="font-size: 1rem;color: black">
+                            <span style="font-size: 0.9rem;"><c:if test="${not empty order.amount}">¥${order.amount}</c:if>
+                                <c:if test="${empty order.amount}">¥0.00</c:if>
+                            </span>
+                        </div>
+                        <div class="item-after" style="color: #92969C">
+                            <fmt:formatDate value="${order.createTime}" pattern="yyyy/MM/dd HH:mm:ss"/>
+                        </div>
+                    </div>
+                    <div class="item-title-row">
+                        <div class="item-title" style="color:black;">
+                            <c:if test="${not empty order.operatorPhone}">
+                                <c:if test="${order.customerEmployeeEntity != null}">
+                                    <c:if test="${not empty order.customerEmployeeEntity.name}">
+                                        ${order.operatorPhone}
+                                        (${order.customerEmployeeEntity.name})
+                                    </c:if>
+                                    <c:if test="${empty order.customerEmployeeEntity.name}">
+                                        ${order.operatorPhone}
+                                    </c:if>
+                                </c:if>
+                                <c:if test="${order.customerEmployeeEntity == null}">
+                                    ${order.operatorPhone}
+                                </c:if>
+                            </c:if>
+                            <c:if test="${empty order.operatorPhone}">
+                                <c:if test="${order.customerEmployeeEntity != null}">
+                                    <c:if test="${not empty order.customerEmployeeEntity.name}">
+                                        ${order.customerEmployeeEntity.name}
+                                    </c:if>
+                                </c:if>
+                            </c:if>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </li>
+    </c:forEach>
+</c:if>
+
+<c:if test="${type == 7}">
+    <div class="analysis">
+        <div class="row">
+        <div class="col-33">
+            <div class="item-title">${totalAmount}</div>
+            <div class="item-description">累计总收入(元)</div>
+        </div>
+        <div class="col-33">
+            <div class="item-title">${customerCount}</div>
+            <div class="item-description">累计总人数(个)</div>
+        </div>
+        <div class="col-33">
+            <div class="item-title">${avgAmount}</div>
+            <div class="item-description">人均消费额(元)</div>
+        </div>
+    </div>
+</c:if>
+
+<c:if test="${type == 14}">
+    <c:forEach items="${spreadRecordList}" var="item">
+        <li>
+            <div class="informationDetail">
+                <ul class="informationList" style="padding: 0;">
+                    <li><fmt:formatDate value="${item.createTime}"
+                                        pattern="yyyy-MM-dd HH:mm:ss"/></li>
+                    <li>${f:ensureDisplayNameDefinition(marketingCashLogExtendEntity.customerEntity,true,1,4)}</li>
+                    <li>${f:ensureDisplayNameDefinition(item.customerEntity,true,3,6)}</li>
+                    <li style="white-space: normal;word-break:break-all;">${item.receiptsOrderEntity.serialNumber}</li>
+                    <li><fmt:formatDate value="${item.receiptsOrderEntity.createdTime}"
+                                        pattern="yyyy-MM-dd HH:mm:ss"/></li>
+                    <li>${item.receiptsOrderEntity.totalAmount}</li>
+                </ul>
+            </div>
+        </li>
+    </c:forEach>
+</c:if>
+
+
+

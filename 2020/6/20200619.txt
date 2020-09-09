@@ -1,0 +1,12 @@
+订单：普通流程那儿库存没有改，要改一下，还有啥？回家的时候好像想起来还有个啥问题
+
+看看自己之前的代码？
+
+看看订单相关的所有内容？了解一下流程走过的所有代码？
+
+给小闯闯买衣服买口罩？最重要的是口罩和四件套~
+
+
+
+        List<MallGoodsTieredEntity> mallGoodsTieredEntities = goodsMallService.getMallGoodsTiered(mallGoodsTieredEntity.getGoodsId());
+        mav.addObject(mallGoodsTieredEntities);

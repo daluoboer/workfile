@@ -1,0 +1,16 @@
+https://wxd7d7c47dfbfdc11c.dev.188yd.com/wxh/publicNumberGift?sellerid=31&marketingType=5&operatorId=1449
+
+商户后台
+	会员、券、营销活动、商品管理、储值卡、收款、店员管理、统计分析
+
+宜店后台
+	数据报表、数据统计、商户管理、审核平台、扣费平台、宜店主页活动、APP页面模板管理
+
+H5B端
+
+H5C端
+
+系统架构
+
+中间件
+

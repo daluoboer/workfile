@@ -1,0 +1,17 @@
+1.告诉鹏举新加的字段
+
+MarketingMeansEntity.meansDetail.executeType
+/**营销方式：1.折扣 2.消费立减*/
+
+√ 2.创建活动的时候验证修改一下
+
+3.创建活动的时候判断该商品该时段活动是否已存在
+
+4.商品不对，展示门店商品
+
+5.查找活动记录，更新活动记录
+
+查找活动记录
+MarketingMeansService.getRecordsByOrder
+更新活动记录
+MarketingMeansService.updateRecord

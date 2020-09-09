@@ -1,0 +1,47 @@
+券核销时按券返推广费：feature/gift_optimze_13169
+
+代理服务费率：feature/requirement_13223
+取费率接口：
+
+Connection to 123.57.21.14 failed.
+[08001] Could not create connection to database server. Attempted reconnect 3 times. Giving up.
+
+java.io.EOFException: Can not read response from server. Expected to read 4 bytes, read 0 bytes before connection was unexpectedly lost.
+
+咋整呢，搞不好了
+反正也搞不好，那就不管它了吧，烦人
+
+听听歌儿看看不会的东西吧还是
+
+
+
+
+压力测试咋测？？
+得看是啥压力测试呗，需要连接就多给点连接，但是应该都是连接吧？只不过可能需要测试的是不同的连接，比方说网络请求、数据库请求
+
+
+
+烦烦烦
+
+
+
+啊啊啊啊啊啊啊烦有用吗！烦有用的话还会有人打架吗.....但是你也不想打架，应该是因为姨妈来才烦？哦不，是
+
+
+刚刚去开了个会~忘了刚才要写啥了......把刚才剥的核桃吃掉~三只松鼠的草本味的核桃好好吃啊
+
+
+嗯....不想刷题，想找人玩儿，但是没人跟我玩儿....
+
+算了，还是刷个题吧呜呜呜
+
+
+
+哎...
+
+
+只能吃点东西了，要挣钱~挣很多钱才能做很多想做的事情啊！然后就能碰到 嗯...志同道合的人吧！
+
+所以啊！别再这么懒惰，这么颓废了~好好学习，多刷点题，多看看不懂的东西，不要整天想些有的没的，把精力放在提高自己上面才是最要紧的~嗯！！！！！！
+
+钱钱钱钱钱钱钱！！！！！！！！向钱进啊！！！！！！！
